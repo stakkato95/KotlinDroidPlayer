@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<!--<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,31 +21,52 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="3dp">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="0dp"
-                android:layout_height="730dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:srcCompat="@mipmap/ic_launcher"
-                tools:layout_editor_absoluteX="0dp"/>
+        </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="0dp"
-                android:layout_height="730dp"
-                android:layout_marginEnd="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@mipmap/ic_launcher_round"/>
-        </android.support.constraint.ConstraintLayout>
     </com.github.stakkato95.kmusic.view.PagerScrollView>
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        app:layout_constraintGuide_begin="20dp"
+        android:orientation="horizontal"/>
+
+</android.support.constraint.ConstraintLayout>-->
+
+<com.github.stakkato95.kmusic.view.PagerScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.github.stakkato95.kmusic.MainActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="0dp"
+    android:layout_marginEnd="0dp"
+    android:layout_marginStart="0dp"
+    android:layout_marginTop="0dp">
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            app:layout_heightPercent="100%"
+            android:background="@android:color/holo_red_dark"/>
+
+        <View
+            android:layout_width="match_parent"
+            app:layout_heightPercent="100%"
+            android:background="@android:color/holo_red_light"
+            android:layout_below="@id/top_view"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+</com.github.stakkato95.kmusic.view.PagerScrollView>
