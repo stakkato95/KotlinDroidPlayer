@@ -21,11 +21,18 @@
             app:layout_heightPercent="100%"
             android:background="@android:color/holo_red_dark"/>
 
-        <View
+        <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
             app:layout_heightPercent="100%"
             android:background="@android:color/holo_red_light"
-            android:layout_below="@id/top_view"/>
+            android:layout_below="@id/top_view">
+
+            <com.github.stakkato95.kmusic.view.MusicProgressBar
+                android:layout_centerInParent="true"
+                app:layout_widthPercent="50%"
+                app:layout_aspectRatio="100%"/>
+
+        </android.support.percent.PercentRelativeLayout>
 
     </android.support.percent.PercentRelativeLayout>
 
