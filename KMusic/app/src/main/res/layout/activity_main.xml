@@ -33,7 +33,16 @@
                 android:id="@+id/progress"
                 android:layout_centerInParent="true"
                 app:layout_widthPercent="50%"
-                app:layout_aspectRatio="100%"/>
+                app:layout_aspectRatio="100%">
+
+                <ImageView
+                    android:id="@+id/centerImage"
+                    app:layout_widthPercent="80%"
+                    app:layout_aspectRatio="100%"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_launcher"/>
+
+            </com.github.stakkato95.kmusic.view.MusicProgressBar>
 
         </android.support.percent.PercentRelativeLayout>
 
