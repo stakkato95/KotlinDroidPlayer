@@ -8,6 +8,7 @@ import android.graphics.Point
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import android.widget.FrameLayout
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.extensions.lengthTo
@@ -56,28 +57,28 @@ class MusicProgressBar : FrameLayout {
         innerCirclePaint.color = Color.WHITE
 
         setWillNotDraw(false)
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        with(canvas!!) {
-            drawCircle(width / 2f, height / 2f, Math.min(width / 2, height / 2).toFloat(), progressBackgroundPaint)
-            drawArc(0f, 0f, width.toFloat(), height.toFloat(), progressStartAngle, progressbarAngle, true, progressbarPaint)
-            drawCircle(width / 2f, height / 2f, Math.min((width / 2.2).toInt(), (height / 2.2).toInt()).toFloat(), innerCirclePaint)
-        }
+        setOnTouchListener(this::touchEvent)
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?) = true
 
-    override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-        super.requestDisallowInterceptTouchEvent(true)
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        canvas?.let {
+            with(canvas) {
+                drawCircle(width / 2f, height / 2f, Math.min(width / 2, height / 2).toFloat(), progressBackgroundPaint)
+                drawArc(0f, 0f, width.toFloat(), height.toFloat(), progressStartAngle, progressbarAngle, true, progressbarPaint)
+                drawCircle(width / 2f, height / 2f, Math.min((width / 2.2).toInt(), (height / 2.2).toInt()).toFloat(), innerCirclePaint)
+            }
+        }
+
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    fun touchEvent(view: View, event: MotionEvent?): Boolean {
         val ev = event!!
         progressbarAngle = calculateAngle(ev.x.toInt(), ev.y.toInt())
         invalidate()
-        return false
+        return true
     }
 
     fun calculateAngle(x: Int, y: Int): Float {

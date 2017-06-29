@@ -9,7 +9,7 @@ import android.widget.ScrollView
 
 class PagerScrollView : ScrollView {
 
-    val minFlingLengthDp = 12
+    val minFlingLengthDp = 6
 
     val flingLength get() = context.resources.displayMetrics.density * minFlingLengthDp
 
@@ -20,8 +20,6 @@ class PagerScrollView : ScrollView {
     val minItemHeight by lazy { (getChildAt(0) as ViewGroup).getChildAt(0).height }
 
     var gestureDetector: GestureDetector = GestureDetector(context, SimpleOnGestureListener(onFlingEvent =  this::onFling))
-
-    var shouldRespondToTouchEvents = true
 
     constructor(context: Context) : super(context)
 
@@ -43,8 +41,7 @@ class PagerScrollView : ScrollView {
             }
         }
 
-        val result = super.onTouchEvent(ev) && shouldRespondToTouchEvents
-        return result
+        return super.onTouchEvent(ev)
     }
 
     fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
