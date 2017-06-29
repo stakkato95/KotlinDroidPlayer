@@ -24,7 +24,6 @@
         <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
             app:layout_heightPercent="100%"
-            android:background="@android:color/holo_red_light"
             android:layout_below="@id/top_view">
 
             <com.github.stakkato95.kmusic.view.MusicProgressBar

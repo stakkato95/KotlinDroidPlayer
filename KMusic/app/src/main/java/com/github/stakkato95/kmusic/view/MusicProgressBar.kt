@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Point
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.widget.FrameLayout
 import com.github.stakkato95.kmusic.R
-
+import com.github.stakkato95.kmusic.extensions.lengthTo
 
 
 /**
@@ -16,40 +18,74 @@ import com.github.stakkato95.kmusic.R
  */
 class MusicProgressBar : FrameLayout {
 
-    lateinit var paint: Paint
-    lateinit var paint1: Paint
+    lateinit var progressBackgroundPaint: Paint
+    lateinit var progressbarPaint: Paint
+    lateinit var innerCirclePaint: Paint
 
-    constructor(context: Context?) : super(context) {
-        init()
-    }
+    var center = Point(0, 0)
+        get() = Point(width / 2, height / 2)
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        init()
-    }
+    var progressbarAngle = 0f
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    var progressStartPoint = Point(0, 0)
+        get() = Point(width / 2, 0)
+
+    var progressStartVectorLength = 0
+        get() = progressStartPoint.lengthTo(center)
+
+    val progressStartAngle = -90f
+
+    constructor(context: Context?) : super(context) { init() }
+
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) { init() }
+
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { init() }
 
     fun init() {
-        paint = Paint()
-        paint.color = ResourcesCompat.getColor(context.resources, R.color.colorPrimaryDark, null)
-        paint.strokeWidth = 48 * resources.displayMetrics.density
-        paint.isAntiAlias = true
+        progressBackgroundPaint = Paint()
+        progressBackgroundPaint.color = ResourcesCompat.getColor(context.resources, R.color.grey, null)
+        progressBackgroundPaint.strokeWidth = 48 * resources.displayMetrics.density
+        progressBackgroundPaint.isAntiAlias = true
 
-        paint1 = Paint()
-        paint1.color = Color.WHITE
-        paint1.strokeWidth = 8 * resources.displayMetrics.density
-        paint1.isAntiAlias = true
+        progressbarPaint = Paint()
+        progressbarPaint.color = ResourcesCompat.getColor(context.resources, R.color.colorPrimary, null)
+        progressbarPaint.strokeWidth = 8 * resources.displayMetrics.density
+        progressbarPaint.isAntiAlias = true
+
+        innerCirclePaint = Paint()
+        innerCirclePaint.color = Color.WHITE
 
         setWillNotDraw(false)
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        paint.color = ResourcesCompat.getColor(context.resources, R.color.colorPrimaryDark, null)
-        canvas?.drawCircle(width / 2f, height / 2f, Math.min(width / 2, height / 2).toFloat(), paint)
+        with(canvas!!) {
+            drawCircle(width / 2f, height / 2f, Math.min(width / 2, height / 2).toFloat(), progressBackgroundPaint)
+            drawArc(0f, 0f, width.toFloat(), height.toFloat(), progressStartAngle, progressbarAngle, true, progressbarPaint)
+            drawCircle(width / 2f, height / 2f, Math.min((width / 2.2).toInt(), (height / 2.2).toInt()).toFloat(), innerCirclePaint)
+        }
+    }
 
-        canvas?.drawArc(0f, 0f, width.toFloat(), height.toFloat(), 0f, 180f, false, paint1)
+    override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+        super.requestDisallowInterceptTouchEvent(false)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val ev = event!!
+        progressbarAngle = calculateAngle(ev.x.toInt(), ev.y.toInt())
+        invalidate()
+        return false
+    }
+
+    fun calculateAngle(x: Int, y: Int): Float {
+        val currentPoint = Point(x, y)
+        val currentPointLength = currentPoint.lengthTo(center)
+
+        val scalarProduct = progressStartPoint.x * currentPoint.x + progressStartPoint.y * currentPoint.y
+        val lengthsProduct = currentPointLength * progressStartVectorLength
+        val angleCosine = (scalarProduct / lengthsProduct).toDouble()
+
+        return (180 * Math.acos(angleCosine) / Math.PI).toFloat()
     }
 }

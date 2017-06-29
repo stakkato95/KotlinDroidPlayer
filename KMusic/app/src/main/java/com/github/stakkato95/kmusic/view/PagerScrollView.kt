@@ -33,6 +33,12 @@ class PagerScrollView : ScrollView {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
+    override fun onInterceptTouchEvent(ev: MotionEvent?) = false
+
+    override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+        super.requestDisallowInterceptTouchEvent(true)
+    }
+
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         val event = ev!!
 
