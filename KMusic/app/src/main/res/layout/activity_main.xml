@@ -9,9 +9,11 @@
     android:layout_marginBottom="0dp"
     android:layout_marginEnd="0dp"
     android:layout_marginStart="0dp"
-    android:layout_marginTop="0dp">
+    android:layout_marginTop="0dp"
+    android:id="@+id/scroll">
 
-    <android.support.percent.PercentRelativeLayout
+    <com.github.stakkato95.kmusic.view.InterceptableLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -22,17 +24,19 @@
             android:background="@android:color/holo_red_dark"/>
 
         <android.support.percent.PercentRelativeLayout
+            android:id="@+id/player_button_container"
             android:layout_width="match_parent"
             app:layout_heightPercent="100%"
             android:layout_below="@id/top_view">
 
             <com.github.stakkato95.kmusic.view.MusicProgressBar
+                android:id="@+id/progress"
                 android:layout_centerInParent="true"
                 app:layout_widthPercent="50%"
                 app:layout_aspectRatio="100%"/>
 
         </android.support.percent.PercentRelativeLayout>
 
-    </android.support.percent.PercentRelativeLayout>
+    </com.github.stakkato95.kmusic.view.InterceptableLayout>
 
 </com.github.stakkato95.kmusic.view.PagerScrollView>

@@ -67,8 +67,10 @@ class MusicProgressBar : FrameLayout {
         }
     }
 
+    override fun onInterceptTouchEvent(ev: MotionEvent?) = true
+
     override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-        super.requestDisallowInterceptTouchEvent(false)
+        super.requestDisallowInterceptTouchEvent(true)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

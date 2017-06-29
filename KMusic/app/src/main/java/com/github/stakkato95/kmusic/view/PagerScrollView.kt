@@ -19,13 +19,9 @@ class PagerScrollView : ScrollView {
 
     val minItemHeight by lazy { (getChildAt(0) as ViewGroup).getChildAt(0).height }
 
-    var gestureDetector: GestureDetector = GestureDetector(context, SimpleOnGestureListener(
-            onShowPressEvent = { },
-            onSingleTapUpEvent = { true },
-            onDownEvent = { false },
-            onFlingEvent =  this::onFling,
-            onScrollEvent = { _, _, _, _ -> false },
-            onLongPressEvent = { }))
+    var gestureDetector: GestureDetector = GestureDetector(context, SimpleOnGestureListener(onFlingEvent =  this::onFling))
+
+    var shouldRespondToTouchEvents = true
 
     constructor(context: Context) : super(context)
 
@@ -34,10 +30,6 @@ class PagerScrollView : ScrollView {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     override fun onInterceptTouchEvent(ev: MotionEvent?) = false
-
-    override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-        super.requestDisallowInterceptTouchEvent(true)
-    }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         val event = ev!!
@@ -51,21 +43,27 @@ class PagerScrollView : ScrollView {
             }
         }
 
-        return super.onTouchEvent(ev)
+        val result = super.onTouchEvent(ev) && shouldRespondToTouchEvents
+        return result
     }
 
-    fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
-        val flingDistance = p1.x - p0.x
-        val isFlingToTop = flingDistance < 0
+    fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+        if (p0 != null && p1 != null) {
 
-        return if (flingDistance > flingLength && flingVelocity >= p3) {
-            smoothScrollTo(0, ++currentPosition * minItemHeight)
-            true
-        } else if (Math.abs(flingDistance) > flingLength && isFlingToTop && p3 >= flingVelocity) {
-            smoothScrollTo(0, --currentPosition * minItemHeight)
-            true
-        } else {
-            false
+            val flingDistance = p1.x - p0.x
+            val isFlingToTop = flingDistance < 0
+
+            return if (flingDistance > flingLength && flingVelocity >= p3) {
+                smoothScrollTo(0, ++currentPosition * minItemHeight)
+                true
+            } else if (Math.abs(flingDistance) > flingLength && isFlingToTop && p3 >= flingVelocity) {
+                smoothScrollTo(0, --currentPosition * minItemHeight)
+                true
+            } else {
+                false
+            }
         }
+
+        return false
     }
 }
