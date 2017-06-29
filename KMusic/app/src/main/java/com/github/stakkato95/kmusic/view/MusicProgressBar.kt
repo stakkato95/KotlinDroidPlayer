@@ -7,11 +7,13 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.extensions.lengthTo
+import com.github.stakkato95.kmusic.extensions.lengthProductOfVectorsStartingInZero
+import com.github.stakkato95.kmusic.extensions.scalarProduct
 
 
 /**
@@ -31,8 +33,8 @@ class MusicProgressBar : FrameLayout {
     var progressStartPoint = Point(0, 0)
         get() = Point(width / 2, 0)
 
-    var progressStartVectorLength = 0
-        get() = progressStartPoint.lengthTo(center)
+    var progressStartVectorLength = 0.0
+        get() = progressStartPoint.lengthProductOfVectorsStartingInZero(center)
 
     val progressStartAngle = -90f
 
@@ -83,12 +85,21 @@ class MusicProgressBar : FrameLayout {
 
     fun calculateAngle(x: Int, y: Int): Float {
         val currentPoint = Point(x, y)
-        val currentPointLength = currentPoint.lengthTo(center)
 
-        val scalarProduct = progressStartPoint.x * currentPoint.x + progressStartPoint.y * currentPoint.y
-        val lengthsProduct = currentPointLength * progressStartVectorLength
-        val angleCosine = (scalarProduct / lengthsProduct).toDouble()
+        val startX = progressStartPoint.x - width / 2
+        val currentX = currentPoint.x - (width / 2)
+        val startY = progressStartPoint.y + height / 2
+        val currentY = (height / 2) - currentPoint.y
 
-        return (180 * Math.acos(angleCosine) / Math.PI).toFloat()
+        val translatedStartPoint = Point(startX, startY)
+        val translatedCurrentPoint = Point(currentX, currentY)
+        val scalarProduct = translatedStartPoint.scalarProduct(translatedCurrentPoint)
+        val lengthProduct = translatedStartPoint.lengthProductOfVectorsStartingInZero(translatedCurrentPoint)
+        val angleCosine = scalarProduct / lengthProduct
+
+        Log.d("ANGLE", "startX = $startX currentX = $currentX startY = $startY currentY = $currentY progressbarAngle = $progressbarAngle")
+
+        val fl = (Math.acos(angleCosine) * 180 / Math.PI).toFloat()
+        return fl
     }
 }
