@@ -15,3 +15,9 @@ fun Point.lengthProductOfVectorsStartingInZero(secondPoint: Point): Double {
 fun Point.scalarProduct(secondPoint: Point): Int {
     return x * secondPoint.x + y * secondPoint.y
 }
+
+fun Point.cosAngleOfTwoVectorsStartingInZeroPoint(secondPoint: Point): Double {
+    val scalarProduct = this.scalarProduct(secondPoint)
+    val lengthProduct = this.lengthProductOfVectorsStartingInZero(secondPoint)
+    return scalarProduct / lengthProduct
+}

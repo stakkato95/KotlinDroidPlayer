@@ -7,13 +7,11 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.extensions.lengthProductOfVectorsStartingInZero
-import com.github.stakkato95.kmusic.extensions.scalarProduct
+import com.github.stakkato95.kmusic.extensions.cosAngleOfTwoVectorsStartingInZeroPoint
 
 
 /**
@@ -32,9 +30,6 @@ class MusicProgressBar : FrameLayout {
 
     var progressStartPoint = Point(0, 0)
         get() = Point(width / 2, 0)
-
-    var progressStartVectorLength = 0.0
-        get() = progressStartPoint.lengthProductOfVectorsStartingInZero(center)
 
     val progressStartAngle = -90f
 
@@ -93,13 +88,13 @@ class MusicProgressBar : FrameLayout {
 
         val translatedStartPoint = Point(startX, startY)
         val translatedCurrentPoint = Point(currentX, currentY)
-        val scalarProduct = translatedStartPoint.scalarProduct(translatedCurrentPoint)
-        val lengthProduct = translatedStartPoint.lengthProductOfVectorsStartingInZero(translatedCurrentPoint)
-        val angleCosine = scalarProduct / lengthProduct
+        val angleCosine = translatedStartPoint.cosAngleOfTwoVectorsStartingInZeroPoint(translatedCurrentPoint)
 
-        Log.d("ANGLE", "startX = $startX currentX = $currentX startY = $startY currentY = $currentY progressbarAngle = $progressbarAngle")
-
-        val fl = (Math.acos(angleCosine) * 180 / Math.PI).toFloat()
+        val fl = if (currentPoint.x > width / 2) {
+            (Math.acos(angleCosine) * 180 / Math.PI ).toFloat()
+        } else {
+            360 - (Math.acos(angleCosine) * 180 / Math.PI ).toFloat()
+        }
         return fl
     }
 }
