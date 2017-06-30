@@ -3,6 +3,7 @@ package com.github.stakkato95.kmusic
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
@@ -12,6 +13,13 @@ import com.github.stakkato95.kmusic.extensions.picasso
 import com.squareup.picasso.Callback
 
 class MainActivity : AppCompatActivity() {
+
+    //TODO remove bullshit
+    var isPlaying = true
+
+    val playPause by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_play_pause, null) }
+
+    val pausePlay by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_play, null) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +45,9 @@ class MainActivity : AppCompatActivity() {
         val vectorIcon = findViewById(R.id.vector_icon) as Button
 
         vectorIcon.setOnClickListener {
+            vectorIcon.background = if (isPlaying) playPause else pausePlay
             (vectorIcon.background as AnimatedVectorDrawable).start()
+            isPlaying = !isPlaying
         }
     }
 }
