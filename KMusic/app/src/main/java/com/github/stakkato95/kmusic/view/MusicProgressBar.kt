@@ -58,7 +58,7 @@ class MusicProgressBar : PercentFrameLayout {
         setOnTouchListener(this::touchEvent)
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?) = true
+//    override fun onInterceptTouchEvent(ev: MotionEvent?) = true
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)

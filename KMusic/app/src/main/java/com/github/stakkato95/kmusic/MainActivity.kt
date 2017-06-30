@@ -1,9 +1,11 @@
 package com.github.stakkato95.kmusic
 
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.app.AppCompatActivity
+import android.widget.Button
 import android.widget.ImageView
 import com.github.stakkato95.kmusic.extensions.blur
 import com.github.stakkato95.kmusic.extensions.picasso
@@ -31,5 +33,11 @@ class MainActivity : AppCompatActivity() {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
+
+        val vectorIcon = findViewById(R.id.vector_icon) as Button
+
+        vectorIcon.setOnClickListener {
+            (vectorIcon.background as AnimatedVectorDrawable).start()
+        }
     }
 }

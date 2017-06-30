@@ -1,0 +1,81 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:width="300dp"
+            android:height="300dp"
+            android:viewportWidth="300"
+            android:viewportHeight="300">
+            <group
+                android:name="upper_group"
+                android:pivotX="150"
+                android:pivotY="150">
+                <path
+                    android:name="upper"
+                    android:pathData="M 75 50 L 75 150 L 225 150 L 173 115 L 75 50 Z"
+                    android:fillColor="@color/colorPrimary"
+                    android:strokeColor="@color/colorPrimary"
+                    android:strokeWidth="1"/>
+            </group>
+            <group
+                android:name="bottom_group"
+                android:pivotX="150"
+                android:pivotY="150">
+                <path
+                    android:name="bottom"
+                    android:pathData="M 75 250 L 75 150 L 225 150 L 173 185 L 75 250 Z"
+                    android:fillColor="@color/colorPrimary"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="upper">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:propertyName="pathData"
+                android:duration="300"
+                android:valueFrom="M 75 50 L 75 150 L 225 150 L 173 115 L 75 50 Z"
+                android:valueTo="M 50 50 L 50 100 L 250 100 L 250 50 L 50 50 Z"
+                android:valueType="pathType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="bottom">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:propertyName="pathData"
+                android:duration="300"
+                android:valueFrom="M 75 250 L 75 250 L 75 150 L 225 150 L 173 185 L 75 250 L 75 250"
+                android:valueTo="M 50 250 L 50 225 L 50 200 L 250 200 L 250 250 L 50 250 L 50 250"
+                android:valueType="pathType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="upper_group">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:propertyName="rotation"
+                android:duration="300"
+                android:valueFrom="0"
+                android:valueTo="90"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="bottom_group">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:propertyName="rotation"
+                android:duration="300"
+                android:valueFrom="0"
+                android:valueTo="90"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+</animated-vector>
