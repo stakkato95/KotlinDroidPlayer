@@ -52,6 +52,7 @@ class MusicProgressBar : PercentFrameLayout {
 
         innerCirclePaint = Paint()
         innerCirclePaint.color = Color.WHITE
+        progressbarPaint.isAntiAlias = true
 
         setWillNotDraw(false)
         setOnTouchListener(this::touchEvent)
