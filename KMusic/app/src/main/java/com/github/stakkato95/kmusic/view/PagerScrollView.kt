@@ -9,7 +9,7 @@ import android.widget.ScrollView
 
 class PagerScrollView : ScrollView {
 
-    val minFlingLengthDp = 6
+    val minFlingLengthDp = 8
 
     val flingLength get() = context.resources.displayMetrics.density * minFlingLengthDp
 
