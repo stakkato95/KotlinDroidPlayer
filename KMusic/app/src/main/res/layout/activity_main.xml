@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.stakkato95.kmusic.view.PagerScrollView
+<com.github.stakkato95.kmusic.common.view.PagerScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,7 +29,7 @@
             app:layout_heightPercent="100%"
             android:layout_below="@id/top_view">
 
-            <com.github.stakkato95.kmusic.view.MusicProgressBar
+            <com.github.stakkato95.kmusic.player.MusicProgressBar
                 android:id="@+id/progress"
                 android:layout_centerInParent="true"
                 app:layout_widthPercent="50%"
@@ -49,10 +49,10 @@
                     android:background="@drawable/ic_play_pause"
                     android:layout_gravity="center"/>
 
-            </com.github.stakkato95.kmusic.view.MusicProgressBar>
+            </com.github.stakkato95.kmusic.player.MusicProgressBar>
 
         </android.support.percent.PercentRelativeLayout>
 
     </android.support.percent.PercentRelativeLayout>
 
-</com.github.stakkato95.kmusic.view.PagerScrollView>
+</com.github.stakkato95.kmusic.common.view.PagerScrollView>

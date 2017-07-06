@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.view
+package com.github.stakkato95.kmusic.player
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.extensions.cosAngleOfTwoVectorsStartingInZeroPoint
+import com.github.stakkato95.kmusic.common.extensions.cosAngleOfTwoVectorsStartingInZeroPoint
 
 
 /**

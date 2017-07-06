@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.view
+package com.github.stakkato95.kmusic.common.view
 
 import android.content.Context
 import android.util.AttributeSet

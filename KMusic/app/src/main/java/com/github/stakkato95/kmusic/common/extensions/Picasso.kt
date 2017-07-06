@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.extensions
+package com.github.stakkato95.kmusic.common.extensions
 
 import android.content.Context
 import com.squareup.picasso.Picasso

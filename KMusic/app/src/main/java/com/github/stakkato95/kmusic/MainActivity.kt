@@ -8,8 +8,9 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.ImageView
-import com.github.stakkato95.kmusic.extensions.blur
-import com.github.stakkato95.kmusic.extensions.picasso
+import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.common.extensions.blur
+import com.github.stakkato95.kmusic.common.extensions.picasso
 import com.squareup.picasso.Callback
 
 class MainActivity : AppCompatActivity() {
