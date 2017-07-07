@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_button_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.github.stakkato95.kmusic.MainActivity">
+
+    <com.github.stakkato95.kmusic.player.MusicProgressBar
+        android:id="@+id/progress"
+        android:layout_centerInParent="true"
+        app:layout_aspectRatio="100%"
+        app:layout_widthPercent="50%">
+
+        <ImageView
+            android:id="@+id/centerImage"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher"
+            app:layout_aspectRatio="100%"
+            app:layout_widthPercent="80%"/>
+
+        <Button
+            android:id="@+id/vector_icon"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_play_pause"
+            app:layout_aspectRatio="100%"
+            app:layout_widthPercent="40%"/>
+
+    </com.github.stakkato95.kmusic.player.MusicProgressBar>
+
+</android.support.percent.PercentRelativeLayout>
