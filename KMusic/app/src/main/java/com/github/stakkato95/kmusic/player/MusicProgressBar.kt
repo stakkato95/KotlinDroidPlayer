@@ -23,9 +23,6 @@ class MusicProgressBar : PercentFrameLayout {
     lateinit var progressbarPaint: Paint
     lateinit var innerCirclePaint: Paint
 
-    var center = Point(0, 0)
-        get() = Point(width / 2, height / 2)
-
     var progressbarAngle = 0f
 
     var progressStartPoint = Point(0, 0)
@@ -58,14 +55,14 @@ class MusicProgressBar : PercentFrameLayout {
         setOnTouchListener(this::touchEvent)
     }
 
-//    override fun onInterceptTouchEvent(ev: MotionEvent?) = true
-
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.let {
             with(canvas) {
+                //let's assume that width is bigger than height
+                val startPadding = ((width - height) / 2).toFloat()
                 drawCircle(width / 2f, height / 2f, Math.min(width / 2, height / 2).toFloat(), progressBackgroundPaint)
-                drawArc(0f, 0f, width.toFloat(), height.toFloat(), progressStartAngle, progressbarAngle, true, progressbarPaint)
+                drawArc(startPadding, 0f, startPadding + height, height.toFloat(), progressStartAngle, progressbarAngle, true, progressbarPaint)
                 drawCircle(width / 2f, height / 2f, Math.min((width / 2.1).toInt(), (height / 2.1).toInt()).toFloat(), innerCirclePaint)
             }
         }
