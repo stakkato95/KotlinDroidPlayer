@@ -37,19 +37,16 @@ class MusicProgressBar : PercentFrameLayout {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { init() }
 
     fun init() {
-        progressBackgroundPaint = Paint()
+        progressBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         progressBackgroundPaint.color = ResourcesCompat.getColor(context.resources, R.color.grey, null)
         progressBackgroundPaint.strokeWidth = 48 * resources.displayMetrics.density
-        progressBackgroundPaint.isAntiAlias = true
 
-        progressbarPaint = Paint()
+        progressbarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         progressbarPaint.color = ResourcesCompat.getColor(context.resources, R.color.colorPrimary, null)
         progressbarPaint.strokeWidth = 8 * resources.displayMetrics.density
-        progressbarPaint.isAntiAlias = true
 
-        innerCirclePaint = Paint()
+        innerCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         innerCirclePaint.color = Color.WHITE
-        progressbarPaint.isAntiAlias = true
 
         setWillNotDraw(false)
         setOnTouchListener(this::touchEvent)
