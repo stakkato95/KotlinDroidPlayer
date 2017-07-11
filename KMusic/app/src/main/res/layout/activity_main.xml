@@ -37,26 +37,6 @@
                 app:srcCompat="@drawable/test_background"/>
 
             <TextView
-                android:id="@+id/album_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="0dp"
-                android:ellipsize="marquee"
-                android:fadingEdge="horizontal"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:singleLine="true"
-                android:scrollHorizontally="true"
-                android:text="Need For Speed Need For Speed Need For Speed"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/text_title"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                app:layout_constraintStart_toStartOf="@+id/guideline4"
-                app:layout_constraintTop_toTopOf="@+id/guideline3"/>
-
-            <TextView
                 android:id="@+id/textView5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -109,12 +89,10 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
                 android:text="Album"
                 android:textColor="@android:color/white"
                 app:layout_constraintStart_toStartOf="@+id/guideline4"
-                app:layout_constraintTop_toBottomOf="@+id/album_text"/>
+                app:layout_constraintTop_toTopOf="@+id/guideline3"/>
 
             <TextView
                 android:id="@+id/textView6"
@@ -152,6 +130,24 @@
                 android:clipToPadding="false"/>
 
         </android.support.percent.PercentRelativeLayout>
+
+        <TextView
+            android:id="@+id/album_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:fadingEdge="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:text="Need For Speed"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_title"
+            android:textStyle="bold"
+            app:layout_marginTopPercent="56%"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"/>
 
     </android.support.percent.PercentRelativeLayout>
 
