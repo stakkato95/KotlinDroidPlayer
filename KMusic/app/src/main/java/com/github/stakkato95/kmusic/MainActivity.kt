@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity() {
                 val layoutParams = albumTextPlayerScreen.layoutParams as PercentRelativeLayout.LayoutParams
                 layoutParams.topMargin = (albumTextInitialY + labelMovementDistance - pager.height).toInt()
                 albumTextPlayerScreen.layoutParams = layoutParams
+
+                albumTextPlayerScreen.scaleX = 0.5f
+                albumTextPlayerScreen.scaleY = 0.5f
             }
 
             val scrollPercent = pager.normalizedScrollY!! / pager.height
@@ -55,15 +58,15 @@ class MainActivity : AppCompatActivity() {
             albumText.animate().scaleX(scale).setDuration(0).start()
             albumText.animate().scaleY(scale).setDuration(0).start()
 
-            if (pager.currentItem == 0) {
+            if (pager.currentItem != 2) {
                 val textAlpha = 1 - Math.pow(scrollPercent.toDouble(), 1 / 3.toDouble()).toFloat()
 
                 val trackInfoView = pager.getChildAt(0)
-                trackInfoView.findViewById(R.id.album_label).alpha = textAlpha
-                trackInfoView.findViewById(R.id.artist_text).alpha = textAlpha
-                trackInfoView.findViewById(R.id.artist_label).alpha = textAlpha
-                trackInfoView.findViewById(R.id.audio_format_text).alpha = textAlpha
-                trackInfoView.findViewById(R.id.audio_format_label).alpha = textAlpha
+                trackInfoView.findViewById(R.id.album_label)?.alpha = textAlpha
+                trackInfoView.findViewById(R.id.artist_text)?.alpha = textAlpha
+                trackInfoView.findViewById(R.id.artist_label)?.alpha = textAlpha
+                trackInfoView.findViewById(R.id.audio_format_text)?.alpha = textAlpha
+                trackInfoView.findViewById(R.id.audio_format_label)?.alpha = textAlpha
             }
 
             lastScrollPercent = scrollPercent
