@@ -40,29 +40,30 @@
                 android:id="@+id/textView5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
                 android:layout_marginTop="8dp"
                 android:text="The Glitch Mode"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/text_title"
+                android:textSize="@dimen/text_display_2"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/guideline4"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                android:layout_marginEnd="0dp"/>
+                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
                 android:layout_marginTop="8dp"
+                android:singleLine="true"
                 android:text="MP3 44 KHz STEREO 320 Kb/s"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/text_title"
+                android:textSize="@dimen/text_display"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/guideline4"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                android:layout_marginEnd="0dp"/>
+                app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toBottomOf="@+id/textView6"/>
 
             <android.support.constraint.Guideline
                 android:layout_width="wrap_content"
@@ -135,19 +136,19 @@
             android:id="@+id/album_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
             android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
             android:fadingEdge="horizontal"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:text="Need For Speed"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/text_display_2"
             android:textStyle="bold"
-            app:layout_marginTopPercent="56%"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"/>
+            app:layout_marginTopPercent="50.5%"/>
 
     </android.support.percent.PercentRelativeLayout>
 

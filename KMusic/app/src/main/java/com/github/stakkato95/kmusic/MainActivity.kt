@@ -32,9 +32,18 @@ class MainActivity : AppCompatActivity() {
         val albumText = findViewById(R.id.album_text)
         val scroll = findViewById(R.id.scroll) as ScrollView
         val container = findViewById(R.id.container)
+        var albumTextInitialY = 0.0f
 
         scroll.viewTreeObserver.addOnScrollChangedListener {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            if (albumTextInitialY == 0.0f) {
+                albumTextInitialY = albumText.y
+            }
+
+            val oneScreen = container.height / 2
+            val labelMovementDistance = oneScreen * 0.6f
+
+            val scrollPercent = if (scroll.scrollY > 0) scroll.scrollY / oneScreen.toFloat() else 0.0f
+            albumText.animate().y(albumTextInitialY + labelMovementDistance * scrollPercent).setDuration(0).start()
         }
     }
 }
