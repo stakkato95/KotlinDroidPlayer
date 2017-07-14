@@ -8,6 +8,22 @@
     android:clipChildren="false"
     tools:context="com.github.stakkato95.kmusic.MainActivity">
 
+    <TextView
+        android:id="@+id/album_text_player_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="Need For Speed"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_display_2"
+        android:textStyle="bold"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_centerInParent="true"
