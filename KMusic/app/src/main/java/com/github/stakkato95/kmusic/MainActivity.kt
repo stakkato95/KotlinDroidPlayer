@@ -1,8 +1,9 @@
 package com.github.stakkato95.kmusic
 
 import android.os.Bundle
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import com.github.stakkato95.kmusic.common.view.VerticalViewPager
 
 class MainActivity : AppCompatActivity() {
 
@@ -10,13 +11,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_new)
 
-        val pager = findViewById(R.id.root_pager) as ViewPager
+        val pager = findViewById(R.id.root_pager) as VerticalViewPager
         pager.adapter = RootPager(supportFragmentManager)
+
+        val albumText = findViewById(R.id.album_text)
+        var albumTextInitialY = 0.0f
+
+        pager.viewTreeObserver.addOnScrollChangedListener {
+            if (albumTextInitialY == 0.0f) {
+                albumTextInitialY = albumText.y
+            }
+
+            val labelMovementDistance = pager.height * 0.4f
+            val scrollPercent = pager.normalizedScrollY!! / pager.height
+            albumText.animate().y(albumTextInitialY + -labelMovementDistance * scrollPercent).setDuration(0).start()
+
+            albumText.visibility = if (pager.normalizedScrollY!! >= pager.height) View.GONE else View.VISIBLE
+        }
+
 
 //
 //        val pager = findViewById(R.id.pager) as ViewPager
 //        with(pager) {
-//            adapter = PlayerPagerAdapter(supportFragmentManager)
+//            adapter = PlayerButtonPagerAdapter(supportFragmentManager)
 //            val leftRightPadding = resources.displayMetrics.widthPixels / 6
 //            setPadding(leftRightPadding, 0, leftRightPadding, 0)
 //        }

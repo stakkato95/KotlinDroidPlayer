@@ -3,7 +3,8 @@ package com.github.stakkato95.kmusic
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.github.stakkato95.kmusic.player.PlayerPageFragment
+import com.github.stakkato95.kmusic.player.PlayerFragment
+import com.github.stakkato95.kmusic.trackinfo.TrackInfoFragment
 import com.github.stakkato95.kmusic.tracks.TracksFragment
 
 /**
@@ -11,9 +12,13 @@ import com.github.stakkato95.kmusic.tracks.TracksFragment
  */
 class RootPager(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    override fun getCount() = 2
+    override fun getCount() = 3
 
     override fun getItem(position: Int): Fragment {
-        return if (position == 1) PlayerPageFragment() else TracksFragment()
+        return when(position) {
+            0 -> TrackInfoFragment()
+            1 -> PlayerFragment()
+            else -> TracksFragment()
+        }
     }
 }

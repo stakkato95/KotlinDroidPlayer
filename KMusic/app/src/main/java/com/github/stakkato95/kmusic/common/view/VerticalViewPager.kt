@@ -11,6 +11,8 @@ import android.view.View
  */
 class VerticalViewPager : ViewPager {
 
+    val normalizedScrollY: Float? get() = scrollX / width.toFloat() * height
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -31,7 +33,7 @@ class VerticalViewPager : ViewPager {
     fun swapXY(motionEvent: MotionEvent?): MotionEvent? {
         if (motionEvent == null) return motionEvent
 
-        val newX =  motionEvent.y / height * width
+        val newX = motionEvent.y / height * width
         val newY = motionEvent.x / width * height
 
         motionEvent.setLocation(newX, newY)

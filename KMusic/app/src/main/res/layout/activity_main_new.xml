@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.stakkato95.kmusic.common.view.VerticalViewPager
+<android.support.percent.PercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.github.stakkato95.kmusic.MainActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/root_pager"/>
+    android:layout_height="match_parent">
+
+    <com.github.stakkato95.kmusic.common.view.VerticalViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.github.stakkato95.kmusic.MainActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/root_pager"/>
+
+    <TextView
+        android:id="@+id/album_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="Need For Speed"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_display_2"
+        android:textStyle="bold"
+        app:layout_marginTopPercent="50.5%"/>
+
+</android.support.percent.PercentRelativeLayout>
