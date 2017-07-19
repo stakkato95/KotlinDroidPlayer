@@ -30,7 +30,7 @@ class MusicProgressBar : PercentFrameLayout {
 
     val progressStartAngle = -90f
 
-    val touchTimeToStartScrolling = 1000L
+    val touchTimeToStartScrolling = 500L
     var touchTimeElapsed = 0L
     var lastTouchTime = 0L
 
@@ -70,7 +70,8 @@ class MusicProgressBar : PercentFrameLayout {
     }
 
     fun touchEvent(view: View, event: MotionEvent?): Boolean {
-        if (event?.action == MotionEvent.ACTION_UP) {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            lastTouchTime = System.currentTimeMillis()
             touchTimeElapsed = 0
         } else {
             touchTimeElapsed += System.currentTimeMillis() - lastTouchTime
