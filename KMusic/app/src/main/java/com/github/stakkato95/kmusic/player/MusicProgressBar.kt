@@ -30,6 +30,10 @@ class MusicProgressBar : PercentFrameLayout {
 
     val progressStartAngle = -90f
 
+    val touchTimeToStartScrolling = 1000L
+    var touchTimeElapsed = 0L
+    var lastTouchTime = 0L
+
     constructor(context: Context?) : super(context) { init() }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) { init() }
@@ -63,13 +67,22 @@ class MusicProgressBar : PercentFrameLayout {
                 drawCircle(width / 2f, height / 2f, Math.min((width / 2.1).toInt(), (height / 2.1).toInt()).toFloat(), innerCirclePaint)
             }
         }
-
     }
 
     fun touchEvent(view: View, event: MotionEvent?): Boolean {
-        val ev = event!!
-        progressbarAngle = calculateAngle(ev.x.toInt(), ev.y.toInt())
-        invalidate()
+        if (event?.action == MotionEvent.ACTION_UP) {
+            touchTimeElapsed = 0
+        } else {
+            touchTimeElapsed += System.currentTimeMillis() - lastTouchTime
+        }
+
+        if (touchTimeElapsed >= touchTimeToStartScrolling) {
+            val ev = event!!
+            progressbarAngle = calculateAngle(ev.x.toInt(), ev.y.toInt())
+            invalidate()
+        }
+
+        lastTouchTime = System.currentTimeMillis()
         return true
     }
 
