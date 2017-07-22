@@ -12,15 +12,20 @@
         android:id="@+id/progress"
         android:layout_centerInParent="true"
         app:layout_aspectRatio="100%"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:barThickness="@dimen/musicProgressBar_default_thickness"
+        app:barThicknessTouched="@dimen/musicProgressBar_touched_thickness"
+        app:lineColor="@color/grey"
+        app:innerCircleColor="@android:color/white"
+        app:progressColor="@color/colorPrimary"
+        app:touchTimeToStartScrollingMillis="250">
 
         <ImageView
             android:id="@+id/centerImage"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher"
-            app:layout_heightPercent="100%"
-            app:layout_widthPercent="100%"
-            android:padding="16dp"/>
+            app:layout_heightPercent="75%"
+            app:layout_aspectRatio="100%"/>
 
         <Button
             android:id="@+id/vector_icon"

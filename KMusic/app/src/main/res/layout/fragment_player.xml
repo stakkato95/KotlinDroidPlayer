@@ -28,7 +28,7 @@
         android:id="@+id/pager"
         android:layout_centerInParent="true"
         android:clipToPadding="false"
-        app:layout_heightPercent="30%"
+        app:layout_heightPercent="35%"
         app:layout_widthPercent="100%"/>
 
 </android.support.percent.PercentRelativeLayout>

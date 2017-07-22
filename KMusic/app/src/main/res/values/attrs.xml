@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MusicProgressBar">
-        <attr name="pagesCount" format="integer" />
+        <attr name="lineColor" format="color" />
+        <attr name="innerCircleColor" format="color" />
+        <attr name="progressColor" format="color" />
+        <attr name="barThickness" format="dimension" />
+        <attr name="barThicknessTouched" format="dimension" />
+        <attr name="touchTimeToStartScrollingMillis" format="integer" />
     </declare-styleable>
 </resources>

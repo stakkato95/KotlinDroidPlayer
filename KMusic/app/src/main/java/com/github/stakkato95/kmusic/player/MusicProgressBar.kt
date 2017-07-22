@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
 import android.support.percent.PercentFrameLayout
-import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -19,10 +18,18 @@ import com.github.stakkato95.kmusic.common.extensions.cosAngleOfTwoVectorsStarti
  */
 class MusicProgressBar : PercentFrameLayout {
 
-    lateinit var progressBackgroundPaint: Paint
-    lateinit var progressbarPaint: Paint
+    val DEFAULT_TOUCH_TIME_TO_START_SCROLLING = 500
+
+    //progress paints
+    lateinit var backgroundLinePaint: Paint
+    lateinit var progressPaint: Paint
     lateinit var innerCirclePaint: Paint
 
+    var progressBarNormalThickness: Float = 0f
+    var progressBarTouchedThickness: Float = 0f
+    var progressBarOffsetFromViewBorder: Float = 0f
+
+    //progress coordinates
     var progressbarAngle = 0f
 
     var progressStartPoint = Point(0, 0)
@@ -30,27 +37,48 @@ class MusicProgressBar : PercentFrameLayout {
 
     val progressStartAngle = -90f
 
-    val touchTimeToStartScrolling = 500L
+    //params that control touch
+    var touchTimeToStartScrolling = 0L
     var touchTimeElapsed = 0L
     var lastTouchTime = 0L
 
-    constructor(context: Context?) : super(context) { init() }
+    constructor(context: Context?) : super(context) { init(null) }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) { init() }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) { init(attrs) }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { init() }
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { init(attrs) }
 
-    fun init() {
-        progressBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        progressBackgroundPaint.color = ResourcesCompat.getColor(context.resources, R.color.grey, null)
-        progressBackgroundPaint.strokeWidth = 48 * resources.displayMetrics.density
+    fun init(attrs: AttributeSet?) {
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.MusicProgressBar)
 
-        progressbarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        progressbarPaint.color = ResourcesCompat.getColor(context.resources, R.color.colorPrimary, null)
-        progressbarPaint.strokeWidth = 8 * resources.displayMetrics.density
+        try {
+            backgroundLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+            backgroundLinePaint.color = attributes.getColor(R.styleable.MusicProgressBar_lineColor, Color.GRAY)
+            backgroundLinePaint.strokeWidth = attributes.getDimensionPixelSize(
+                    R.styleable.MusicProgressBar_barThickness,
+                    context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_default_thickness)
+            ).toFloat()
 
-        innerCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        innerCirclePaint.color = Color.WHITE
+            progressBarNormalThickness = attributes.getDimensionPixelSize(
+                    R.styleable.MusicProgressBar_barThickness,
+                    context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_default_thickness)
+            ).toFloat()
+            progressBarTouchedThickness= attributes.getDimensionPixelSize(
+                    R.styleable.MusicProgressBar_barThicknessTouched,
+                    context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_touched_thickness)
+            ).toFloat()
+            progressBarOffsetFromViewBorder = progressBarTouchedThickness - progressBarNormalThickness
+            progressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+            progressPaint.color = attributes.getColor(R.styleable.MusicProgressBar_progressColor, Color.RED)
+            progressPaint.strokeWidth = progressBarNormalThickness
+
+            innerCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+            innerCirclePaint.color = attributes.getColor(R.styleable.MusicProgressBar_innerCircleColor, Color.WHITE)
+
+            touchTimeToStartScrolling = attributes.getInteger(R.styleable.MusicProgressBar_touchTimeToStartScrollingMillis, DEFAULT_TOUCH_TIME_TO_START_SCROLLING).toLong()
+        } finally {
+            attributes.recycle()
+        }
 
         setWillNotDraw(false)
         setOnTouchListener(this::touchEvent)
@@ -61,10 +89,22 @@ class MusicProgressBar : PercentFrameLayout {
         canvas?.let {
             with(canvas) {
                 //let's assume that width is bigger than height
-                val startPadding = ((width - height) / 2).toFloat()
-                drawCircle(width / 2f, height / 2f, Math.min(width / 2, height / 2).toFloat(), progressBackgroundPaint)
-                drawArc(startPadding, 0f, startPadding + height, height.toFloat(), progressStartAngle, progressbarAngle, true, progressbarPaint)
-                drawCircle(width / 2f, height / 2f, Math.min((width / 2.1).toInt(), (height / 2.1).toInt()).toFloat(), innerCirclePaint)
+                val startPadding = ((width - height) / 2).toFloat() + progressBarOffsetFromViewBorder
+                val circleCenterX = width / 2f
+                val circleCenterY = height / 2f
+
+                val backgroundLineRadius = Math.min(width / 2, height / 2).toFloat() - progressBarOffsetFromViewBorder
+                drawCircle(circleCenterX, circleCenterY, backgroundLineRadius, backgroundLinePaint)
+
+                val progressArcRight = startPadding + height - progressBarOffsetFromViewBorder * 2
+                val progressArcBottom = height.toFloat() - progressBarOffsetFromViewBorder
+                drawArc(startPadding, progressBarOffsetFromViewBorder, progressArcRight, progressArcBottom, progressStartAngle, progressbarAngle, true, progressPaint)
+
+                val innerCircleRadius = Math.min(
+                        ((width / 2.0) - progressBarOffsetFromViewBorder - progressBarNormalThickness),
+                        ((height / 2.0) - progressBarOffsetFromViewBorder - progressBarNormalThickness)
+                ).toFloat()
+                drawCircle(circleCenterX, circleCenterY, innerCircleRadius, innerCirclePaint)
             }
         }
     }

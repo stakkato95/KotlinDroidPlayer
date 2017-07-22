@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="musicProgressBar_default_thickness">8dp</dimen>
+    <dimen name="musicProgressBar_touched_thickness">16dp</dimen>
+    <!--text-->
     <dimen name="text_subheading">16sp</dimen>
     <dimen name="text_title">20sp</dimen>
     <dimen name="text_display">34sp</dimen>
