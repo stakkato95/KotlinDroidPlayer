@@ -31,16 +31,16 @@ class MusicProgressBar : PercentFrameLayout {
 
     //progress coordinates
     var progressbarAngle = 0f
-
+    val progressStartAngle = -90f
     var progressStartPoint = Point(0, 0)
         get() = Point(width / 2, 0)
-
-    val progressStartAngle = -90f
 
     //params that control touch
     var touchTimeToStartScrolling = 0L
     var touchTimeElapsed = 0L
     var lastTouchTime = 0L
+
+    var isTouched = false
 
     constructor(context: Context?) : super(context) { init(null) }
 
@@ -88,21 +88,35 @@ class MusicProgressBar : PercentFrameLayout {
         super.onDraw(canvas)
         canvas?.let {
             with(canvas) {
+                val currentProgressbarThickness = if (isTouched) progressBarTouchedThickness else progressBarNormalThickness
+
+
+                val increaseOfOuterCircle =
+                        if (isTouched) (progressBarTouchedThickness - progressBarNormalThickness) / 2
+                        else 0.0f
+
                 //let's assume that width is bigger than height
                 val startPadding = ((width - height) / 2).toFloat() + progressBarOffsetFromViewBorder
                 val circleCenterX = width / 2f
                 val circleCenterY = height / 2f
 
-                val backgroundLineRadius = Math.min(width / 2, height / 2).toFloat() - progressBarOffsetFromViewBorder
+                val backgroundLineRadius = Math.min(width / 2, height / 2).toFloat() - progressBarOffsetFromViewBorder + increaseOfOuterCircle
                 drawCircle(circleCenterX, circleCenterY, backgroundLineRadius, backgroundLinePaint)
 
-                val progressArcRight = startPadding + height - progressBarOffsetFromViewBorder * 2
-                val progressArcBottom = height.toFloat() - progressBarOffsetFromViewBorder
-                drawArc(startPadding, progressBarOffsetFromViewBorder, progressArcRight, progressArcBottom, progressStartAngle, progressbarAngle, true, progressPaint)
+                val progressArcLeft = startPadding - increaseOfOuterCircle
+                val progressArcRight = startPadding + increaseOfOuterCircle + height - progressBarOffsetFromViewBorder * 2
+                val progressBarTop = progressBarOffsetFromViewBorder - increaseOfOuterCircle
+                val progressArcBottom = height.toFloat() - progressBarOffsetFromViewBorder + increaseOfOuterCircle
+                drawArc(progressArcLeft, progressBarTop, progressArcRight, progressArcBottom, progressStartAngle, progressbarAngle, true, progressPaint)
+
+
+                val reductionOfInnerCircle =
+                        if (isTouched) progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2
+                        else progressBarNormalThickness
 
                 val innerCircleRadius = Math.min(
-                        ((width / 2.0) - progressBarOffsetFromViewBorder - progressBarNormalThickness),
-                        ((height / 2.0) - progressBarOffsetFromViewBorder - progressBarNormalThickness)
+                        ((width / 2.0) - progressBarOffsetFromViewBorder - reductionOfInnerCircle),
+                        ((height / 2.0) - progressBarOffsetFromViewBorder - reductionOfInnerCircle)
                 ).toFloat()
                 drawCircle(circleCenterX, circleCenterY, innerCircleRadius, innerCirclePaint)
             }
@@ -113,8 +127,12 @@ class MusicProgressBar : PercentFrameLayout {
         if (event?.action == MotionEvent.ACTION_DOWN) {
             lastTouchTime = System.currentTimeMillis()
             touchTimeElapsed = 0
-        } else {
+
+            isTouched = true
+        } else if (event?.action == MotionEvent.ACTION_MOVE) {
             touchTimeElapsed += System.currentTimeMillis() - lastTouchTime
+        } else {
+            isTouched = false
         }
 
         if (touchTimeElapsed >= touchTimeToStartScrolling) {
