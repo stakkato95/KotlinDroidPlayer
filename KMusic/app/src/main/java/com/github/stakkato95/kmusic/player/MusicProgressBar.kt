@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.support.percent.PercentFrameLayout
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
@@ -58,6 +57,10 @@ class MusicProgressBar : PercentFrameLayout {
     var touchState = TouchState.FINISHED
     var progressScaleTimeElapsed = 0L
     var lastProgressScaleTime = 0L
+
+
+    var lastMotionEvent: MotionEvent? = null
+    var isAngleUpdatedAfterTouch = true
 
     constructor(context: Context?) : super(context) {
         init(null)
@@ -111,38 +114,38 @@ class MusicProgressBar : PercentFrameLayout {
         super.onDraw(canvas)
         with(canvas) {
             val currentTimeMillis = System.currentTimeMillis()
-
-            if (touchState.isStarted()) {
-                lastProgressScaleTime = currentTimeMillis
-
-            } else if (touchState.isInProgress() && progressScaleTimeElapsed <= touchTimeToStartScrolling) {
-                progressScaleTimeElapsed += currentTimeMillis - lastProgressScaleTime
-                invalidate()
-
-            } else if (touchState.isInProgress() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
-                progressScaleTimeElapsed = touchTimeToStartScrolling
-                invalidate()
-
-            } else if (touchState.isFinished() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
-                progressScaleTimeElapsed -= currentTimeMillis - lastProgressScaleTime
-                invalidate()
-
-            } else if (touchState.isFinished() && progressScaleTimeElapsed <= 0) {
-                lastProgressScaleTime = 0
-            }
-
-            val touchTimeProgress = progressScaleTimeElapsed.toFloat() / touchTimeToStartScrolling.toFloat()
-            Log.d("VIEW", touchTimeProgress.toString())
+//
+//            if (touchState.isStarted()) {
+//                lastProgressScaleTime = currentTimeMillis
+//
+//            } else if (touchState.isInProgress() && progressScaleTimeElapsed <= touchTimeToStartScrolling) {
+//                progressScaleTimeElapsed += currentTimeMillis - lastProgressScaleTime
+//                invalidate()
+//
+//            } else if (touchState.isInProgress() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
+//                progressScaleTimeElapsed = touchTimeToStartScrolling
+//                invalidate()
+//
+//            } else if (touchState.isFinished() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
+//                progressScaleTimeElapsed -= currentTimeMillis - lastProgressScaleTime
+//                invalidate()
+//
+//            } else if (touchState.isFinished() && progressScaleTimeElapsed <= 0) {
+//                lastProgressScaleTime = 0
+//            }
+//
+//            val touchTimeProgress = progressScaleTimeElapsed.toFloat() / touchTimeToStartScrolling.toFloat()
+//            Log.d("VIEW", touchTimeProgress.toString())
 
             val increaseOfOuterCircle =
                     if (touchState.isInProgress()) {
-                        (progressBarTouchedThickness - progressBarNormalThickness) / 2 * touchTimeProgress
+                        (progressBarTouchedThickness - progressBarNormalThickness) / 2// * touchTimeProgress
                     } else {
                         0.0f
                     }
             val reductionOfInnerCircle =
                     if (touchState.isInProgress()) {
-                        progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2 * touchTimeProgress
+                        progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2// * touchTimeProgress
                     } else {
                         progressBarNormalThickness
                     }
@@ -185,24 +188,22 @@ class MusicProgressBar : PercentFrameLayout {
     }
 
     fun touchEvent(view: View, event: MotionEvent): Boolean {
-        val currentTimeMillis = System.currentTimeMillis()
 
         if (event.action == MotionEvent.ACTION_DOWN) {
             touchState = TouchState.STARTED
-            invalidate()
+            lastMotionEvent = event
+            isAngleUpdatedAfterTouch = false
+            postDelayed(this::updateProgressAngleAfterDelay, touchTimeToStartScrolling)
+
+        } else if (event.action == MotionEvent.ACTION_MOVE && !isAngleUpdatedAfterTouch) {
+            lastMotionEvent = event
         } else if (event.action == MotionEvent.ACTION_MOVE) {
-            touchTimeElapsed += currentTimeMillis - lastTouchTime
-        } else {
+            updateProgressAngle(event)
+        } else if (event.action == MotionEvent.ACTION_UP ||
+                event.action == MotionEvent.ACTION_CANCEL) {
             touchState = TouchState.FINISHED
-            touchTimeElapsed = 0
         }
 
-        if (touchTimeElapsed >= touchTimeToStartScrolling) {
-            progressbarAngle = calculateAngle(event.x.toInt(), event.y.toInt())
-            invalidate()
-        }
-
-        lastTouchTime = currentTimeMillis
         return true
     }
 
@@ -224,5 +225,17 @@ class MusicProgressBar : PercentFrameLayout {
             360 - (Math.acos(angleCosine) * 180 / Math.PI).toFloat()
         }
         return fl
+    }
+
+    fun updateProgressAngle(event: MotionEvent) {
+        progressbarAngle = calculateAngle(event.x.toInt(), event.y.toInt())
+        invalidate()
+    }
+
+    fun updateProgressAngleAfterDelay() {
+        if (touchState.isInProgress() && lastMotionEvent != null) {
+            updateProgressAngle(lastMotionEvent!!)
+            isAngleUpdatedAfterTouch = true
+        }
     }
 }
