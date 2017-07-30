@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.support.percent.PercentFrameLayout
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
@@ -112,21 +113,26 @@ class MusicProgressBar : PercentFrameLayout {
             val currentTimeMillis = System.currentTimeMillis()
 
             if (touchState.isStarted()) {
-                lastTouchTime = currentTimeMillis
+                lastProgressScaleTime = currentTimeMillis
 
             } else if (touchState.isInProgress() && progressScaleTimeElapsed <= touchTimeToStartScrolling) {
                 progressScaleTimeElapsed += currentTimeMillis - lastProgressScaleTime
                 invalidate()
 
+            } else if (touchState.isInProgress() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
+                progressScaleTimeElapsed = touchTimeToStartScrolling
+                invalidate()
+
             } else if (touchState.isFinished() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
-                progressScaleTimeElapsed -= System.currentTimeMillis() - lastProgressScaleTime
+                progressScaleTimeElapsed -= currentTimeMillis - lastProgressScaleTime
                 invalidate()
 
             } else if (touchState.isFinished() && progressScaleTimeElapsed <= 0) {
                 lastProgressScaleTime = 0
             }
 
-            val touchTimeProgress = progressScaleTimeElapsed / touchTimeToStartScrolling
+            val touchTimeProgress = progressScaleTimeElapsed.toFloat() / touchTimeToStartScrolling.toFloat()
+            Log.d("VIEW", touchTimeProgress.toString())
 
             val increaseOfOuterCircle =
                     if (touchState.isInProgress()) {
