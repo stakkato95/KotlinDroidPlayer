@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.support.percent.PercentFrameLayout
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
@@ -34,6 +35,9 @@ class MusicProgressBar : PercentFrameLayout {
 
     val DEFAULT_TOUCH_TIME_TO_START_SCROLLING = 500
 
+    val IDEAL_FPS_RATE = 60f
+    val SECOND_IN_MILLIS = 1000f
+
     //progress paints
     lateinit var backgroundLinePaint: Paint
     lateinit var progressPaint: Paint
@@ -56,8 +60,7 @@ class MusicProgressBar : PercentFrameLayout {
 
     var touchState = TouchState.FINISHED
     var progressScaleTimeElapsed = 0L
-    var lastProgressScaleTime = 0L
-
+    val progressBarUpdateStep = (SECOND_IN_MILLIS / IDEAL_FPS_RATE).toLong()
 
     var lastMotionEvent: MotionEvent? = null
     var isAngleUpdatedAfterTouch = true
@@ -134,18 +137,18 @@ class MusicProgressBar : PercentFrameLayout {
 //                lastProgressScaleTime = 0
 //            }
 //
-//            val touchTimeProgress = progressScaleTimeElapsed.toFloat() / touchTimeToStartScrolling.toFloat()
-//            Log.d("VIEW", touchTimeProgress.toString())
+            val touchTimeProgress = progressScaleTimeElapsed.toFloat() / touchTimeToStartScrolling.toFloat()
+            Log.d("VIEW", touchTimeProgress.toString())
 
             val increaseOfOuterCircle =
                     if (touchState.isInProgress()) {
-                        (progressBarTouchedThickness - progressBarNormalThickness) / 2// * touchTimeProgress
+                        (progressBarTouchedThickness - progressBarNormalThickness) / 2 * touchTimeProgress
                     } else {
                         0.0f
                     }
             val reductionOfInnerCircle =
                     if (touchState.isInProgress()) {
-                        progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2// * touchTimeProgress
+                        progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2 * touchTimeProgress
                     } else {
                         progressBarNormalThickness
                     }
@@ -179,7 +182,7 @@ class MusicProgressBar : PercentFrameLayout {
             drawCircle(circleCenterX, circleCenterY, innerCircleRadius, innerCirclePaint)
 
             if (touchState.isInProgress()) {
-                lastProgressScaleTime = currentTimeMillis
+//                lastProgressScaleTime = currentTimeMillis
             }
             if (touchState.isStarted()) {
                 touchState = TouchState.IN_PROGRESS
@@ -194,6 +197,8 @@ class MusicProgressBar : PercentFrameLayout {
             lastMotionEvent = event
             isAngleUpdatedAfterTouch = false
             postDelayed(this::updateProgressAngleAfterDelay, touchTimeToStartScrolling)
+            updateProgressBarThicknessAfterDelay()
+            progressScaleTimeElapsed = 0
 
         } else if (event.action == MotionEvent.ACTION_MOVE && !isAngleUpdatedAfterTouch) {
             lastMotionEvent = event
@@ -201,6 +206,7 @@ class MusicProgressBar : PercentFrameLayout {
             updateProgressAngle(event)
         } else if (event.action == MotionEvent.ACTION_UP ||
                 event.action == MotionEvent.ACTION_CANCEL) {
+            updateProgressBarThicknessAfterDelay()
             touchState = TouchState.FINISHED
         }
 
@@ -237,5 +243,19 @@ class MusicProgressBar : PercentFrameLayout {
             updateProgressAngle(lastMotionEvent!!)
             isAngleUpdatedAfterTouch = true
         }
+    }
+
+    fun updateProgressBarThicknessAfterDelay() {
+        if (touchState.isStarted() && progressScaleTimeElapsed < touchTimeToStartScrolling) {
+            progressScaleTimeElapsed += progressBarUpdateStep
+        }
+        if (touchState.isFinished() && progressScaleTimeElapsed < touchTimeToStartScrolling) {
+            progressScaleTimeElapsed += progressBarUpdateStep
+        }
+
+        //TODO procede here
+
+        invalidate()
+        postDelayed(this::updateProgressBarThicknessAfterDelay, progressBarUpdateStep)
     }
 }
