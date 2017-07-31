@@ -141,17 +141,17 @@ class MusicProgressBar : PercentFrameLayout {
             Log.d("VIEW", touchTimeProgress.toString())
 
             val increaseOfOuterCircle =
-                    if (touchState.isInProgress()) {
+//                    if (touchState.isInProgress()) {
                         (progressBarTouchedThickness - progressBarNormalThickness) / 2 * touchTimeProgress
-                    } else {
-                        0.0f
-                    }
+//                    } else {
+//                        0.0f
+//                    }
             val reductionOfInnerCircle =
-                    if (touchState.isInProgress()) {
+//                    if (touchState.isInProgress()) {
                         progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2 * touchTimeProgress
-                    } else {
-                        progressBarNormalThickness
-                    }
+//                    } else {
+//                        progressBarNormalThickness
+//                    }
 
             //let's assume that width is bigger than height
             val startPadding = ((width - height) / 2).toFloat() + progressBarOffsetFromViewBorder
@@ -206,8 +206,8 @@ class MusicProgressBar : PercentFrameLayout {
             updateProgressAngle(event)
         } else if (event.action == MotionEvent.ACTION_UP ||
                 event.action == MotionEvent.ACTION_CANCEL) {
-            updateProgressBarThicknessAfterDelay()
             touchState = TouchState.FINISHED
+            updateProgressBarThicknessAfterDelay()
         }
 
         return true
@@ -246,16 +246,22 @@ class MusicProgressBar : PercentFrameLayout {
     }
 
     fun updateProgressBarThicknessAfterDelay() {
-        if (touchState.isStarted() && progressScaleTimeElapsed < touchTimeToStartScrolling) {
+        var shouldInvalidate = false
+
+        if ((touchState.isStarted() || touchState.isInProgress())
+                && progressScaleTimeElapsed < touchTimeToStartScrolling) {
             progressScaleTimeElapsed += progressBarUpdateStep
+            shouldInvalidate = true
         }
-        if (touchState.isFinished() && progressScaleTimeElapsed < touchTimeToStartScrolling) {
-            progressScaleTimeElapsed += progressBarUpdateStep
+        if (touchState.isFinished() && progressScaleTimeElapsed > 0L) {
+            progressScaleTimeElapsed -= progressBarUpdateStep
+            shouldInvalidate = true
         }
 
-        //TODO procede here
-
-        invalidate()
-        postDelayed(this::updateProgressBarThicknessAfterDelay, progressBarUpdateStep)
+        Log.d("VIEW", progressScaleTimeElapsed.toString())
+        if (shouldInvalidate) {
+            invalidate()
+            postDelayed(this::updateProgressBarThicknessAfterDelay, progressBarUpdateStep)
+        }
     }
 }
