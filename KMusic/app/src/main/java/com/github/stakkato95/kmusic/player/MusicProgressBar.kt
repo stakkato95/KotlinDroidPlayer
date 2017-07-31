@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.support.percent.PercentFrameLayout
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
@@ -50,13 +49,21 @@ class MusicProgressBar : PercentFrameLayout {
     //progress coordinates
     var progressbarAngle = 0f
     val progressStartAngle = -90f
-    var progressStartPoint = Point(0, 0)
-        get() = Point(width / 2, 0)
+
+    var center = Point()
+        get() = Point(width / 2, height / 2)
+    var centerX = 0f
+        get() = center.x.toFloat()
+    var centerY = 0f
+        get() = center.y.toFloat()
+
+    var halfWidth = 0f
+        get() = width / 2f
+    var halfHeight = 0f
+        get() = height / 2f
 
     //params that control touch
     var touchTimeToStartScrolling = 0L
-    var touchTimeElapsed = 0L
-    var lastTouchTime = 0L
 
     var touchState = TouchState.FINISHED
     var progressScaleTimeElapsed = 0L
@@ -104,7 +111,10 @@ class MusicProgressBar : PercentFrameLayout {
             innerCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
             innerCirclePaint.color = attributes.getColor(R.styleable.MusicProgressBar_innerCircleColor, Color.WHITE)
 
-            touchTimeToStartScrolling = attributes.getInteger(R.styleable.MusicProgressBar_touchTimeToStartScrollingMillis, DEFAULT_TOUCH_TIME_TO_START_SCROLLING).toLong()
+            touchTimeToStartScrolling = attributes.getInteger(
+                    R.styleable.MusicProgressBar_touchTimeToStartScrollingMillis,
+                    DEFAULT_TOUCH_TIME_TO_START_SCROLLING
+            ).toLong()
         } finally {
             attributes.recycle()
         }
@@ -116,89 +126,70 @@ class MusicProgressBar : PercentFrameLayout {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         with(canvas) {
-            val currentTimeMillis = System.currentTimeMillis()
-//
-//            if (touchState.isStarted()) {
-//                lastProgressScaleTime = currentTimeMillis
-//
-//            } else if (touchState.isInProgress() && progressScaleTimeElapsed <= touchTimeToStartScrolling) {
-//                progressScaleTimeElapsed += currentTimeMillis - lastProgressScaleTime
-//                invalidate()
-//
-//            } else if (touchState.isInProgress() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
-//                progressScaleTimeElapsed = touchTimeToStartScrolling
-//                invalidate()
-//
-//            } else if (touchState.isFinished() && progressScaleTimeElapsed >= touchTimeToStartScrolling) {
-//                progressScaleTimeElapsed -= currentTimeMillis - lastProgressScaleTime
-//                invalidate()
-//
-//            } else if (touchState.isFinished() && progressScaleTimeElapsed <= 0) {
-//                lastProgressScaleTime = 0
-//            }
-//
-            val touchTimeProgress = progressScaleTimeElapsed.toFloat() / touchTimeToStartScrolling.toFloat()
-            Log.d("VIEW", touchTimeProgress.toString())
+            val touchTimeProgress = progressScaleTimeElapsed.toFloat() / touchTimeToStartScrolling
 
-            val increaseOfOuterCircle =
-//                    if (touchState.isInProgress()) {
-                        (progressBarTouchedThickness - progressBarNormalThickness) / 2 * touchTimeProgress
-//                    } else {
-//                        0.0f
-//                    }
-            val reductionOfInnerCircle =
-//                    if (touchState.isInProgress()) {
-                        progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2 * touchTimeProgress
-//                    } else {
-//                        progressBarNormalThickness
-//                    }
+            val increaseOfOuterCircle = calculateIncreaseOfOuterCircle(touchTimeProgress)
+            val reductionOfInnerCircle = calculateReductionOfInnerCircle(touchTimeProgress)
 
-            //let's assume that width is bigger than height
-            val startPadding = ((width - height) / 2).toFloat() + progressBarOffsetFromViewBorder
-            val circleCenterX = width / 2f
-            val circleCenterY = height / 2f
+            drawBackgroundLine(canvas, increaseOfOuterCircle)
 
-            val backgroundLineRadius = Math.min(width / 2, height / 2).toFloat() - progressBarOffsetFromViewBorder + increaseOfOuterCircle
-            drawCircle(circleCenterX, circleCenterY, backgroundLineRadius, backgroundLinePaint)
+            drawProgressArc(canvas, increaseOfOuterCircle)
 
-            val progressArcLeft = startPadding - increaseOfOuterCircle
-            val progressArcRight = startPadding + increaseOfOuterCircle + height - progressBarOffsetFromViewBorder * 2
-            val progressBarTop = progressBarOffsetFromViewBorder - increaseOfOuterCircle
-            val progressArcBottom = height.toFloat() - progressBarOffsetFromViewBorder + increaseOfOuterCircle
-            drawArc(
-                    progressArcLeft,
-                    progressBarTop,
-                    progressArcRight,
-                    progressArcBottom,
-                    progressStartAngle,
-                    progressbarAngle,
-                    true,
-                    progressPaint)
-
-            val innerCircleRadius = Math.min(
-                    ((width / 2.0) - progressBarOffsetFromViewBorder - reductionOfInnerCircle),
-                    ((height / 2.0) - progressBarOffsetFromViewBorder - reductionOfInnerCircle)
-            ).toFloat()
-            drawCircle(circleCenterX, circleCenterY, innerCircleRadius, innerCirclePaint)
-
-            if (touchState.isInProgress()) {
-//                lastProgressScaleTime = currentTimeMillis
-            }
-            if (touchState.isStarted()) {
-                touchState = TouchState.IN_PROGRESS
-            }
+            drawInnerCircle(canvas, reductionOfInnerCircle)
         }
     }
 
-    fun touchEvent(view: View, event: MotionEvent): Boolean {
+    fun drawBackgroundLine(canvas: Canvas, increaseOfOuterCircle: Float) {
+        //let's assume that width is bigger than height
+        val backgroundLineRadius = Math.min(halfWidth, halfHeight) - progressBarOffsetFromViewBorder + increaseOfOuterCircle
+        canvas.drawCircle(centerX, centerY, backgroundLineRadius, backgroundLinePaint)
+    }
 
+    fun drawProgressArc(canvas: Canvas, increaseOfOuterCircle: Float) {
+        val progressbarLeftPadding = (width - height) / 2f + progressBarOffsetFromViewBorder
+
+        val progressArcLeft = progressbarLeftPadding - increaseOfOuterCircle
+        val progressArcRight = progressbarLeftPadding + increaseOfOuterCircle + height - progressBarOffsetFromViewBorder * 2
+        val progressBarTop = progressBarOffsetFromViewBorder - increaseOfOuterCircle
+        val progressArcBottom = height.toFloat() - progressBarOffsetFromViewBorder + increaseOfOuterCircle
+
+        canvas.drawArc(
+                progressArcLeft,
+                progressBarTop,
+                progressArcRight,
+                progressArcBottom,
+                progressStartAngle,
+                progressbarAngle,
+                true,
+                progressPaint)
+    }
+
+    fun drawInnerCircle(canvas: Canvas, reductionOfInnerCircle: Float) {
+        val innerCircleRadius = Math.min(
+                halfWidth - progressBarOffsetFromViewBorder - reductionOfInnerCircle,
+                halfHeight - progressBarOffsetFromViewBorder - reductionOfInnerCircle
+        )
+        canvas.drawCircle(centerX, centerY, innerCircleRadius, innerCirclePaint)
+    }
+
+    fun calculateIncreaseOfOuterCircle(touchTimeProgress: Float): Float {
+        return (progressBarTouchedThickness - progressBarNormalThickness) / 2 * touchTimeProgress
+    }
+
+    fun calculateReductionOfInnerCircle(touchTimeProgress: Float): Float {
+        return progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2 * touchTimeProgress
+    }
+
+    fun touchEvent(view: View, event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             touchState = TouchState.STARTED
             lastMotionEvent = event
+
             isAngleUpdatedAfterTouch = false
+            progressScaleTimeElapsed = 0
+
             postDelayed(this::updateProgressAngleAfterDelay, touchTimeToStartScrolling)
             updateProgressBarThicknessAfterDelay()
-            progressScaleTimeElapsed = 0
 
         } else if (event.action == MotionEvent.ACTION_MOVE && !isAngleUpdatedAfterTouch) {
             lastMotionEvent = event
@@ -216,21 +207,20 @@ class MusicProgressBar : PercentFrameLayout {
     fun calculateAngle(x: Int, y: Int): Float {
         val currentPoint = Point(x, y)
 
-        val startX = progressStartPoint.x - width / 2
+        val startX = 0
         val currentX = currentPoint.x - (width / 2)
-        val startY = progressStartPoint.y + height / 2
+        val startY = height / 2
         val currentY = (height / 2) - currentPoint.y
 
         val translatedStartPoint = Point(startX, startY)
         val translatedCurrentPoint = Point(currentX, currentY)
         val angleCosine = translatedStartPoint.cosAngleOfTwoVectorsStartingInZeroPoint(translatedCurrentPoint)
 
-        val fl = if (currentPoint.x > width / 2) {
+        return if (currentPoint.x > width / 2) {
             (Math.acos(angleCosine) * 180 / Math.PI).toFloat()
         } else {
             360 - (Math.acos(angleCosine) * 180 / Math.PI).toFloat()
         }
-        return fl
     }
 
     fun updateProgressAngle(event: MotionEvent) {
@@ -258,7 +248,6 @@ class MusicProgressBar : PercentFrameLayout {
             shouldInvalidate = true
         }
 
-        Log.d("VIEW", progressScaleTimeElapsed.toString())
         if (shouldInvalidate) {
             invalidate()
             postDelayed(this::updateProgressBarThicknessAfterDelay, progressBarUpdateStep)
