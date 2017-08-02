@@ -7,5 +7,9 @@
         <attr name="barThickness" format="dimension" />
         <attr name="barThicknessTouched" format="dimension" />
         <attr name="touchTimeToStartScrollingMillis" format="integer" />
+        <attr name="vibrationTime" format="integer" />
+        <attr name="vibrationTimeOnFirstTouch" format="integer" />
+        <attr name="angleBetweenVibrations" format="integer" />
+        <attr name="angleMeasurementErrorPercent" format="float" />
     </declare-styleable>
 </resources>

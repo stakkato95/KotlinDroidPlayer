@@ -18,7 +18,11 @@
         app:lineColor="@color/grey"
         app:innerCircleColor="@android:color/white"
         app:progressColor="@color/colorPrimary"
-        app:touchTimeToStartScrollingMillis="250">
+        app:touchTimeToStartScrollingMillis="250"
+        app:angleBetweenVibrations="15"
+        app:angleMeasurementErrorPercent="0.2"
+        app:vibrationTime="25"
+        app:vibrationTimeOnFirstTouch="50">
 
         <ImageView
             android:id="@+id/centerImage"

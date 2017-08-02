@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
+import android.os.Vibrator
 import android.support.percent.PercentFrameLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -37,6 +38,11 @@ class MusicProgressBar : PercentFrameLayout {
     val IDEAL_FPS_RATE = 60f
     val SECOND_IN_MILLIS = 1000f
 
+    val DEFAULT_ANGLE_BETWEEN_VIBRATIONS = 10
+    val DEFAULT_VIBRATION_TIME = 50
+    val DEFAULT_VIBRATION_TIME_ON_FIRST_TOUCH = 100
+    val DEFAULT_ANGLE_MEASUREMENT_ERROR = 0f
+
     //progress paints
     lateinit var backgroundLinePaint: Paint
     lateinit var progressPaint: Paint
@@ -48,6 +54,7 @@ class MusicProgressBar : PercentFrameLayout {
 
     //progress coordinates
     var progressbarAngle = 0f
+    var progressbarAngleLast = 0f
     val progressStartAngle = -90f
 
     var center = Point()
@@ -68,6 +75,13 @@ class MusicProgressBar : PercentFrameLayout {
     var touchState = TouchState.FINISHED
     var progressScaleTimeElapsed = 0L
     val progressBarUpdateStep = (SECOND_IN_MILLIS / IDEAL_FPS_RATE).toLong()
+
+    var angleBetweenVibration = 0
+    var angleMeasurementError = 0f
+    var vibrationTime = 0L
+    var vibrationTimeOnFirstTouch = 0L
+
+    lateinit var vibrator: Vibrator
 
     constructor(context: Context?) : super(context) {
         init(null)
@@ -112,12 +126,26 @@ class MusicProgressBar : PercentFrameLayout {
                     R.styleable.MusicProgressBar_touchTimeToStartScrollingMillis,
                     DEFAULT_TOUCH_TIME_TO_START_SCROLLING
             ).toLong()
+
+            angleBetweenVibration = attributes.getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_ANGLE_BETWEEN_VIBRATIONS)
+
+            vibrationTime = attributes
+                    .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_VIBRATION_TIME)
+                    .toLong()
+
+            vibrationTimeOnFirstTouch = attributes
+                    .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_VIBRATION_TIME_ON_FIRST_TOUCH)
+                    .toLong()
+
+            angleMeasurementError = attributes.getFloat(R.styleable.MusicProgressBar_angleMeasurementErrorPercent, DEFAULT_ANGLE_MEASUREMENT_ERROR)
         } finally {
             attributes.recycle()
         }
 
         setWillNotDraw(false)
         setOnTouchListener(this::touchEvent)
+
+        vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -183,10 +211,15 @@ class MusicProgressBar : PercentFrameLayout {
                 touchState = TouchState.STARTED
                 progressScaleTimeElapsed = 0
 
+                vibrator.vibrate(vibrationTimeOnFirstTouch)
+
                 updateProgressBarThicknessAfterDelay()
                 updateProgressAngle(event)
             }
-            event.action == MotionEvent.ACTION_MOVE -> updateProgressAngle(event)
+            event.action == MotionEvent.ACTION_MOVE -> {
+                updateProgressAngle(event)
+                vibrate()
+            }
             event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL -> {
                 touchState = TouchState.FINISHED
 
@@ -238,5 +271,13 @@ class MusicProgressBar : PercentFrameLayout {
             invalidate()
             postDelayed(this::updateProgressBarThicknessAfterDelay, progressBarUpdateStep)
         }
+    }
+
+    fun vibrate() {
+        if (Math.round(progressbarAngle) % angleBetweenVibration <= angleBetweenVibration * angleMeasurementError) {
+            vibrator.vibrate(vibrationTime)
+        }
+
+        progressbarAngleLast = progressbarAngle
     }
 }
