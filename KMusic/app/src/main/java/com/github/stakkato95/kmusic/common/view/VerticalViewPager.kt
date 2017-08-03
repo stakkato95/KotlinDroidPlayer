@@ -11,7 +11,7 @@ import android.view.View
  */
 class VerticalViewPager : ViewPager {
 
-    val normalizedScrollY: Float? get() = scrollX / width.toFloat() * height
+    val normalizedScrollY: Float get() = scrollX / width.toFloat() * height
 
     var canInterceptTouchEvents = true
 

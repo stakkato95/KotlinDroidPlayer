@@ -7,7 +7,7 @@ import android.widget.TextView
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
-fun TextView.setBlendedColorText(startColor: Int, endColor: Int, ratio: Float) {
+fun TextView.setBlendedTextColor(startColor: Int, endColor: Int, ratio: Float) {
     setTextColor(ColorUtils.blendARGB(startColor, endColor, ratio))
 }
 

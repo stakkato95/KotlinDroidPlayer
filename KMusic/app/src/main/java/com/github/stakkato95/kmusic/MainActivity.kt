@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
 
         verticalPagerView.adapter = RootPager(supportFragmentManager)
 
-        ViewPagerCoordinator(verticalPagerView, albumTextVeiw)
+        val coordinator = ViewPagerCoordinator(verticalPagerView, albumTextVeiw, 1f, 0.5f)
+        coordinator.labelMovementPercent = 0.4f
 
         setProgressBarTouchListener()
     }

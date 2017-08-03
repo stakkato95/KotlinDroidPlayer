@@ -1,19 +1,26 @@
 package com.github.stakkato95.kmusic.tracks.view
 
-import android.support.percent.PercentRelativeLayout
 import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.common.extensions.lerp
-import com.github.stakkato95.kmusic.common.extensions.setBlendedColorText
+import com.github.stakkato95.kmusic.common.extensions.setBlendedTextColor
 import com.github.stakkato95.kmusic.common.view.VerticalViewPager
 
 /**
  * Created by artsiomkaliaha on 03.08.17.
  */
-class ViewPagerCoordinator(var pager: VerticalViewPager, var text: TextView) : ScrollCoordinator(pager) {
+class ViewPagerCoordinator(
+        val pager: VerticalViewPager,
+        val text: TextView,
+        val startTextSize: Float,
+        val endTextSize: Float) : ScrollCoordinator(pager) {
+
+    companion object {
+        val TEXT_INITIAL_Y_COORDINATE_NOT_INITED = -1f
+    }
 
     val textViewsToFade = arrayOf(
             R.id.artistView,
@@ -22,59 +29,65 @@ class ViewPagerCoordinator(var pager: VerticalViewPager, var text: TextView) : S
             R.id.audioFormatLabelView
     )
 
-    var lastScrollPercent: Float = 0.0f
+    var lastScrollPercent = 0f
+    var lastScroll = 0f
+
     var albumTextInitialHeight = 0
-    var lastScroll = 0.0f
-    var albumTextInitialY = 0.0f
+    var albumTextInitialY = TEXT_INITIAL_Y_COORDINATE_NOT_INITED
+
+    //to what distance label will move to top when ViewPager is scrolled to top
+    var labelMovementPercent = 0f
+    var labelMovementDistance = 0f
+        get() = pager.height * labelMovementPercent
 
     val startColor = ResourcesCompat.getColor(pager.context.resources, R.color.colorPrimary, null)
     val endColor = ResourcesCompat.getColor(pager.context.resources, R.color.colorAccent, null)
 
     override fun onObservableViewScrolled() {
-        val labelMovementDistance = observableView.height * 0.4f
-
-        if (albumTextInitialY == 0.0f) {
+        if (albumTextInitialY == TEXT_INITIAL_Y_COORDINATE_NOT_INITED) {
             albumTextInitialY = text.y
             albumTextInitialHeight = text.height
-            val playerView = pager.getChildAt(1)
-
-            val albumTextPlayerScreen = playerView.findViewById(R.id.album_text_player_screen) as TextView
-
-            val layoutParams = albumTextPlayerScreen.layoutParams as PercentRelativeLayout.LayoutParams
-            layoutParams.topMargin = (albumTextInitialY + labelMovementDistance - pager.height).toInt()
-            albumTextPlayerScreen.layoutParams = layoutParams
-
-            albumTextPlayerScreen.scaleX = 0.5f
-            albumTextPlayerScreen.scaleY = 0.5f
         }
 
-        val scrollPercent = pager.normalizedScrollY!! / pager.height
-        val isMovingFromFirstToSecondPage = pager.normalizedScrollY!! - lastScroll >= 0 && pager.normalizedScrollY!! < pager.height
-        val isMovingFromSecondToFirstPage = pager.normalizedScrollY!! - lastScroll < 0 && pager.normalizedScrollY!! < pager.height
+        val pagerScroll = pager.normalizedScrollY
+        val scrollPercent = pagerScroll / pager.height
+        val isMovingFromFirstToSecondPage = pagerScroll - lastScroll >= 0 && pagerScroll < pager.height
+        val isMovingFromSecondToFirstPage = pagerScroll - lastScroll < 0 && pagerScroll < pager.height
 
-        if (isMovingFromFirstToSecondPage.xor(isMovingFromSecondToFirstPage)) {
-            text.animate().y(albumTextInitialY + -labelMovementDistance * scrollPercent).setDuration(0).start()
-        } else {
-            text.animate().yBy(lastScroll - pager.normalizedScrollY!!).setDuration(0).start()
-        }
+        moveText(pagerScroll, scrollPercent, isMovingFromFirstToSecondPage, isMovingFromSecondToFirstPage)
 
-        text.setBlendedColorText(startColor, endColor, scrollPercent)
+        scaleText(scrollPercent, isMovingFromFirstToSecondPage, isMovingFromSecondToFirstPage)
 
-        if (isMovingFromFirstToSecondPage || isMovingFromSecondToFirstPage) {
-            val targetSize = albumTextInitialHeight * lerp(1f, 0.5f, scrollPercent)
-            val scale = targetSize / text.height
+        text.setBlendedTextColor(startColor, endColor, scrollPercent)
 
-            text.animate().scaleX(scale).setDuration(0).start()
-            text.animate().scaleY(scale).setDuration(0).start()
-        }
-
-        fadeText(isMovingFromFirstToSecondPage, isMovingFromSecondToFirstPage)
+        fadeOtherText(isMovingFromFirstToSecondPage, isMovingFromSecondToFirstPage)
 
         lastScrollPercent = scrollPercent
-        lastScroll = pager.normalizedScrollY!!
+        lastScroll = pagerScroll
     }
 
-    fun fadeText(isMovingFromFirstToSecondPage: Boolean, isMovingFromSecondToFirstPage: Boolean) {
+    fun moveText(scroll: Float, scrollPercent: Float, movingFromFirstToSecond: Boolean, movingFromSecondToFirst: Boolean) {
+        val animation = if (movingFromFirstToSecond.xor(movingFromSecondToFirst)) {
+            text.animate().y(albumTextInitialY - labelMovementDistance * scrollPercent)
+        } else {
+            text.animate().yBy(lastScroll - scroll)
+        }
+        animation.setDuration(0).start()
+    }
+
+    fun scaleText(scrollPercent: Float, movingFromFirstToSecond: Boolean, movingFromSecondToFirst: Boolean) {
+        if (movingFromFirstToSecond || movingFromSecondToFirst) {
+            val targetSize = albumTextInitialHeight * lerp(startTextSize, endTextSize, scrollPercent)
+            val targetScale = targetSize / text.height
+            text.animate()
+                    .scaleX(targetScale)
+                    .scaleY(targetScale)
+                    .setDuration(0)
+                    .start()
+        }
+    }
+
+    fun fadeOtherText(isMovingFromFirstToSecondPage: Boolean, isMovingFromSecondToFirstPage: Boolean) {
         var trackInfoView: ViewGroup? = null
         var albumLabel: View? = null
 
@@ -86,19 +99,21 @@ class ViewPagerCoordinator(var pager: VerticalViewPager, var text: TextView) : S
             }
         }
 
-        albumLabel?.let {
-            val views = arrayListOf(albumLabel)
-            textViewsToFade.forEach { id -> views.add(trackInfoView?.findViewById(id)) }
-
-            val tartgetAlpha = if (isMovingFromFirstToSecondPage && albumLabel != null && albumLabel!!.alpha == 1f) {
-                0f
-            } else if (isMovingFromSecondToFirstPage && albumLabel != null && albumLabel!!.alpha <= 1f) {
-                1f
-            } else {
-                0f
-            }
-
-            views.forEach { it!!.animate().alpha(tartgetAlpha).start() }
+        if (albumLabel == null) {
+            return
         }
+
+        val views = arrayListOf(albumLabel)
+        textViewsToFade.forEach { id -> views.add(trackInfoView!!.findViewById(id)) }
+
+        val targetAlpha = if (isMovingFromFirstToSecondPage && albumLabel.alpha == 1f) {
+            0f
+        } else if (isMovingFromSecondToFirstPage && albumLabel.alpha <= 1f) {
+            1f
+        } else {
+            0f
+        }
+
+        views.forEach { it.animate().alpha(targetAlpha).start() }
     }
 }
