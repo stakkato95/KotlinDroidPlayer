@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.player.view
+package com.github.stakkato95.kmusic.player.adapter
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
