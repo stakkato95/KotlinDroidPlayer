@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/tracks_cardView_height"
+    android:paddingTop="@dimen/tracks_cardView_padding_topBottom"
+    android:paddingBottom="@dimen/tracks_cardView_padding_topBottom"
+    android:paddingStart="@dimen/tracks_cardView_padding_leftRight"
+    android:paddingEnd="@dimen/tracks_cardView_padding_leftRight"
+    android:clipToPadding="false">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/tracks_cardView_elevation"
+        app:cardCornerRadius="@dimen/tracks_cardView_cornerRadius">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/test_background"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_track_item_shadow"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/trackNameView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginEnd="@dimen/tracks_cardView_text_rightMargin"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="Need For Speed"/>
+
+            <TextView
+                android:id="@+id/trackAuthorView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/tracks_cardView_text_rightMargin"
+                android:layout_marginEnd="@dimen/tracks_cardView_text_rightMargin"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="Lil John"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
+
+

@@ -2,7 +2,10 @@
 <android.support.v7.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.github.stakkato95.kmusic.MainActivity"
-    android:layout_height="match_parent"
+    android:id="@+id/tracksRecyclerView"
     android:layout_width="match_parent"
-    android:background="@android:color/holo_purple"/>
+    android:layout_height="match_parent"
+    tools:context="com.github.stakkato95.kmusic.MainActivity"
+    android:paddingStart="@dimen/tracks_recyclerView_padding"
+    android:paddingEnd="@dimen/tracks_recyclerView_padding"
+    android:paddingTop="@dimen/tracks_recyclerView_padding"/>
