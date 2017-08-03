@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic
+package com.github.stakkato95.kmusic.common.view
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

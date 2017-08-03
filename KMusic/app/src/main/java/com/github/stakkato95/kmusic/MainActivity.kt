@@ -2,6 +2,7 @@ package com.github.stakkato95.kmusic
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.github.stakkato95.kmusic.common.view.RootPager
 import com.github.stakkato95.kmusic.tracks.view.ViewPagerCoordinator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_player_button.*

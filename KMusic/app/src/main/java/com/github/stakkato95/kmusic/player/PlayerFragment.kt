@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.player.view.PlayerButtonPagerAdapter
 
 /**
  * Created by artsiomkaliaha on 14.07.17.

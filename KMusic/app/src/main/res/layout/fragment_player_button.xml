@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context="com.github.stakkato95.kmusic.MainActivity">
 
-    <com.github.stakkato95.kmusic.player.MusicProgressBar
+    <com.github.stakkato95.kmusic.player.view.MusicProgressBar
         android:id="@+id/musicProgressBar"
         android:layout_centerInParent="true"
         app:layout_aspectRatio="100%"
@@ -38,6 +38,6 @@
             app:layout_aspectRatio="100%"
             app:layout_heightPercent="40%"/>
 
-    </com.github.stakkato95.kmusic.player.MusicProgressBar>
+    </com.github.stakkato95.kmusic.player.view.MusicProgressBar>
 
 </android.support.percent.PercentRelativeLayout>

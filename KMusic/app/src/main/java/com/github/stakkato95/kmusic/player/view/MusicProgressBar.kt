@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.player
+package com.github.stakkato95.kmusic.player.view
 
 import android.content.Context
 import android.content.res.TypedArray
