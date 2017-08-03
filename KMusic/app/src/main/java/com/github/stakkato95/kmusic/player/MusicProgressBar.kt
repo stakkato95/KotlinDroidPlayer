@@ -35,7 +35,7 @@ class MusicProgressBar : PercentFrameLayout {
 
     val DEFAULT_TOUCH_TIME_TO_START_SCROLLING = 500
 
-    val IDEAL_FPS_RATE = 60f
+    val IDEAL_FPS_RATE = 90f
     val SECOND_IN_MILLIS = 1000f
 
     val DEFAULT_ANGLE_BETWEEN_VIBRATIONS = 10
@@ -213,6 +213,10 @@ class MusicProgressBar : PercentFrameLayout {
 
                 updateProgressBarThicknessAfterDelay()
                 postDelayed({
+                    if (touchState.isFinished()) {
+                        return@postDelayed
+                    }
+
                     canUpdateProgressAngle = true
                     updateProgressAngle(lastMotionEvent)
                     vibrator.vibrate(vibrationTimeOnFirstTouch)
