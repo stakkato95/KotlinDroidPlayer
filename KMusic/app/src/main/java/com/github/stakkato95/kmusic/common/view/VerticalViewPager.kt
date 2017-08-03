@@ -13,6 +13,8 @@ class VerticalViewPager : ViewPager {
 
     val normalizedScrollY: Float? get() = scrollX / width.toFloat() * height
 
+    var canInterceptTouchEvents = true
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
@@ -23,6 +25,10 @@ class VerticalViewPager : ViewPager {
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        if (!canInterceptTouchEvents) {
+            return false
+        }
+
         val isIntercepted = super.onInterceptTouchEvent(swapXY(ev))
         swapXY(ev)
         return isIntercepted

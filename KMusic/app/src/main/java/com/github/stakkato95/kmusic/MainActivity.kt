@@ -1,16 +1,17 @@
 package com.github.stakkato95.kmusic
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.percent.PercentRelativeLayout
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.stakkato95.kmusic.common.extensions.lerp
 import com.github.stakkato95.kmusic.common.extensions.setBlendedColorText
 import com.github.stakkato95.kmusic.common.view.VerticalViewPager
+import kotlinx.android.synthetic.main.fragment_player_button.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         pager.adapter = RootPager(supportFragmentManager)
 
         val albumText = findViewById(R.id.album_text) as TextView
-
 
         val startColor = ResourcesCompat.getColor(resources, R.color.colorPrimary, null)
         val endColor = ResourcesCompat.getColor(resources, R.color.colorAccent, null)
@@ -57,14 +57,11 @@ class MainActivity : AppCompatActivity() {
             val isMovingFromSecondToFirstPage = pager.normalizedScrollY!! - lastScroll < 0 && pager.normalizedScrollY!! < pager.height
 
             if (isMovingFromFirstToSecondPage.xor(isMovingFromSecondToFirstPage)) {
-                Log.d("PAGER", "From 2 to 1 || from 1 to 2")
                 albumText.animate().y(albumTextInitialY + -labelMovementDistance * scrollPercent).setDuration(0).start()
             } else {
-                Log.d("PAGER", "1->2 = $isMovingFromFirstToSecondPage 2->1 = $isMovingFromSecondToFirstPage")
                 albumText.animate().yBy(lastScroll - pager.normalizedScrollY!!).setDuration(0).start()
             }
 
-//            albumText.visibility = if (pager.normalizedScrollY!! <= pager.height) View.VISIBLE else View.GONE
             albumText.setBlendedColorText(startColor, endColor, scrollPercent)
 
             if (isMovingFromFirstToSecondPage || isMovingFromSecondToFirstPage) {
@@ -80,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             lastScrollPercent = scrollPercent
             lastScroll = pager.normalizedScrollY!!
         }
+
+        setProgressBarTouchListener()
     }
 
     fun fadeText(albumText: TextView, scrollPercent: Float, isMovingFromFirstToSecondPage: Boolean, isMovingFromSecondToFirstPage: Boolean) {
@@ -109,8 +108,6 @@ class MainActivity : AppCompatActivity() {
                 artistLabel!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
                 audioFormatText!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
                 audioFormatLabel!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
-
-//            val textAlpha = 1 - Math.pow(scrollPercent.toDouble(), 1 / 3.toDouble()).toFloat()
             } else if (isMovingFromSecondToFirstPage && albumLabel != null && albumLabel!!.alpha <= 1f) {
                 albumLabel!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
                 artistText!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
@@ -119,5 +116,15 @@ class MainActivity : AppCompatActivity() {
                 audioFormatLabel!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
             }
         }
+    }
+
+    fun setProgressBarTouchListener() {
+        Handler().postDelayed({
+            musicProgressBar.setProgressStateListener { isScrollInProgress ->
+                pager.canInterceptTouchEvents = !isScrollInProgress
+            }
+        }, 500)
+
+
     }
 }

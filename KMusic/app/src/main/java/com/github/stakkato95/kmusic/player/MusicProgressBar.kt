@@ -76,11 +76,12 @@ class MusicProgressBar : PercentFrameLayout {
     var angleMeasurementError = 0f
     var vibrationTime = 0L
     var vibrationTimeOnFirstTouch = 0L
-
     lateinit var vibrator: Vibrator
 
     var lastTouchPoint: Point? = null
     var canUpdateProgressAngle = true
+
+    var progressListener: ((Boolean) -> Unit)? = null
 
     constructor(context: Context?) : super(context) {
         init(null)
@@ -231,6 +232,7 @@ class MusicProgressBar : PercentFrameLayout {
                     updateProgressAngle(lastTouchPoint)
                     vibrator.vibrate(vibrationTimeOnFirstTouch)
                     canUpdateProgressAngle = true
+                    progressListener?.invoke(true)
 
                 }, touchTimeToStartScrolling)
             }
@@ -245,6 +247,7 @@ class MusicProgressBar : PercentFrameLayout {
             event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL -> {
                 touchState = TouchState.FINISHED
                 updateProgressBarThicknessAfterDelay()
+                progressListener?.invoke(false)
             }
         }
 
@@ -303,4 +306,8 @@ class MusicProgressBar : PercentFrameLayout {
 
         progressbarAngleLast = progressbarAngle
     }
+
+    fun setProgressStateListener(listener: (Boolean) -> Unit) { progressListener = listener }
+
+    fun removeProgressStateListener() { progressListener = null }
 }

@@ -9,7 +9,7 @@
     tools:context="com.github.stakkato95.kmusic.MainActivity">
 
     <com.github.stakkato95.kmusic.player.MusicProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/musicProgressBar"
         android:layout_centerInParent="true"
         app:layout_aspectRatio="100%"
         android:layout_height="match_parent"
