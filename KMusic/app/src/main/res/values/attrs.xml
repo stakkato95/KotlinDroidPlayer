@@ -10,6 +10,6 @@
         <attr name="vibrationTime" format="integer" />
         <attr name="vibrationTimeOnFirstTouch" format="integer" />
         <attr name="angleBetweenVibrations" format="integer" />
-        <attr name="angleMeasurementErrorPercent" format="float" />
+        <attr name="vibrationAngleMeasurementErrorPercent" format="float" />
     </declare-styleable>
 </resources>

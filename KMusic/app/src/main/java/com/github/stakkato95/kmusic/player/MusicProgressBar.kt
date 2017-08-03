@@ -1,6 +1,7 @@
 package com.github.stakkato95.kmusic.player
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -8,7 +9,6 @@ import android.graphics.Point
 import android.os.Vibrator
 import android.support.percent.PercentFrameLayout
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
@@ -21,18 +21,12 @@ import com.github.stakkato95.kmusic.common.extensions.toPoint
  */
 class MusicProgressBar : PercentFrameLayout {
 
-    enum class TouchState(private val isStarted: Boolean,
-                          private val isInProgress: Boolean,
-                          private val isFinished: Boolean) {
-        STARTED(true, true, false),
-        IN_PROGRESS(false, true, false),
-        FINISHED(false, false, true);
-
-        fun isInProgress() = isInProgress
-
-        fun isStarted() = isStarted
-
-        fun isFinished() = isFinished
+    enum class TouchState(val isStarted: Boolean = false,
+                          val isInProgress: Boolean = false,
+                          val isFinished: Boolean = false) {
+        STARTED(isStarted = true),
+        IN_PROGRESS(isInProgress = true),
+        FINISHED(isFinished = true)
     }
 
     val DEFAULT_TOUCH_TIME_TO_START_SCROLLING = 500
@@ -88,61 +82,76 @@ class MusicProgressBar : PercentFrameLayout {
     var lastTouchPoint: Point? = null
     var canUpdateProgressAngle = true
 
-    constructor(context: Context?) : super(context) { init(null) }
+    constructor(context: Context?) : super(context) {
+        init(null)
+    }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) { init(attrs) }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        init(attrs)
+    }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { init(attrs) }
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        init(attrs)
+    }
 
     fun init(attrs: AttributeSet?) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MusicProgressBar)
 
-        try {
-            backgroundLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            backgroundLinePaint.color = attributes.getColor(R.styleable.MusicProgressBar_lineColor, Color.GRAY)
-            backgroundLinePaint.strokeWidth = attributes.getDimensionPixelSize(
-                    R.styleable.MusicProgressBar_barThickness,
-                    context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_default_thickness)
-            ).toFloat()
+        initPaints(attributes)
 
-            progressBarNormalThickness = attributes.getDimensionPixelSize(
-                    R.styleable.MusicProgressBar_barThickness,
-                    context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_default_thickness)
-            ).toFloat()
-            progressBarTouchedThickness = attributes.getDimensionPixelSize(
-                    R.styleable.MusicProgressBar_barThicknessTouched,
-                    context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_touched_thickness)
-            ).toFloat()
-            progressBarOffsetFromViewBorder = progressBarTouchedThickness - progressBarNormalThickness
-            progressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            progressPaint.color = attributes.getColor(R.styleable.MusicProgressBar_progressColor, Color.RED)
-            progressPaint.strokeWidth = progressBarNormalThickness
+        initBarsThicknesses(attributes)
 
-            innerCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            innerCirclePaint.color = attributes.getColor(R.styleable.MusicProgressBar_innerCircleColor, Color.WHITE)
+        initVibration(attributes)
 
-            touchTimeToStartScrolling = attributes.getInteger(
-                    R.styleable.MusicProgressBar_touchTimeToStartScrollingMillis,
-                    DEFAULT_TOUCH_TIME_TO_START_SCROLLING
-            ).toLong()
+        touchTimeToStartScrolling = attributes
+                .getInteger(R.styleable.MusicProgressBar_touchTimeToStartScrollingMillis, DEFAULT_TOUCH_TIME_TO_START_SCROLLING)
+                .toLong()
 
-            angleBetweenVibration = attributes.getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_ANGLE_BETWEEN_VIBRATIONS)
-
-            vibrationTime = attributes
-                    .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_VIBRATION_TIME)
-                    .toLong()
-
-            vibrationTimeOnFirstTouch = attributes
-                    .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_VIBRATION_TIME_ON_FIRST_TOUCH)
-                    .toLong()
-
-            angleMeasurementError = attributes.getFloat(R.styleable.MusicProgressBar_angleMeasurementErrorPercent, DEFAULT_ANGLE_MEASUREMENT_ERROR)
-        } finally {
-            attributes.recycle()
-        }
+        attributes.recycle()
 
         setWillNotDraw(false)
         setOnTouchListener(this::touchEvent)
+    }
+
+    fun initPaints(attributes: TypedArray) {
+        backgroundLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        backgroundLinePaint.color = attributes.getColor(R.styleable.MusicProgressBar_lineColor, Color.GRAY)
+
+        progressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        progressPaint.color = attributes.getColor(R.styleable.MusicProgressBar_progressColor, Color.RED)
+        progressPaint.strokeWidth = progressBarNormalThickness
+
+        innerCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        innerCirclePaint.color = attributes.getColor(R.styleable.MusicProgressBar_innerCircleColor, Color.WHITE)
+    }
+
+    fun initBarsThicknesses(attributes: TypedArray) {
+        val progressbarDefaultThickness = context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_default_thickness)
+        val progressbarDefaultTouchedThickness = context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_touched_thickness)
+
+        progressBarNormalThickness = attributes
+                .getDimensionPixelSize(R.styleable.MusicProgressBar_barThickness, progressbarDefaultThickness)
+                .toFloat()
+        progressBarTouchedThickness = attributes
+                .getDimensionPixelSize(R.styleable.MusicProgressBar_barThicknessTouched, progressbarDefaultTouchedThickness)
+                .toFloat()
+        progressBarOffsetFromViewBorder = progressBarTouchedThickness - progressBarNormalThickness
+    }
+
+    fun initVibration(attributes: TypedArray) {
+        angleBetweenVibration = attributes
+                .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_ANGLE_BETWEEN_VIBRATIONS)
+
+        vibrationTime = attributes
+                .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_VIBRATION_TIME)
+                .toLong()
+
+        vibrationTimeOnFirstTouch = attributes
+                .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_VIBRATION_TIME_ON_FIRST_TOUCH)
+                .toLong()
+
+        angleMeasurementError = attributes
+                .getFloat(R.styleable.MusicProgressBar_vibrationAngleMeasurementErrorPercent, DEFAULT_ANGLE_MEASUREMENT_ERROR)
 
         vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
@@ -205,8 +214,6 @@ class MusicProgressBar : PercentFrameLayout {
     }
 
     fun touchEvent(view: View, event: MotionEvent): Boolean {
-        Log.d("TOUCH", "x=${event.x} y=${event.y} action=${event.action}")
-
         when {
             event.action == MotionEvent.ACTION_DOWN -> {
                 touchState = TouchState.STARTED
@@ -217,21 +224,21 @@ class MusicProgressBar : PercentFrameLayout {
 
                 updateProgressBarThicknessAfterDelay()
                 postDelayed({
-                    if (touchState.isFinished()) {
+                    if (touchState.isFinished) {
                         return@postDelayed
                     }
 
                     updateProgressAngle(lastTouchPoint)
                     vibrator.vibrate(vibrationTimeOnFirstTouch)
-
                     canUpdateProgressAngle = true
+
                 }, touchTimeToStartScrolling)
             }
             event.action == MotionEvent.ACTION_MOVE -> {
                 lastTouchPoint = event.toPoint()
 
                 if (canUpdateProgressAngle) {
-                    updateProgressAngle(event.toPoint())
+                    updateProgressAngle(lastTouchPoint)
                     vibrate()
                 }
             }
@@ -272,11 +279,11 @@ class MusicProgressBar : PercentFrameLayout {
 
     fun updateProgressBarThicknessAfterDelay() {
         val shouldInvalidate = when {
-            (touchState.isStarted() || touchState.isInProgress()) && progressScaleTimeElapsed < touchTimeToStartScrolling -> {
+            (touchState.isStarted || touchState.isInProgress) && progressScaleTimeElapsed < touchTimeToStartScrolling -> {
                 progressScaleTimeElapsed += progressBarUpdateStep
                 true
             }
-            touchState.isFinished() && progressScaleTimeElapsed > 0L -> {
+            touchState.isFinished && progressScaleTimeElapsed > 0L -> {
                 progressScaleTimeElapsed -= progressBarUpdateStep
                 true
             }

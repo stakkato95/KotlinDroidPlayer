@@ -20,7 +20,7 @@
         app:progressColor="@color/colorPrimary"
         app:touchTimeToStartScrollingMillis="350"
         app:angleBetweenVibrations="15"
-        app:angleMeasurementErrorPercent="0.2"
+        app:vibrationAngleMeasurementErrorPercent="0.2"
         app:vibrationTime="25"
         app:vibrationTimeOnFirstTouch="50">
 
