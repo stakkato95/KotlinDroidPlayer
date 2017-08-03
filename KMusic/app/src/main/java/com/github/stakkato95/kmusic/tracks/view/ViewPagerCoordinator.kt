@@ -15,6 +15,13 @@ import com.github.stakkato95.kmusic.common.view.VerticalViewPager
  */
 class ViewPagerCoordinator(var pager: VerticalViewPager, var text: TextView) : ScrollCoordinator(pager) {
 
+    val textViewsToFade = arrayOf(
+            R.id.artistView,
+            R.id.artistLabelView,
+            R.id.audioFormatView,
+            R.id.audioFormatLabelView
+    )
+
     var lastScrollPercent: Float = 0.0f
     var albumTextInitialHeight = 0
     var lastScroll = 0.0f
@@ -61,13 +68,13 @@ class ViewPagerCoordinator(var pager: VerticalViewPager, var text: TextView) : S
             text.animate().scaleY(scale).setDuration(0).start()
         }
 
-        fadeText(text, scrollPercent, isMovingFromFirstToSecondPage, isMovingFromSecondToFirstPage)
+        fadeText(isMovingFromFirstToSecondPage, isMovingFromSecondToFirstPage)
 
         lastScrollPercent = scrollPercent
         lastScroll = pager.normalizedScrollY!!
     }
 
-    fun fadeText(albumText: TextView, scrollPercent: Float, isMovingFromFirstToSecondPage: Boolean, isMovingFromSecondToFirstPage: Boolean) {
+    fun fadeText(isMovingFromFirstToSecondPage: Boolean, isMovingFromSecondToFirstPage: Boolean) {
         var trackInfoView: ViewGroup? = null
         var albumLabel: View? = null
 
@@ -80,27 +87,18 @@ class ViewPagerCoordinator(var pager: VerticalViewPager, var text: TextView) : S
         }
 
         albumLabel?.let {
-            val artistText = trackInfoView?.findViewById(R.id.artistView)
-            val artistLabel = trackInfoView?.findViewById(R.id.artistLabelView)
-            val audioFormatText = trackInfoView?.findViewById(R.id.audioFormatView)
-            val audioFormatLabel = trackInfoView?.findViewById(R.id.audioFormatLabelView)
+            val views = arrayListOf(albumLabel)
+            textViewsToFade.forEach { id -> views.add(trackInfoView?.findViewById(id)) }
 
-            val fadeOutAnimationDuration = 250L
-            val fadeInAnimationDuration = 100L
-
-            if (isMovingFromFirstToSecondPage && albumLabel != null && albumLabel!!.alpha == 1f) {
-                albumLabel!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
-                artistText!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
-                artistLabel!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
-                audioFormatText!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
-                audioFormatLabel!!.animate().alpha(0f).setDuration(fadeInAnimationDuration).start()
+            val tartgetAlpha = if (isMovingFromFirstToSecondPage && albumLabel != null && albumLabel!!.alpha == 1f) {
+                0f
             } else if (isMovingFromSecondToFirstPage && albumLabel != null && albumLabel!!.alpha <= 1f) {
-                albumLabel!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
-                artistText!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
-                artistLabel!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
-                audioFormatText!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
-                audioFormatLabel!!.animate().alpha(1f).setDuration(fadeOutAnimationDuration).start()
+                1f
+            } else {
+                0f
             }
+
+            views.forEach { it!!.animate().alpha(tartgetAlpha).start() }
         }
     }
 }
