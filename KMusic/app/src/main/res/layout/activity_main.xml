@@ -13,10 +13,10 @@
         tools:context="com.github.stakkato95.kmusic.MainActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/root_pager"/>
+        android:id="@+id/verticalPagerView"/>
 
     <TextView
-        android:id="@+id/album_text"
+        android:id="@+id/albumTextVeiw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"

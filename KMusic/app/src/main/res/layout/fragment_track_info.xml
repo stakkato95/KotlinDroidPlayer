@@ -8,7 +8,7 @@
     tools:context="com.github.stakkato95.kmusic.MainActivity">
 
     <ImageView
-        android:id="@+id/cover_image"
+        android:id="@+id/coverImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/test_background"/>
 
     <TextView
-        android:id="@+id/artist_text"
+        android:id="@+id/artistView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
@@ -32,10 +32,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/album_label"/>
+        app:layout_constraintTop_toBottomOf="@+id/albumLabelView"/>
 
     <TextView
-        android:id="@+id/audio_format_text"
+        android:id="@+id/audioFormatView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
@@ -47,7 +47,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/artist_label"/>
+        app:layout_constraintTop_toBottomOf="@+id/artistLabelView"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
@@ -71,7 +71,7 @@
         app:layout_constraintGuide_end="32dp"/>
 
     <TextView
-        android:id="@+id/album_label"
+        android:id="@+id/albumLabelView"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:text="Album"
@@ -80,22 +80,22 @@
         app:layout_constraintTop_toTopOf="@+id/guideline3"/>
 
     <TextView
-        android:id="@+id/artist_label"
+        android:id="@+id/artistLabelView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:text="Artist"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/artist_text"/>
+        app:layout_constraintTop_toBottomOf="@+id/artistView"/>
 
     <TextView
-        android:id="@+id/audio_format_label"
+        android:id="@+id/audioFormatLabelView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:text="Audio Format"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/audio_format_text"/>
+        app:layout_constraintTop_toBottomOf="@+id/audioFormatView"/>
 </android.support.constraint.ConstraintLayout>
