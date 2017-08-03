@@ -36,7 +36,7 @@ class PlayerButtonFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_player_button, container, false)!!
 
-        val image = view.findViewById(R.id.centerImage) as ImageView
+        val image = view.findViewById<ImageView>(R.id.centerImage)
 
         activity.picasso.load(R.drawable.test_background).into(image, object: Callback {
             override fun onSuccess() {
@@ -53,7 +53,7 @@ class PlayerButtonFragment : Fragment() {
             }
         })
 
-        val vectorIcon = view.findViewById(R.id.vector_icon) as Button
+        val vectorIcon = view.findViewById<Button>(R.id.vector_icon)
 
         vectorIcon.setOnClickListener {
             vectorIcon.background = if (isPlaying) playPause else pausePlay

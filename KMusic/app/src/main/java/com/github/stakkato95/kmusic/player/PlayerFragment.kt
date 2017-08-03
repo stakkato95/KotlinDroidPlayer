@@ -14,11 +14,11 @@ import com.github.stakkato95.kmusic.player.adapter.PlayerButtonPagerAdapter
  */
 class PlayerFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_player, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_player, container, false)
 
 
-        val pager = view?.findViewById(R.id.pager) as ViewPager
+        val pager = view.findViewById<ViewPager>(R.id.pager)
         with(pager) {
             adapter = PlayerButtonPagerAdapter(fragmentManager)
             val leftRightPadding = resources.displayMetrics.widthPixels / 6

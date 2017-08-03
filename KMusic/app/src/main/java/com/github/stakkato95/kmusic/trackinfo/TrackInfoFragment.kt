@@ -15,11 +15,13 @@ import com.github.stakkato95.kmusic.common.extensions.blur
  */
 class TrackInfoFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_track_info, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_track_info, container, false)
 
-        val cover = view?.findViewById(R.id.coverImageView) as ImageView
-        val blurredImage = (cover.drawable as BitmapDrawable).bitmap.blur(this@TrackInfoFragment.activity, 0.5f, 12.5f)
+        val cover = view.findViewById<ImageView>(R.id.coverImageView)
+        val blurredImage = (cover.drawable as BitmapDrawable)
+                .bitmap
+                .blur(this@TrackInfoFragment.activity, 0.5f, 12.5f)
         cover.setImageBitmap(blurredImage)
 
         return view
