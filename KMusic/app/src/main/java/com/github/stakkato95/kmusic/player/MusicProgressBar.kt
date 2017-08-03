@@ -8,10 +8,12 @@ import android.graphics.Point
 import android.os.Vibrator
 import android.support.percent.PercentFrameLayout
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.common.extensions.cosAngleOfTwoVectorsStartingInZeroPoint
+import com.github.stakkato95.kmusic.common.extensions.toPoint
 
 
 /**
@@ -83,7 +85,7 @@ class MusicProgressBar : PercentFrameLayout {
 
     lateinit var vibrator: Vibrator
 
-    var lastMotionEvent: MotionEvent? = null
+    var lastTouchPoint: Point? = null
     var canUpdateProgressAngle = true
 
     constructor(context: Context?) : super(context) { init(null) }
@@ -203,10 +205,12 @@ class MusicProgressBar : PercentFrameLayout {
     }
 
     fun touchEvent(view: View, event: MotionEvent): Boolean {
+        Log.d("TOUCH", "x=${event.x} y=${event.y} action=${event.action}")
+
         when {
             event.action == MotionEvent.ACTION_DOWN -> {
                 touchState = TouchState.STARTED
-                lastMotionEvent = event
+                lastTouchPoint = event.toPoint()
 
                 canUpdateProgressAngle = false
                 progressScaleTimeElapsed = 0
@@ -217,16 +221,20 @@ class MusicProgressBar : PercentFrameLayout {
                         return@postDelayed
                     }
 
-                    canUpdateProgressAngle = true
-                    updateProgressAngle(lastMotionEvent)
+                    updateProgressAngle(lastTouchPoint)
                     vibrator.vibrate(vibrationTimeOnFirstTouch)
+
+                    canUpdateProgressAngle = true
                 }, touchTimeToStartScrolling)
             }
-            event.action == MotionEvent.ACTION_MOVE && canUpdateProgressAngle -> {
-                updateProgressAngle(event)
-                vibrate()
+            event.action == MotionEvent.ACTION_MOVE -> {
+                lastTouchPoint = event.toPoint()
+
+                if (canUpdateProgressAngle) {
+                    updateProgressAngle(event.toPoint())
+                    vibrate()
+                }
             }
-            event.action == MotionEvent.ACTION_MOVE && !canUpdateProgressAngle -> lastMotionEvent = event
             event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL -> {
                 touchState = TouchState.FINISHED
                 updateProgressBarThicknessAfterDelay()
@@ -255,9 +263,9 @@ class MusicProgressBar : PercentFrameLayout {
         }
     }
 
-    fun updateProgressAngle(event: MotionEvent?) {
-        event?.let {
-            progressbarAngle = calculateAngle(event.x.toInt(), event.y.toInt())
+    fun updateProgressAngle(touchPoint: Point?) {
+        touchPoint?.let {
+            progressbarAngle = calculateAngle(touchPoint.x, touchPoint.y)
             invalidate()
         }
     }

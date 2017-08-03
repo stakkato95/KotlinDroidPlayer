@@ -14,5 +14,3 @@ fun TextView.setBlendedColorText(startColor: Int, endColor: Int, ratio: Float) {
 fun TextView.setInterpolatedTextSize(startSize: Float, endSize: Float, ratio: Float, unit: Int = TypedValue.COMPLEX_UNIT_PX) {
     setTextSize(unit, startSize + ratio * (endSize - startSize))
 }
-
-fun lerp(start: Float, end: Float, ratio: Float) = start + ratio * (end - start)
