@@ -9,7 +9,7 @@ android {
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.github.stakkato95.kmusic"
-        minSdkVersion 21
+        minSdkVersion 18
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"

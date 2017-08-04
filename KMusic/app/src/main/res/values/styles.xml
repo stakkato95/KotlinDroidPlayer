@@ -1,2 +1,20 @@
 <resources>
+    <style name="AppTrackInfoText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginEnd">@dimen/tracks_cardView_text_margin</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">end</item>
+    </style>
+    <style name="AppTrackInfoText.Author" parent="AppTrackInfoText">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginBottom">@dimen/tracks_cardView_text_margin</item>
+        <item name="android:textSize">@dimen/tracks_cardView_authorText_size</item>
+    </style>
+    <style name="AppTrackInfoText.TrackName" parent="AppTrackInfoText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/tracks_cardView_trackNameText_size</item>
+    </style>
 </resources>

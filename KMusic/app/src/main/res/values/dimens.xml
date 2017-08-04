@@ -8,9 +8,12 @@
     <dimen name="tracks_cardView_padding_topBottom">8dp</dimen>
     <dimen name="tracks_cardView_padding_leftRight">8dp</dimen>
     <dimen name="tracks_cardView_height">192dp</dimen>
-    <dimen name="tracks_cardView_text_rightMargin">16dp</dimen>
-
+    <dimen name="tracks_cardView_bottomOverlay_height">56dp</dimen>
+    <dimen name="tracks_cardView_text_margin">8dp</dimen>
+    <dimen name="tracks_cardView_authorAndTrackName_bottomMargin">8dp</dimen>
     <dimen name="tracks_recyclerView_padding">8dp</dimen>
+    <dimen name="tracks_cardView_authorText_size">16sp</dimen>
+    <dimen name="tracks_cardView_trackNameText_size">20sp</dimen>
 
     <!--text-->
     <dimen name="text_subheading">16sp</dimen>
