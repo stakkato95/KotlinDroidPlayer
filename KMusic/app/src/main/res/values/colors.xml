@@ -7,4 +7,5 @@
 
     <color name="trackitem_gradient_start">#00FFFFFF</color>
     <color name="trackitem_gradient_end">#FFFFFF</color>
+    <color name="trackitem_pressed">#4A3F51B5</color>
 </resources>

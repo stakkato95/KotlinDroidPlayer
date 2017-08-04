@@ -14,7 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="@dimen/tracks_cardView_elevation"
-        app:cardCornerRadius="@dimen/tracks_cardView_cornerRadius">
+        app:cardCornerRadius="@dimen/tracks_cardView_cornerRadius"
+        android:background="@drawable/bg_track_item_selector"
+        android:clickable="true"
+        android:foreground="@drawable/bg_track_item_selector">
 
         <ImageView
             android:layout_width="match_parent"
@@ -24,8 +27,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_track_item_shadow">
+            android:layout_height="match_parent">
 
             <View
                 android:layout_width="match_parent"
