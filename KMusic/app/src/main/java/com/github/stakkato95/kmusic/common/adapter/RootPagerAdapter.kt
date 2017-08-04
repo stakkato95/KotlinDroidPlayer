@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.common.view
+package com.github.stakkato95.kmusic.common.adapter
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -10,7 +10,7 @@ import com.github.stakkato95.kmusic.tracks.TracksFragment
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
-class RootPager(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class RootPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getCount() = 3
 

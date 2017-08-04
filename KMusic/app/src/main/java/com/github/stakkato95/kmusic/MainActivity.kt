@@ -2,7 +2,7 @@ package com.github.stakkato95.kmusic
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.github.stakkato95.kmusic.common.view.RootPager
+import com.github.stakkato95.kmusic.common.adapter.RootPagerAdapter
 import com.github.stakkato95.kmusic.tracks.view.ViewPagerCoordinator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_player_button.*
@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        verticalPagerView.adapter = RootPager(supportFragmentManager)
+        verticalPagerView.adapter = RootPagerAdapter(supportFragmentManager)
 
         val coordinator = ViewPagerCoordinator(verticalPagerView, albumTextVeiw, 1f, 0.5f)
         coordinator.labelMovementPercent = 0.4f
