@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.tracks.Track
+import com.github.stakkato95.kmusic.database.model.Track
 
 /**
  * Created by artsiomkaliaha on 03.08.17.

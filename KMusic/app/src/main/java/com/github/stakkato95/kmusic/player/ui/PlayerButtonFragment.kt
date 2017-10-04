@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.player
+package com.github.stakkato95.kmusic.player.ui
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable

@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.tracks
+package com.github.stakkato95.kmusic.database.model
 
 /**
  * Created by artsiomkaliaha on 03.08.17.

@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.tracks
+package com.github.stakkato95.kmusic.tracks.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,13 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.database.model.Track
+import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
 import com.github.stakkato95.kmusic.tracks.adapter.TracksAdapter
 import kotlinx.android.synthetic.main.fragment_tracks.view.*
+import javax.inject.Inject
 
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
 class TracksFragment : Fragment() {
+
+    @Inject
+    lateinit var presenter: TracksPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tracks, container, false)

@@ -2,7 +2,7 @@ package com.github.stakkato95.kmusic.player.adapter
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.github.stakkato95.kmusic.player.PlayerButtonFragment
+import com.github.stakkato95.kmusic.player.ui.PlayerButtonFragment
 
 /**
  * Created by artsiomkaliaha on 06.07.17.
