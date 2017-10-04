@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.launch
+package com.github.stakkato95.kmusic.launcher
 
 import android.Manifest
 import android.content.Intent

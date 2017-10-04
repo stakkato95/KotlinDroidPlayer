@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.common.view
+package com.github.stakkato95.kmusic.common.widget
 
 import android.view.GestureDetector
 import android.view.MotionEvent

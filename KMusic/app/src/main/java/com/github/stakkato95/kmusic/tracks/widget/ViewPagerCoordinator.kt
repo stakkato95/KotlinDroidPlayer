@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.tracks.view
+package com.github.stakkato95.kmusic.tracks.widget
 
 import android.support.v4.content.res.ResourcesCompat
 import android.view.View
@@ -7,7 +7,7 @@ import android.widget.TextView
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.common.extensions.lerp
 import com.github.stakkato95.kmusic.common.extensions.setBlendedTextColor
-import com.github.stakkato95.kmusic.common.view.VerticalViewPager
+import com.github.stakkato95.kmusic.common.widget.VerticalViewPager
 
 /**
  * Created by artsiomkaliaha on 03.08.17.

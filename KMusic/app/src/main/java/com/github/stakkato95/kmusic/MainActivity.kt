@@ -2,11 +2,9 @@ package com.github.stakkato95.kmusic
 
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
 import com.github.stakkato95.kmusic.common.adapter.RootPagerAdapter
-import com.github.stakkato95.kmusic.tracks.view.ViewPagerCoordinator
+import com.github.stakkato95.kmusic.tracks.widget.ViewPagerCoordinator
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
@@ -32,20 +30,20 @@ class MainActivity : AppCompatActivity() {
         val coordinator = ViewPagerCoordinator(verticalPagerView, albumTextVeiw, 1f, 0.5f)
         coordinator.labelMovementPercent = 0.4f
 
-        setProgressBarTouchListener()
-
-        val cursor = contentResolver.query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME),
-                null,
-                null,
-                null
-        )
-
-        Toast.makeText(this, "Tracks count = ${cursor.count}", Toast.LENGTH_LONG).show()
-
-        cursor.close()
-
+//        setProgressBarTouchListener()
+//
+//        val cursor = contentResolver.query(
+//                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+//                arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME),
+//                null,
+//                null,
+//                null
+//        )
+//
+//        Toast.makeText(this, "Tracks count = ${cursor.count}", Toast.LENGTH_LONG).show()
+//
+//        cursor.close()
+//
         testExoPlayer()
     }
 

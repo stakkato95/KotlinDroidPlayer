@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.tracks.view
+package com.github.stakkato95.kmusic.tracks.widget
 
 import android.view.View
 

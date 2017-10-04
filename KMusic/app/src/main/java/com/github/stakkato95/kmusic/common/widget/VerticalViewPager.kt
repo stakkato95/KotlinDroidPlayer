@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.common.view
+package com.github.stakkato95.kmusic.common.widget
 
 import android.content.Context
 import android.support.v4.view.ViewPager
