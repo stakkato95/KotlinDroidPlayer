@@ -1,5 +1,7 @@
 package com.github.stakkato95.kmusic.mvp.di.module
 
+import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
+import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenterImpl
 import com.github.stakkato95.kmusic.mvp.usecase.TracksUseCase
 import com.github.stakkato95.kmusic.mvp.usecase.TracksUseCaseImpl
 import dagger.Module
@@ -13,4 +15,7 @@ class AllTracksModule {
 
     @Provides
     fun provideAllTracksUseCase(): TracksUseCase = TracksUseCaseImpl()
+
+    @Provides
+    fun provideAllTracksPresenter(tracksUseCase: TracksUseCase): TracksPresenter = TracksPresenterImpl(tracksUseCase)
 }
