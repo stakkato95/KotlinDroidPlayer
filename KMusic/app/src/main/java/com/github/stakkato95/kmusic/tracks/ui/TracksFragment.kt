@@ -6,9 +6,10 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.stakkato95.kmusic.App
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
 import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
+import com.github.stakkato95.kmusic.mvp.repository.model.Track
 import com.github.stakkato95.kmusic.tracks.adapter.TracksAdapter
 import kotlinx.android.synthetic.main.fragment_tracks.view.*
 import javax.inject.Inject
@@ -27,6 +28,9 @@ class TracksFragment : Fragment() {
             adapter = TracksAdapter(getTracks())
             layoutManager = GridLayoutManager(activity, 2)
         }
+
+        App.INJECTOR.plusAllTracksComponent()?.inject(this)
+
         return view
     }
 

@@ -1,5 +1,6 @@
 package com.github.stakkato95.kmusic.mvp.di.module
 
+import com.github.stakkato95.kmusic.mvp.repository.Repository
 import com.github.stakkato95.kmusic.mvp.repository.RepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -13,5 +14,5 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideRepository() = RepositoryImpl()
+    fun provideRepository(): Repository = RepositoryImpl()
 }
