@@ -10,7 +10,7 @@ import dagger.Provides
  */
 @Module
 class SingleTrackModule {
-
+    
     @Provides
     fun provideSingleTrackUsecase(): SingleTrackUseCase = SingleTrackUseCaseImpl()
 }
