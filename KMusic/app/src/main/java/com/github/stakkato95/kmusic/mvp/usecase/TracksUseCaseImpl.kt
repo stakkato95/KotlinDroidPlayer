@@ -8,7 +8,7 @@ import io.reactivex.Observable
  */
 class TracksUseCaseImpl : TracksUseCase {
 
-    override fun getData(): Observable<Track> {
-        return Observable.just(Track("Hello", "World"))
+    override fun getData(): Observable<List<Track>> {
+        return Observable.just(listOf(Track("Hello", "World")))
     }
 }
