@@ -1,9 +1,9 @@
 package com.github.stakkato95.kmusic.mvp.di.module
 
 import android.content.Context
+import com.github.stakkato95.kmusic.mvp.di.scope.ApplicationScope
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 /**
  * Created by artsiomkaliaha on 04.10.17.
@@ -12,6 +12,6 @@ import javax.inject.Singleton
 class AppModule(val context: Context) {
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideAppContext() = context
 }
