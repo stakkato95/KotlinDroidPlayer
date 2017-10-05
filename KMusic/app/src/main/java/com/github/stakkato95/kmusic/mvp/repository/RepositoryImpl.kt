@@ -8,5 +8,11 @@ import io.reactivex.Observable
  */
 class RepositoryImpl: Repository {
 
-    override fun getAllTracks(): Observable<Track> = Observable.empty()
+    override fun getAllTracks(): Observable<List<Track>> {
+        return Observable.empty()
+    }
+
+    override fun getCurrentTrack(): Observable<Track> {
+        return Observable.empty()
+    }
 }

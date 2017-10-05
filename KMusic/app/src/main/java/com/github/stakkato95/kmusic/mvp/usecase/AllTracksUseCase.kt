@@ -5,4 +5,4 @@ import com.github.stakkato95.kmusic.mvp.repository.model.Track
 /**
  * Created by artsiomkaliaha on 04.10.17.
  */
-interface TracksUseCase: UseCase<List<Track>>
+interface AllTracksUseCase : UseCase<List<Track>>

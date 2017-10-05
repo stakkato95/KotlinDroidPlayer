@@ -8,5 +8,7 @@ import io.reactivex.Observable
  */
 interface Repository {
 
-    fun getAllTracks(): Observable<Track>
+    fun getAllTracks(): Observable<List<Track>>
+
+    fun getCurrentTrack(): Observable<Track>
 }
