@@ -1,6 +1,6 @@
 package com.github.stakkato95.kmusic.mvp.di.module
 
-import com.github.stakkato95.kmusic.database.RepositoryImpl
+import com.github.stakkato95.kmusic.mvp.repository.RepositoryImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

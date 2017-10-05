@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.common.adapter
+package com.github.stakkato95.kmusic.main.adapter
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

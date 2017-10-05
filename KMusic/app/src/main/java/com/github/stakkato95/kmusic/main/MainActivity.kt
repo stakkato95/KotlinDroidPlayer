@@ -1,9 +1,10 @@
-package com.github.stakkato95.kmusic
+package com.github.stakkato95.kmusic.main
 
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.github.stakkato95.kmusic.common.adapter.RootPagerAdapter
+import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.main.adapter.RootPagerAdapter
 import com.github.stakkato95.kmusic.tracks.widget.ViewPagerCoordinator
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory

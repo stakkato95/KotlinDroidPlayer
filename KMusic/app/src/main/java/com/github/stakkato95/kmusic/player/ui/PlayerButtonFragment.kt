@@ -12,8 +12,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.common.extensions.blur
-import com.github.stakkato95.kmusic.common.extensions.picasso
+import com.github.stakkato95.kmusic.util.extensions.blur
+import com.github.stakkato95.kmusic.util.extensions.picasso
 import com.squareup.picasso.Callback
 
 /**

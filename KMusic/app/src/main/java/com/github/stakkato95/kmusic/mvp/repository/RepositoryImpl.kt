@@ -1,6 +1,6 @@
-package com.github.stakkato95.kmusic.database
+package com.github.stakkato95.kmusic.mvp.repository
 
-import com.github.stakkato95.kmusic.database.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.Track
 import io.reactivex.Observable
 
 /**

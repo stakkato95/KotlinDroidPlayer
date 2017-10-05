@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.common.extensions
+package com.github.stakkato95.kmusic.util.extensions
 
 import android.support.v4.graphics.ColorUtils
 import android.util.TypedValue

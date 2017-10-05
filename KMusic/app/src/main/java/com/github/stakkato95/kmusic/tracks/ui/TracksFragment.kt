@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.database.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.Track
 import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
 import com.github.stakkato95.kmusic.tracks.adapter.TracksAdapter
 import kotlinx.android.synthetic.main.fragment_tracks.view.*

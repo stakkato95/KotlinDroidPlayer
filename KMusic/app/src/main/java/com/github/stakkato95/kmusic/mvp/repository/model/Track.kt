@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.database.model
+package com.github.stakkato95.kmusic.mvp.repository.model
 
 /**
  * Created by artsiomkaliaha on 03.08.17.

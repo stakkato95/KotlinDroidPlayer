@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.common.extensions.blur
+import com.github.stakkato95.kmusic.util.extensions.blur
 
 /**
  * Created by artsiomkaliaha on 14.07.17.

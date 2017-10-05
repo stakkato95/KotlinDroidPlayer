@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.common.extensions.lerp
-import com.github.stakkato95.kmusic.common.extensions.setBlendedTextColor
-import com.github.stakkato95.kmusic.common.widget.VerticalViewPager
+import com.github.stakkato95.kmusic.util.extensions.lerp
+import com.github.stakkato95.kmusic.util.extensions.setBlendedTextColor
+import com.github.stakkato95.kmusic.main.widget.VerticalViewPager
 
 /**
  * Created by artsiomkaliaha on 03.08.17.

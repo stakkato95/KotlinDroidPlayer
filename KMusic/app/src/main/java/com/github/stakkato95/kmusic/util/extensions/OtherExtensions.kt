@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.common.extensions
+package com.github.stakkato95.kmusic.util.extensions
 
 import android.graphics.Point
 import android.view.MotionEvent

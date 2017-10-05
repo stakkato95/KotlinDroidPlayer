@@ -1,4 +1,4 @@
-package com.github.stakkato95.kmusic.manager
+package com.github.stakkato95.kmusic.util.manager
 
 /**
  * Created by artsiomkaliaha on 11.09.17.

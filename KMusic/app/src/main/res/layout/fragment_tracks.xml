@@ -5,7 +5,7 @@
     android:id="@+id/tracksRecyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.stakkato95.kmusic.MainActivity"
+    tools:context="com.github.stakkato95.kmusic.main.MainActivity"
     android:paddingStart="@dimen/tracks_recyclerView_padding"
     android:paddingEnd="@dimen/tracks_recyclerView_padding"
     android:paddingTop="@dimen/tracks_recyclerView_padding"/>

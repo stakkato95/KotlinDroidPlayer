@@ -12,8 +12,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.common.extensions.cosAngleOfTwoVectorsStartingInZeroPoint
-import com.github.stakkato95.kmusic.common.extensions.toPoint
+import com.github.stakkato95.kmusic.util.extensions.cosAngleOfTwoVectorsStartingInZeroPoint
+import com.github.stakkato95.kmusic.util.extensions.toPoint
 
 
 /**
