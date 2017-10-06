@@ -14,14 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".App">
-        <activity android:name=".launcher.LaunchActivity">
+        <activity android:name="com.github.stakkato95.kmusic.screen.launcher.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".main.MainActivity"/>
+        <activity android:name="com.github.stakkato95.kmusic.screen.main.MainActivity"/>
     </application>
 
 </manifest>
