@@ -11,6 +11,7 @@ import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.common.BaseFragment
 import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
 import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.view.TracksView
 import com.github.stakkato95.kmusic.screen.tracks.adapter.TracksAdapter
 import kotlinx.android.synthetic.main.fragment_tracks.view.*
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Inject
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
-class TracksFragment : BaseFragment() {
+class TracksFragment : BaseFragment(), TracksView {
 
     @Inject
     lateinit var presenter: TracksPresenter
@@ -50,5 +51,17 @@ class TracksFragment : BaseFragment() {
     override fun injectPresenter(): LifecycleObserver {
         App.INJECTOR.plusAllTracksComponent()?.inject(this)
         return presenter
+    }
+
+    override fun showTracks(tracks: List<Track>) {
+        //TODO
+    }
+
+    override fun showNoTracks() {
+        //TODO
+    }
+
+    override fun showError() {
+        //TODO
     }
 }

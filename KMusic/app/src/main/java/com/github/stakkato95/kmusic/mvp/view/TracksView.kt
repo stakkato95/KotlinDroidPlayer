@@ -10,4 +10,6 @@ interface TracksView {
     fun showTracks(tracks: List<Track>)
 
     fun showNoTracks()
+
+    fun showError()
 }
