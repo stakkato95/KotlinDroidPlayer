@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.github.stakkato95.kmusic.screen.main.MainActivity"/>
+        <activity android:name="com.github.stakkato95.kmusic.screen.main.ui.MainActivity"/>
     </application>
 
 </manifest>

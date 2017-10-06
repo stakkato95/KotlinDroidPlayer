@@ -1,18 +1,22 @@
 package com.github.stakkato95.kmusic.mvp.repository
 
+import com.github.stakkato95.kmusic.mvp.repository.database.DatabaseRepository
+import com.github.stakkato95.kmusic.mvp.repository.media.MediaStoreRepository
 import com.github.stakkato95.kmusic.mvp.repository.model.Track
 import io.reactivex.Observable
 
 /**
  * Created by artsiomkaliaha on 04.10.17.
  */
-class RepositoryImpl: Repository {
+class RepositoryImpl(val mediaStoreRepository: MediaStoreRepository,
+                     val databaseRepository: DatabaseRepository): Repository {
 
     override fun getAllTracks(): Observable<List<Track>> {
-        return Observable.empty()
+        return databaseRepository
+                .getAllTracks()
+                .switchIfEmpty(mediaStoreRepository.getAllTracks())
+                .doOnNext { databaseRepository.saveAllTracks(it) }
     }
 
-    override fun getCurrentTrack(): Observable<Track> {
-        return Observable.empty()
-    }
+    override fun getCurrentTrack(): Observable<Track> = databaseRepository.getCurrentTrack()
 }

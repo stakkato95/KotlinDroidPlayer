@@ -1,8 +1,10 @@
-package com.github.stakkato95.kmusic.screen.main
+package com.github.stakkato95.kmusic.screen.main.ui
 
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.screen.main.adapter.RootPagerAdapter
 import com.github.stakkato95.kmusic.screen.tracks.widget.ViewPagerCoordinator
@@ -33,15 +35,15 @@ class MainActivity : AppCompatActivity() {
 
 //        setProgressBarTouchListener()
 //
-//        val cursor = contentResolver.query(
-//                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-//                arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME),
-//                null,
-//                null,
-//                null
-//        )
-//
-//        Toast.makeText(this, "Tracks count = ${cursor.count}", Toast.LENGTH_LONG).show()
+        val cursor = contentResolver.query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Audio.Media.DATA),
+                null,
+                null,
+                null
+        )
+
+        Toast.makeText(this, "Tracks count = ${cursor.count}", Toast.LENGTH_LONG).show()
 //
 //        cursor.close()
 //

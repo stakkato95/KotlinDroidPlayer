@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import com.github.stakkato95.kmusic.screen.main.MainActivity
+import com.github.stakkato95.kmusic.screen.main.ui.MainActivity
 import com.github.stakkato95.kmusic.R
 
 /**

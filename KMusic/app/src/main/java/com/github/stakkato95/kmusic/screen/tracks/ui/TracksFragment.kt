@@ -41,7 +41,7 @@ class TracksFragment : BaseFragment() {
     fun getTracks(): List<Track> {
         val tracks = arrayListOf<Track>()
         for (i in 0..20) {
-            tracks.add(Track("Need for Speed", "Lil John"))
+            tracks.add(Track("Need for Speed", "Lil John", ""))
         }
 
         return tracks
