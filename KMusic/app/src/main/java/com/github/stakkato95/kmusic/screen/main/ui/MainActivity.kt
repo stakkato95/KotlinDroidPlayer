@@ -44,9 +44,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         Toast.makeText(this, "Tracks count = ${cursor.count}", Toast.LENGTH_LONG).show()
-//
-//        cursor.close()
-//
+
+        cursor.close()
+
         testExoPlayer()
     }
 

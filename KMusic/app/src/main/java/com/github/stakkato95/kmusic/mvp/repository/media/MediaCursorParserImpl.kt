@@ -17,7 +17,8 @@ class MediaCursorParserImpl : MediaCursorParser {
             val track = Track(
                     cursor.getString(MediaStore.Audio.Media.DATA),
                     cursor.getString(MediaStore.Audio.Media.DISPLAY_NAME),
-                    cursor.getString(MediaStore.Audio.Media.ARTIST))
+                    cursor.getString(MediaStore.Audio.Media.ARTIST)
+            )
             tracks.add(track)
         }
 

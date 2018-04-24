@@ -7,7 +7,7 @@ import dagger.Subcomponent
 /**
  * Created by artsiomkaliaha on 05.10.17.
  */
-@Subcomponent(modules = arrayOf(SingleTrackModule::class))
+@Subcomponent(modules = [SingleTrackModule::class])
 @SingleTrackScope
 interface SingleTrackComponent {
 

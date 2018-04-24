@@ -35,5 +35,5 @@ class RepositoryModule {
 
     @Provides
     @ApplicationScope
-    fun providedatabaseRepository(): DatabaseRepository = DatabaseRepositoryImpl()
+    fun provideDatabaseRepository(): DatabaseRepository = DatabaseRepositoryImpl()
 }

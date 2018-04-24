@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.screen.main.widget.VerticalViewPager
 import com.github.stakkato95.kmusic.util.extensions.lerp
 import com.github.stakkato95.kmusic.util.extensions.setBlendedTextColor
-import com.github.stakkato95.kmusic.screen.main.widget.VerticalViewPager
 
 /**
  * Created by artsiomkaliaha on 03.08.17.
@@ -19,17 +19,17 @@ class ViewPagerCoordinator(
         val endTextSize: Float) : ScrollCoordinator(pager) {
 
     companion object {
-        val TEXT_INITIAL_Y_COORDINATE_NOT_INITED = -1f
+        const val TEXT_INITIAL_Y_COORDINATE_NOT_INITED = -1f
     }
 
-    val textViewsToFade = arrayOf(
+    private val textViewsToFade = arrayOf(
             R.id.artistView,
             R.id.artistLabelView,
             R.id.audioFormatView,
             R.id.audioFormatLabelView
     )
 
-    var lastScrollPercent = 0f
+    private var lastScrollPercent = 0f
     var lastScroll = 0f
 
     var albumTextInitialHeight = 0
@@ -40,8 +40,8 @@ class ViewPagerCoordinator(
     var labelMovementDistance = 0f
         get() = pager.height * labelMovementPercent
 
-    val startColor = ResourcesCompat.getColor(pager.context.resources, R.color.colorPrimary, null)
-    val endColor = ResourcesCompat.getColor(pager.context.resources, R.color.colorAccent, null)
+    private val startColor = ResourcesCompat.getColor(pager.context.resources, R.color.colorPrimary, null)
+    private val endColor = ResourcesCompat.getColor(pager.context.resources, R.color.colorAccent, null)
 
     override fun onObservableViewScrolled() {
         if (albumTextInitialY == TEXT_INITIAL_Y_COORDINATE_NOT_INITED) {

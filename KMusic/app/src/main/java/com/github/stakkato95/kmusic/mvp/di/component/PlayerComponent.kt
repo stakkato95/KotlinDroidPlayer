@@ -8,7 +8,7 @@ import dagger.Subcomponent
 /**
  * Created by artsiomkaliaha on 05.10.17.
  */
-@Subcomponent(modules = arrayOf(PlayerModule::class))
+@Subcomponent(modules = [PlayerModule::class])
 @PlayerScope
 interface PlayerComponent {
 

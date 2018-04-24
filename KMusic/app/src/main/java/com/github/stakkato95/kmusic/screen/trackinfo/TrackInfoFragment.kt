@@ -21,7 +21,7 @@ class TrackInfoFragment : Fragment() {
         val cover = view.findViewById<ImageView>(R.id.coverImageView)
         val blurredImage = (cover.drawable as BitmapDrawable)
                 .bitmap
-                .blur(this@TrackInfoFragment.activity, 0.5f, 12.5f)
+                .blur(this.activity, 0.5f, 12.5f)
         cover.setImageBitmap(blurredImage)
 
         return view

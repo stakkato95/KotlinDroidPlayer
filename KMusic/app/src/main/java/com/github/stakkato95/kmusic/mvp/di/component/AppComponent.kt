@@ -8,7 +8,7 @@ import dagger.Component
 /**
  * Created by artsiomkaliaha on 04.10.17.
  */
-@Component(modules = arrayOf(AppModule::class, RepositoryModule::class))
+@Component(modules = [AppModule::class, RepositoryModule::class])
 @ApplicationScope
 interface AppComponent {
 

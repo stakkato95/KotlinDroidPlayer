@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import com.github.stakkato95.kmusic.screen.main.ui.MainActivity
 import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.screen.main.ui.MainActivity
 
 /**
  * Created by artsiomkaliaha on 04.08.17.
@@ -16,7 +16,7 @@ import com.github.stakkato95.kmusic.R
 class LaunchActivity : AppCompatActivity() {
 
     companion object {
-        val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
+        const val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class LaunchActivity : AppCompatActivity() {
         }
     }
 
-    fun startMainActivity() {
+    private fun startMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
     }
 }
