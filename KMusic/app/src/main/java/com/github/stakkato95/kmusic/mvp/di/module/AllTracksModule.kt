@@ -1,12 +1,12 @@
 package com.github.stakkato95.kmusic.mvp.di.module
 
-import android.content.Context
 import com.github.stakkato95.kmusic.mvp.di.scope.AllTracksScope
 import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
 import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenterImpl
 import com.github.stakkato95.kmusic.mvp.repository.Repository
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCase
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCaseImpl
+import com.github.stakkato95.kmusic.mvp.view.TracksView
 import dagger.Module
 import dagger.Provides
 
@@ -14,7 +14,7 @@ import dagger.Provides
  * Created by artsiomkaliaha on 05.10.17.
  */
 @Module
-class AllTracksModule {
+class AllTracksModule(val view: TracksView) {
 
     @Provides
     @AllTracksScope
@@ -22,6 +22,7 @@ class AllTracksModule {
 
     @Provides
     @AllTracksScope
-    fun provideAllTracksPresenter(context: Context, allTracksUseCase: AllTracksUseCase): TracksPresenter
-            = TracksPresenterImpl(null, allTracksUseCase)
+    fun provideAllTracksPresenter(allTracksUseCase: AllTracksUseCase): TracksPresenter {
+        return TracksPresenterImpl(view, allTracksUseCase)
+    }
 }

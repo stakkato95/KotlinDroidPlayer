@@ -1,5 +1,6 @@
 package com.github.stakkato95.kmusic.mvp.di.component
 
+import com.github.stakkato95.kmusic.mvp.di.module.AllTracksModule
 import com.github.stakkato95.kmusic.mvp.di.module.SingleTrackModule
 import com.github.stakkato95.kmusic.mvp.di.scope.SingleTrackScope
 import dagger.Subcomponent
@@ -11,5 +12,5 @@ import dagger.Subcomponent
 @SingleTrackScope
 interface SingleTrackComponent {
 
-    fun plusAllTracksComponent(): AllTracksComponent
+    fun plusAllTracksComponent(allTracksModule: AllTracksModule): AllTracksComponent
 }

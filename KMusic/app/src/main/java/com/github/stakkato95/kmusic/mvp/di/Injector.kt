@@ -6,7 +6,9 @@ import com.github.stakkato95.kmusic.mvp.di.component.AppComponent
 import com.github.stakkato95.kmusic.mvp.di.component.DaggerAppComponent
 import com.github.stakkato95.kmusic.mvp.di.component.PlayerComponent
 import com.github.stakkato95.kmusic.mvp.di.component.SingleTrackComponent
+import com.github.stakkato95.kmusic.mvp.di.module.AllTracksModule
 import com.github.stakkato95.kmusic.mvp.di.module.AppModule
+import com.github.stakkato95.kmusic.mvp.view.TracksView
 
 /**
  * Created by artsiomkaliaha on 05.10.17.
@@ -33,12 +35,12 @@ class Injector(context: Context) {
         singleTrackComponent = null
     }
 
-    fun plusAllTracksComponent(): AllTracksComponent? {
+    fun plusAllTracksComponent(tracksView: TracksView): AllTracksComponent? {
         if (singleTrackComponent == null) {
             plusSingleTrackComponent()
         }
 
-        allTracksComponent = singleTrackComponent?.plusAllTracksComponent()
+        allTracksComponent = singleTrackComponent?.plusAllTracksComponent(AllTracksModule(tracksView))
         return allTracksComponent
     }
 

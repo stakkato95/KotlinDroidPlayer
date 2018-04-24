@@ -19,15 +19,10 @@ import javax.inject.Inject
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
-class TracksFragment : BaseFragment(), TracksView {
+class AllTracksFragment : BaseFragment(), TracksView {
 
     @Inject
     lateinit var presenter: TracksPresenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycle.addObserver(presenter)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tracks, container, false)
@@ -39,6 +34,11 @@ class TracksFragment : BaseFragment(), TracksView {
         return view
     }
 
+    override fun injectPresenter(): LifecycleObserver {
+        App.INJECTOR.plusAllTracksComponent(this)?.inject(this)
+        return presenter
+    }
+
     fun getTracks(): List<Track> {
         val tracks = arrayListOf<Track>()
         for (i in 0..20) {
@@ -46,11 +46,6 @@ class TracksFragment : BaseFragment(), TracksView {
         }
 
         return tracks
-    }
-
-    override fun injectPresenter(): LifecycleObserver {
-        App.INJECTOR.plusAllTracksComponent()?.inject(this)
-        return presenter
     }
 
     override fun showTracks(tracks: List<Track>) {

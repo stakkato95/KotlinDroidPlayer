@@ -12,7 +12,7 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val presenter = injectPresenter()
-//        lifecycle.addObserver(presenter)
+        lifecycle.addObserver(presenter)
     }
 
     abstract fun injectPresenter() : LifecycleObserver
