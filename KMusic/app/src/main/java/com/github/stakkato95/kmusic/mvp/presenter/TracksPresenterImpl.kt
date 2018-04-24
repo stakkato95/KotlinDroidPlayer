@@ -9,16 +9,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 /**
  * Created by artsiomkaliaha on 04.10.17.
  */
-class TracksPresenterImpl(val view: TracksView, val useCase: AllTracksUseCase) :
-        TracksPresenter, DefaultLifecycleObserver {
+class TracksPresenterImpl(var view: TracksView?, val useCase: AllTracksUseCase) : TracksPresenter, DefaultLifecycleObserver {
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         var disposeable = useCase.getData()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { view.showTracks(it) },
-                        { view.showError() }
+                        { view?.showTracks(it) },
+                        { view?.showError() }
                 )
 
         //TODO DISPOSEABLE!!!

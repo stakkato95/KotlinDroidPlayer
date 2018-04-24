@@ -23,5 +23,5 @@ class AllTracksModule {
     @Provides
     @AllTracksScope
     fun provideAllTracksPresenter(context: Context, allTracksUseCase: AllTracksUseCase): TracksPresenter
-            = TracksPresenterImpl(context, allTracksUseCase)
+            = TracksPresenterImpl(null, allTracksUseCase)
 }
