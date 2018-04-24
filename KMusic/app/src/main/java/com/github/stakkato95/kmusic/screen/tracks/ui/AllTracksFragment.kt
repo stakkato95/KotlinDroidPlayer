@@ -34,15 +34,20 @@ class AllTracksFragment : BaseFragment(), TracksView {
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        App.INJECTOR.clearAllTracksComponent()
+    }
+
     override fun injectPresenter(): LifecycleObserver {
         App.INJECTOR.plusAllTracksComponent(this)?.inject(this)
         return presenter
     }
 
-    fun getTracks(): List<Track> {
+    private fun getTracks(): List<Track> {
         val tracks = arrayListOf<Track>()
         for (i in 0..20) {
-            tracks.add(Track("Need for Speed", "Lil John", ""))
+            tracks.add(Track(0, "Need for Speed", "Lil John", ""))
         }
 
         return tracks

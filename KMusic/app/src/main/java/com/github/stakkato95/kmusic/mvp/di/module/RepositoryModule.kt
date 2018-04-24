@@ -10,6 +10,7 @@ import com.github.stakkato95.kmusic.mvp.repository.media.MediaCursorParser
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaCursorParserImpl
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaStoreRepository
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaStoreRepositoryImpl
+import com.github.stakkato95.kmusic.mvp.repository.room.KMusicDatabase
 import dagger.Module
 import dagger.Provides
 
@@ -35,5 +36,5 @@ class RepositoryModule {
 
     @Provides
     @ApplicationScope
-    fun provideDatabaseRepository(): DatabaseRepository = DatabaseRepositoryImpl()
+    fun provideDatabaseRepository(database: KMusicDatabase): DatabaseRepository = DatabaseRepositoryImpl(database)
 }

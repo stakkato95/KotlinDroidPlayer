@@ -8,6 +8,7 @@ import com.github.stakkato95.kmusic.mvp.di.component.PlayerComponent
 import com.github.stakkato95.kmusic.mvp.di.component.SingleTrackComponent
 import com.github.stakkato95.kmusic.mvp.di.module.AllTracksModule
 import com.github.stakkato95.kmusic.mvp.di.module.AppModule
+import com.github.stakkato95.kmusic.mvp.repository.room.KMusicDatabase
 import com.github.stakkato95.kmusic.mvp.view.TracksView
 
 /**
@@ -17,7 +18,7 @@ class Injector(context: Context) {
 
     private var appComponent: AppComponent = DaggerAppComponent
             .builder()
-            .appModule(AppModule(context))
+            .appModule(AppModule(context, KMusicDatabase.initDatabase(context)))
             .build()
 
     private var singleTrackComponent: SingleTrackComponent? = null

@@ -8,8 +8,8 @@ import io.reactivex.Observable
 /**
  * Created by artsiomkaliaha on 04.10.17.
  */
-class RepositoryImpl(val mediaStoreRepository: MediaStoreRepository,
-                     val databaseRepository: DatabaseRepository): Repository {
+class RepositoryImpl(private val mediaStoreRepository: MediaStoreRepository,
+                     private val databaseRepository: DatabaseRepository): Repository {
 
     override fun getAllTracks(): Observable<List<Track>> {
         return databaseRepository
