@@ -7,4 +7,6 @@ import android.database.Cursor
  */
 fun Cursor.getString(column: String) = getString(getColumnIndex(column))
 
-fun Cursor.getInteger(column: String) = getInt(getColumnIndex(column))
+fun Cursor.getInt(column: String) = getInt(getColumnIndex(column))
+
+fun Cursor.getLong(column: String) = getInt(getColumnIndex(column))

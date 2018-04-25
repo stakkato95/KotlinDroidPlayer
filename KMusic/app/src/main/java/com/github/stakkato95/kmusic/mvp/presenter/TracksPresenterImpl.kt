@@ -17,7 +17,9 @@ class TracksPresenterImpl(var view: TracksView, private val useCase: AllTracksUs
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { view.showTracks(it) },
-                        { view.showError() }
+                        {
+                            view.showError()
+                        }
                 )
 
         //TODO DISPOSEABLE!!!

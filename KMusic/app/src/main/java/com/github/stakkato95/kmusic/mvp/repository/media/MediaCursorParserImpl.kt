@@ -3,7 +3,8 @@ package com.github.stakkato95.kmusic.mvp.repository.media
 import android.database.Cursor
 import android.provider.MediaStore
 import com.github.stakkato95.kmusic.mvp.repository.model.Track
-import com.github.stakkato95.kmusic.util.extensions.getInteger
+import com.github.stakkato95.kmusic.util.extensions.getInt
+import com.github.stakkato95.kmusic.util.extensions.getLong
 import com.github.stakkato95.kmusic.util.extensions.getString
 
 /**
@@ -16,10 +17,11 @@ class MediaCursorParserImpl : MediaCursorParser {
 
         while (cursor.moveToNext()) {
             val track = Track(
-                    cursor.getInteger(MediaStore.Audio.Media._ID),
+                    cursor.getInt(MediaStore.Audio.Media._ID),
                     cursor.getString(MediaStore.Audio.Media.DATA),
                     cursor.getString(MediaStore.Audio.Media.DISPLAY_NAME),
-                    cursor.getString(MediaStore.Audio.Media.ARTIST)
+                    cursor.getString(MediaStore.Audio.Media.ARTIST),
+                    cursor.getString(MediaStore.Audio.Albums.ALBUM_ART)
             )
             tracks.add(track)
         }

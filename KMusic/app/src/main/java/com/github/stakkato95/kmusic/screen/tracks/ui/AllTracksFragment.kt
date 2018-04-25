@@ -13,6 +13,7 @@ import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
 import com.github.stakkato95.kmusic.mvp.repository.model.Track
 import com.github.stakkato95.kmusic.mvp.view.TracksView
 import com.github.stakkato95.kmusic.screen.tracks.adapter.TracksAdapter
+import kotlinx.android.synthetic.main.fragment_tracks.*
 import kotlinx.android.synthetic.main.fragment_tracks.view.*
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class AllTracksFragment : BaseFragment(), TracksView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_tracks, container, false)
         with(view.tracksRecyclerView) {
-            adapter = TracksAdapter(getTracks())
+            adapter = TracksAdapter(null)
             layoutManager = GridLayoutManager(activity, 2)
         }
 
@@ -44,17 +45,8 @@ class AllTracksFragment : BaseFragment(), TracksView {
         return presenter
     }
 
-    private fun getTracks(): List<Track> {
-        val tracks = arrayListOf<Track>()
-        for (i in 0..20) {
-            tracks.add(Track(0, "Need for Speed", "Lil John", ""))
-        }
-
-        return tracks
-    }
-
     override fun showTracks(tracks: List<Track>) {
-        println(tracks.size)
+        (tracksRecyclerView.adapter as TracksAdapter).updateTracks(tracks)
     }
 
     override fun showNoTracks() {

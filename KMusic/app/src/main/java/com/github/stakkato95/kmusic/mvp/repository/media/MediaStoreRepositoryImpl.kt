@@ -14,13 +14,14 @@ class MediaStoreRepositoryImpl(val context: Context, private val parser: MediaCu
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media.ARTIST
+            MediaStore.Audio.Albums.ALBUM_ART
     )
 
     override fun getAllTracks(): Observable<List<Track>> {
         return Observable.create<List<Track>> {
             var tracks = listOf<Track>()
 
+            //TODO MediaStore.Audio.!!!MEDIA!!!.EXTERNAL_CONTENT_URI
             context.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null, null, null).use {
                 tracks = parser.parse(it)
             }
