@@ -69,6 +69,10 @@ dependencies {
     //room db
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    implementation "android.arch.persistence.room:rxjava2:$rootProject.roomVersion"
     androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
     kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+
+    //stetho
+    implementation "com.facebook.stetho:stetho:$rootProject.stethoVersion"
 }

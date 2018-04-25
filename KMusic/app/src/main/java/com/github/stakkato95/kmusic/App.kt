@@ -1,6 +1,7 @@
 package com.github.stakkato95.kmusic
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.github.stakkato95.kmusic.mvp.di.Injector
 
 /**
@@ -16,5 +17,6 @@ class App: Application() {
         super.onCreate()
 
         INJECTOR = Injector(applicationContext)
+        Stetho.initializeWithDefaults(this)
     }
 }

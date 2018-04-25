@@ -8,9 +8,10 @@ import io.reactivex.Observable
 /**
  * Created by artsiomkaliaha on 06.10.17.
  */
-class MediaStoreRepositoryImpl(val context: Context, val parser: MediaCursorParser) : MediaStoreRepository {
+class MediaStoreRepositoryImpl(val context: Context, private val parser: MediaCursorParser) : MediaStoreRepository {
 
     private val projection = arrayOf(
+            MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.DISPLAY_NAME,
             MediaStore.Audio.Media.ARTIST

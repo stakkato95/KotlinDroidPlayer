@@ -28,6 +28,7 @@ task clean(type: Delete) {
 }
 
 ext {
-    roomVersion = '1.1.0-beta2'
+    roomVersion = '1.1.0-beta3'
     archLifecycleVersion = '1.1.1'
+    stethoVersion = '1.5.0'
 }

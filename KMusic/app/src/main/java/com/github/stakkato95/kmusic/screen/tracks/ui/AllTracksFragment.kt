@@ -54,7 +54,7 @@ class AllTracksFragment : BaseFragment(), TracksView {
     }
 
     override fun showTracks(tracks: List<Track>) {
-        //TODO
+        println(tracks.size)
     }
 
     override fun showNoTracks() {
