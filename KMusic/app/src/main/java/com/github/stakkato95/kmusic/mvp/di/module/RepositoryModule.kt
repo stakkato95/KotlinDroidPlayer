@@ -6,8 +6,8 @@ import com.github.stakkato95.kmusic.mvp.repository.Repository
 import com.github.stakkato95.kmusic.mvp.repository.RepositoryImpl
 import com.github.stakkato95.kmusic.mvp.repository.database.DatabaseRepository
 import com.github.stakkato95.kmusic.mvp.repository.database.DatabaseRepositoryImpl
+import com.github.stakkato95.kmusic.mvp.repository.media.AlbumsCursorParser
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaCursorParser
-import com.github.stakkato95.kmusic.mvp.repository.media.MediaCursorParserImpl
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaStoreRepository
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaStoreRepositoryImpl
 import com.github.stakkato95.kmusic.mvp.repository.room.KMusicDatabase
@@ -25,14 +25,19 @@ class RepositoryModule {
     fun provideRepository(media: MediaStoreRepository, database: DatabaseRepository): Repository
             = RepositoryImpl(media, database)
 
+    //TODO use annotiations to distinguisch media parser and albumsParser
     @Provides
     @ApplicationScope
-    fun provideMediaSoreRepository(context: Context, parser: MediaCursorParser): MediaStoreRepository
-            = MediaStoreRepositoryImpl(context, parser)
+    fun provideMediaSoreRepository(context: Context, mediaParser: MediaCursorParser, albumsParser: AlbumsCursorParser): MediaStoreRepository
+            = MediaStoreRepositoryImpl(context, mediaParser, albumsParser)
 
     @Provides
     @ApplicationScope
-    fun provideMediaParser(): MediaCursorParser = MediaCursorParserImpl()
+    fun provideMediaParser() = MediaCursorParser()
+
+    @Provides
+    @ApplicationScope
+    fun provideAlbumsParser() = AlbumsCursorParser()
 
     @Provides
     @ApplicationScope

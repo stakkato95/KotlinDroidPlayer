@@ -44,6 +44,8 @@ class TracksViewHolder(override val containerView: View?) : RecyclerView.ViewHol
 //        retreiver.setDataSource(track.path)
 //        retreiver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM).toInt()
 
-        trackImage.context.picasso.load(Uri.parse("file://${track.albumId}")).into(trackImage)
+        track.coverPath?.let {
+            trackImage.context.picasso.load(Uri.parse("file://${track.coverPath}")).into(trackImage)
+        }
     }
 }
