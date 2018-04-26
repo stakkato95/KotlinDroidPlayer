@@ -2,7 +2,7 @@ package com.github.stakkato95.kmusic.mvp.repository
 
 import com.github.stakkato95.kmusic.mvp.repository.database.DatabaseRepository
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaStoreRepository
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 import io.reactivex.Observable
 
 /**
@@ -11,7 +11,7 @@ import io.reactivex.Observable
 class RepositoryImpl(private val mediaStoreRepository: MediaStoreRepository,
                      private val databaseRepository: DatabaseRepository) : Repository {
 
-    override fun getAllTracks(): Observable<List<Track>> {
+    override fun getAllTracks(): Observable<List<PlayerTrack>> {
         return databaseRepository
                 .getAllTracks()
                 .take(1)
@@ -21,5 +21,5 @@ class RepositoryImpl(private val mediaStoreRepository: MediaStoreRepository,
                 })
     }
 
-    override fun getCurrentTrack(): Observable<Track> = databaseRepository.getCurrentTrack()
+    override fun getCurrentTrack(): Observable<PlayerTrack> = databaseRepository.getCurrentTrack()
 }

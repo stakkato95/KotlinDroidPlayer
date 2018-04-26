@@ -1,7 +1,7 @@
 package com.github.stakkato95.kmusic.mvp.repository
 
 import com.github.stakkato95.kmusic.mvp.repository.media.MediaStoreRepository
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 import io.reactivex.Observable
 
 /**
@@ -9,5 +9,5 @@ import io.reactivex.Observable
  */
 interface Repository : MediaStoreRepository {
 
-    fun getCurrentTrack(): Observable<Track>
+    fun getCurrentTrack(): Observable<PlayerTrack>
 }

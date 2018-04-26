@@ -10,7 +10,7 @@ import com.github.stakkato95.kmusic.App
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.common.BaseFragment
 import com.github.stakkato95.kmusic.mvp.presenter.TracksPresenter
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 import com.github.stakkato95.kmusic.mvp.view.TracksView
 import com.github.stakkato95.kmusic.screen.tracks.adapter.TracksAdapter
 import kotlinx.android.synthetic.main.fragment_tracks.*
@@ -45,8 +45,8 @@ class AllTracksFragment : BaseFragment(), TracksView {
         return presenter
     }
 
-    override fun showTracks(tracks: List<Track>) {
-        (tracksRecyclerView.adapter as TracksAdapter).updateTracks(tracks)
+    override fun showTracks(playerTracks: List<PlayerTrack>) {
+        (tracksRecyclerView.adapter as TracksAdapter).updateTracks(playerTracks)
     }
 
     override fun showNoTracks() {
@@ -54,6 +54,10 @@ class AllTracksFragment : BaseFragment(), TracksView {
     }
 
     override fun showError() {
+        //TODO
+    }
+
+    override fun updateCurrentTrackProgress(progress: Float) {
         //TODO
     }
 }

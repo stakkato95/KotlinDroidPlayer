@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 import com.github.stakkato95.kmusic.util.extensions.picasso
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_track_info.*
@@ -14,10 +14,10 @@ import kotlinx.android.synthetic.main.item_track_info.*
 /**
  * Created by artsiomkaliaha on 03.08.17.
  */
-class TracksAdapter(private var tracks: List<Track>? = null) : RecyclerView.Adapter<TracksViewHolder>() {
+class TracksAdapter(private var playerTracks: List<PlayerTrack>? = null) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onBindViewHolder(holder: TracksViewHolder?, position: Int) {
-        val trcks = tracks
+        val trcks = playerTracks
         trcks?.let { holder?.setup(trcks[position]) }
     }
 
@@ -26,26 +26,19 @@ class TracksAdapter(private var tracks: List<Track>? = null) : RecyclerView.Adap
         return TracksViewHolder(view)
     }
 
-    override fun getItemCount() = tracks?.size ?: 0
+    override fun getItemCount() = playerTracks?.size ?: 0
 
-    fun updateTracks(tracks: List<Track>?) {
-        this.tracks = tracks
+    fun updateTracks(playerTracks: List<PlayerTrack>?) {
+        this.playerTracks = playerTracks
         notifyDataSetChanged()
     }
 }
 
 class TracksViewHolder(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun setup(track: Track) {
-        trackNameView.text = track.name
-        trackAuthorView.text = track.author
-
-//        val retreiver = MediaMetadataRetriever()
-//        retreiver.setDataSource(track.path)
-//        retreiver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM).toInt()
-
-        track.coverPath?.let {
-            trackImage.context.picasso.load(Uri.parse("file://${track.coverPath}")).into(trackImage)
-        }
+    fun setup(playerTrack: PlayerTrack) {
+        trackNameView.text = playerTrack.name
+        trackAuthorView.text = playerTrack.author
+        playerTrack.coverPath?.let { trackImage.context.picasso.load(Uri.parse("file://${playerTrack.coverPath}")).into(trackImage) }
     }
 }

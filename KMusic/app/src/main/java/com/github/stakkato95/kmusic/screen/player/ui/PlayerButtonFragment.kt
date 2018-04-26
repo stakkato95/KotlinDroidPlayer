@@ -21,11 +21,11 @@ import com.squareup.picasso.Callback
  */
 class PlayerButtonFragment : Fragment() {
 
-    var isPlaying = true
+    private var isPlaying = true
 
-    val playPause by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_play_pause, null) }
+    private val playPause by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_play_pause, null) }
 
-    val pausePlay by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_play, null) }
+    private val pausePlay by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_play, null) }
 
     companion object {
         fun newInstance(): PlayerButtonFragment {

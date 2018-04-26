@@ -4,9 +4,9 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 
-@Database(entities = [Track::class], version = 1)
+@Database(entities = [PlayerTrack::class], version = 1)
 abstract class KMusicDatabase : RoomDatabase() {
 
     companion object {

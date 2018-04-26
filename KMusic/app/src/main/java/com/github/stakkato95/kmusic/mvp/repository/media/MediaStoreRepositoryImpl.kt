@@ -2,7 +2,7 @@ package com.github.stakkato95.kmusic.mvp.repository.media
 
 import android.content.Context
 import android.provider.MediaStore
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 import io.reactivex.Observable
 
 /**
@@ -20,9 +20,9 @@ class MediaStoreRepositoryImpl(val context: Context, private val parser: CursorP
     )
     private val albumsProjection = arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART)
 
-    override fun getAllTracks(): Observable<List<Track>> {
-        return Observable.create<List<Track>> {
-            val tracks = mutableListOf<Track>()
+    override fun getAllTracks(): Observable<List<PlayerTrack>> {
+        return Observable.create<List<PlayerTrack>> {
+            val tracks = mutableListOf<PlayerTrack>()
 
             context.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null, null, null).use {
                 parser.parse(it, tracks)

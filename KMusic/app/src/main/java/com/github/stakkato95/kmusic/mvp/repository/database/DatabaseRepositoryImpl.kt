@@ -1,6 +1,6 @@
 package com.github.stakkato95.kmusic.mvp.repository.database
 
-import com.github.stakkato95.kmusic.mvp.repository.model.Track
+import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 import com.github.stakkato95.kmusic.mvp.repository.room.KMusicDatabase
 import io.reactivex.Observable
 
@@ -11,11 +11,11 @@ class DatabaseRepositoryImpl(val database: KMusicDatabase) : DatabaseRepository 
 
     override fun getAllTracks() = database.getTrackDao().getAllTracks().toObservable()
 
-    override fun getCurrentTrack(): Observable<Track> {
+    override fun getCurrentTrack(): Observable<PlayerTrack> {
         return Observable.empty()
     }
 
-    override fun saveAllTracks(tracks: List<Track>) {
-        database.getTrackDao().insertTracks(tracks)
+    override fun saveAllTracks(playerTracks: List<PlayerTrack>) {
+        database.getTrackDao().insertTracks(playerTracks)
     }
 }
