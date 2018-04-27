@@ -13,6 +13,4 @@ import dagger.Subcomponent
 interface AllTracksComponent {
 
     fun inject(fragmentAll: AllTracksFragment)
-
-    fun plusPlayerComponent(): PlayerComponent
 }

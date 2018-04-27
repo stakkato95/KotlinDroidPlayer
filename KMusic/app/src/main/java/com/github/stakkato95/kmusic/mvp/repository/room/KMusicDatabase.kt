@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 
-@Database(entities = [PlayerTrack::class], version = 1)
+@Database(entities = [PlayerTrack::class], version = 2)
 abstract class KMusicDatabase : RoomDatabase() {
 
     companion object {
@@ -14,7 +14,9 @@ abstract class KMusicDatabase : RoomDatabase() {
         private const val DATABASE_NAME = "kmusik_db"
 
         fun initDatabase(context: Context)
-                = Room.databaseBuilder(context.applicationContext, KMusicDatabase::class.java, DATABASE_NAME).build()
+                = Room.databaseBuilder(context.applicationContext, KMusicDatabase::class.java, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
+                .build()
     }
 
     abstract fun getTrackDao(): TrackDao

@@ -8,15 +8,20 @@ import android.view.ViewGroup
 import com.github.stakkato95.kmusic.App
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.common.BaseFragment
+import com.github.stakkato95.kmusic.mvp.presenter.PlayerPresenter
 import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
-import com.github.stakkato95.kmusic.mvp.view.TracksView
+import com.github.stakkato95.kmusic.mvp.view.PlayerView
 import com.github.stakkato95.kmusic.screen.player.adapter.PlayerButtonPagerAdapter
 import kotlinx.android.synthetic.main.fragment_player.*
+import javax.inject.Inject
 
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
-class PlayerFragment : BaseFragment(), TracksView {
+class PlayerFragment : BaseFragment(), PlayerView {
+
+    @Inject
+    lateinit var presenter: PlayerPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_player, container, false)
@@ -33,7 +38,8 @@ class PlayerFragment : BaseFragment(), TracksView {
 
     override fun injectPresenter(): LifecycleObserver {
         //TODO but presenter is singletone????!!!!! think about it
-        App.INJECTOR.plusAllTracksComponent(this)
+        App.INJECTOR.plusPlayerComponent(this)?.inject(this)
+        return presenter
     }
 
     override fun showTracks(playerTracks: List<PlayerTrack>) {

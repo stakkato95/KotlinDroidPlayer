@@ -8,8 +8,9 @@ import com.github.stakkato95.kmusic.mvp.di.component.PlayerComponent
 import com.github.stakkato95.kmusic.mvp.di.component.SingleTrackComponent
 import com.github.stakkato95.kmusic.mvp.di.module.AllTracksModule
 import com.github.stakkato95.kmusic.mvp.di.module.AppModule
-import com.github.stakkato95.kmusic.mvp.repository.room.KMusicDatabase
-import com.github.stakkato95.kmusic.mvp.view.TracksView
+import com.github.stakkato95.kmusic.mvp.di.module.PlayerModule
+import com.github.stakkato95.kmusic.mvp.view.AllTracksView
+import com.github.stakkato95.kmusic.mvp.view.PlayerView
 
 /**
  * Created by artsiomkaliaha on 05.10.17.
@@ -18,7 +19,7 @@ class Injector(context: Context) {
 
     private var appComponent: AppComponent = DaggerAppComponent
             .builder()
-            .appModule(AppModule(context, KMusicDatabase.initDatabase(context)))
+            .appModule(AppModule(context))
             .build()
 
     private var singleTrackComponent: SingleTrackComponent? = null
@@ -36,12 +37,12 @@ class Injector(context: Context) {
         singleTrackComponent = null
     }
 
-    fun plusAllTracksComponent(tracksView: TracksView): AllTracksComponent? {
+    fun plusAllTracksComponent(allTracksView: AllTracksView): AllTracksComponent? {
         if (singleTrackComponent == null) {
             plusSingleTrackComponent()
         }
 
-        allTracksComponent = singleTrackComponent?.plusAllTracksComponent(AllTracksModule(tracksView))
+        allTracksComponent = singleTrackComponent?.plusAllTracksComponent(AllTracksModule(allTracksView))
         return allTracksComponent
     }
 
@@ -49,8 +50,12 @@ class Injector(context: Context) {
         allTracksComponent = null
     }
 
-    fun plusPlayerComponent(): PlayerComponent? {
-        playerComponent = allTracksComponent?.plusPlayerComponent()
+    fun plusPlayerComponent(playerView: PlayerView): PlayerComponent? {
+        if (singleTrackComponent == null) {
+            plusSingleTrackComponent()
+        }
+
+        playerComponent = singleTrackComponent?.plusPlayerComponent(PlayerModule(playerView))
         return playerComponent
     }
 

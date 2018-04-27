@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 /**
  * Created by artsiomkaliaha on 04.10.17.
  */
-class TracksPresenterImpl(private var view: TracksView,
+abstract class TracksPresenterImpl(private var view: TracksView,
                           private val useCase: AllTracksUseCase,
                           private val state: TracksState) : TracksPresenter, DefaultLifecycleObserver {
 
