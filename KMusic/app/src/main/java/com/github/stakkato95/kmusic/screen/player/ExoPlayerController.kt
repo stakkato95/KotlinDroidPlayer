@@ -28,7 +28,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     private var currentPlayedTrackOrdinal: Int? = null
     private lateinit var currentMediaSource: DynamicConcatenatingMediaSource
 
-    private val userAgent = Util.getUserAgent(context, context.applicationInfo.nonLocalizedLabel.toString())
+    private val userAgent = Util.getUserAgent(context, context.applicationInfo.name)
 
     override fun playPause(trackOrdinal: Int) {
         if (currentPlayedTrackOrdinal == null || currentPlayedTrackOrdinal != trackOrdinal) {

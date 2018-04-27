@@ -7,9 +7,9 @@ import com.github.stakkato95.kmusic.screen.player.ui.PlayerButtonFragment
 /**
  * Created by artsiomkaliaha on 06.07.17.
  */
-class PlayerButtonPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class PlayerButtonPagerAdapter(fm: FragmentManager, private val tracksCount: Int) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int) = PlayerButtonFragment.newInstance()
 
-    override fun getCount() = 5
+    override fun getCount() = tracksCount
 }

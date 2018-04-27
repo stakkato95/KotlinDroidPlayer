@@ -7,6 +7,7 @@ import com.github.stakkato95.kmusic.mvp.repository.Repository
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCase
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCaseImpl
 import com.github.stakkato95.kmusic.mvp.view.AllTracksView
+import com.github.stakkato95.kmusic.screen.player.PlayerController
 import dagger.Module
 import dagger.Provides
 
@@ -22,6 +23,6 @@ class AllTracksModule(private val view: AllTracksView) {
 
     @Provides
     @AllTracksScope
-    fun provideAllTracksPresenter(allTracksUseCase: AllTracksUseCase, tracksState: TracksState)
-            = AllTracksPresenter(view, allTracksUseCase, tracksState)
+    fun provideAllTracksPresenter(allTracksUseCase: AllTracksUseCase, tracksState: TracksState, playerController: PlayerController)
+            = AllTracksPresenter(view, allTracksUseCase, tracksState, playerController)
 }

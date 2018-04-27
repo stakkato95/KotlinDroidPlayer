@@ -29,5 +29,5 @@ class AppModule(private val context: Context) {
 
     @Provides
     @ApplicationScope
-    fun providePlayerController(): PlayerController = ExoPlayerController()
+    fun providePlayerController(state: TracksState, context: Context): PlayerController = ExoPlayerController(state, context)
 }

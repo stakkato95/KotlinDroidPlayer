@@ -9,12 +9,11 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.util.extensions.blur
 import com.github.stakkato95.kmusic.util.extensions.picasso
 import com.squareup.picasso.Callback
+import kotlinx.android.synthetic.main.fragment_player_button.*
 
 /**
  * Created by artsiomkaliaha on 06.07.17.
@@ -33,34 +32,27 @@ class PlayerButtonFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_player_button, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
+            = inflater?.inflate(R.layout.fragment_player_button, container, false)!!
 
-        val image = view.findViewById<ImageView>(R.id.centerImage)
-
-        activity.picasso.load(R.drawable.test_background).into(image, object: Callback {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity.picasso.load(R.drawable.test_background).into(centerImage, object : Callback {
             override fun onSuccess() {
-                val bitmap = (image.drawable as BitmapDrawable).bitmap.blur(this@PlayerButtonFragment.activity, 0.5f, 25 / 2f)
+                val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@PlayerButtonFragment.activity, 0.5f, 25 / 2f)
                 val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
                 roundedBitmapDrawable.isCircular = true
                 roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
-
-                image.setImageDrawable(roundedBitmapDrawable)
+                centerImage.setImageDrawable(roundedBitmapDrawable)
             }
 
-            override fun onError() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun onError() {}
         })
 
-        val vectorIcon = view.findViewById<Button>(R.id.vector_icon)
-
-        vectorIcon.setOnClickListener {
-            vectorIcon.background = if (isPlaying) playPause else pausePlay
-            (vectorIcon.background as AnimatedVectorDrawable).start()
+        vector_icon.setOnClickListener {
+            vector_icon.background = if (isPlaying) playPause else pausePlay
+            (vector_icon.background as AnimatedVectorDrawable).start()
             isPlaying = !isPlaying
         }
-
-        return view
     }
 }

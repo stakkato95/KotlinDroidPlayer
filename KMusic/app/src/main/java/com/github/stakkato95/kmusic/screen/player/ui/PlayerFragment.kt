@@ -27,15 +27,6 @@ class PlayerFragment : BaseFragment(), PlayerView {
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        with(pager) {
-            adapter = PlayerButtonPagerAdapter(fragmentManager)
-            val leftRightPadding = resources.displayMetrics.widthPixels / 6
-            setPadding(leftRightPadding, 0, leftRightPadding, 0)
-        }
-    }
-
     override fun injectPresenter(): LifecycleObserver {
         //TODO but presenter is singletone????!!!!! think about it
         App.INJECTOR.plusPlayerComponent(this)?.inject(this)
@@ -43,7 +34,11 @@ class PlayerFragment : BaseFragment(), PlayerView {
     }
 
     override fun showTracks(playerTracks: List<PlayerTrack>) {
-        //TODO
+        with(pager) {
+            adapter = PlayerButtonPagerAdapter(fragmentManager, playerTracks.size)
+            val leftRightPadding = resources.displayMetrics.widthPixels / 6
+            setPadding(leftRightPadding, 0, leftRightPadding, 0)
+        }
     }
 
     override fun showNoTracks() {
