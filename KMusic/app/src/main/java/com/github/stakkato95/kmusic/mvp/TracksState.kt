@@ -3,7 +3,9 @@ package com.github.stakkato95.kmusic.mvp
 import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 import kotlin.properties.Delegates.observable
 
-class TracksState(var tracks: List<PlayerTrack>? = null) {
+class TracksState {
+
+    lateinit var tracks: List<PlayerTrack>
 
     private val observers = mutableListOf<((PlayerTrack?) -> Unit)>()
 

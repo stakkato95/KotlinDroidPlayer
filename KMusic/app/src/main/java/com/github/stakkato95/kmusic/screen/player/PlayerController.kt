@@ -5,7 +5,7 @@ package com.github.stakkato95.kmusic.screen.player
  */
 interface PlayerController {
 
-    fun playPause()
+    fun playPause(trackOrdinal: Int)
 
     fun nextTrack()
 

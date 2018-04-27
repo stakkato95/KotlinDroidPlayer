@@ -31,4 +31,6 @@ ext {
     roomVersion = '1.1.0-beta3'
     archLifecycleVersion = '1.1.1'
     stethoVersion = '1.5.0'
+    exoPlayerVersion = '2.7.3'
+    daggerVersion = '2.11'
 }
