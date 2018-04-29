@@ -32,13 +32,13 @@ class ExoPlayerController(private val state: TracksState, private val context: C
 
     override fun playPause(trackOrdinal: Int) {
         if (currentPlayedTrackOrdinal == null || currentPlayedTrackOrdinal != trackOrdinal) {
+            currentPlayedTrackOrdinal = trackOrdinal
             currentMediaSource = DynamicConcatenatingMediaSource()
             currentMediaSource.addMediaSources(createNewMediaSource(trackOrdinal))
             player.prepare(currentMediaSource)
-            player.playWhenReady = true
-        } else {
-            player.playWhenReady = false
         }
+
+        player.playWhenReady = !player.playWhenReady
     }
 
     override fun nextTrack() {
