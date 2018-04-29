@@ -73,15 +73,20 @@ class PlayerButtonFragment : Fragment() {
         })
 
         vector_icon.setOnClickListener {
-            vector_icon.background = if (isPlaying) playPause else pausePlay
-            (vector_icon.background as AnimatedVectorDrawable).start()
-            isPlaying = !isPlaying
-
+            switchPlayPauseIcon()
             val ordinal: Int = trackOrdinal ?: TRACK_ORDINAL_NO_VALUE
             if (ordinal != TRACK_ORDINAL_NO_VALUE) {
                 playPauseCallbackHolder?.callback?.invoke(ordinal)
             }
         }
+
+        switchPlayPauseIcon()
+    }
+
+    fun switchPlayPauseIcon() {
+        vector_icon.background = if (isPlaying) playPause else pausePlay
+        (vector_icon.background as AnimatedVectorDrawable).start()
+        isPlaying = !isPlaying
     }
 }
 
