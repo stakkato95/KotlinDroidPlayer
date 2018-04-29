@@ -6,12 +6,18 @@ import com.github.stakkato95.kmusic.mvp.TracksState
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.PlaybackParameters
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
@@ -23,8 +29,6 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     companion object {
 
         const val MEDIA_SOURCES_BOUNDARY_OFFSET = 5
-
-        const val CURRENT_PLAYED_TRACK_NOT_SET = -1
     }
 
     private var player: ExoPlayer = ExoPlayerFactory.newSimpleInstance(
@@ -33,17 +37,16 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             DefaultLoadControl()
     )
 
-    private var currentPlayedTrackOrdinal = CURRENT_PLAYED_TRACK_NOT_SET
+    private var currentPlayedTrackOrdinal = C.INDEX_UNSET
 
-    private lateinit var currentMediaSource: DynamicConcatenatingMediaSource
+    private val currentMediaSource = DynamicConcatenatingMediaSource()
 
     private val userAgent = Util.getUserAgent(context, context.applicationInfo.name)
 
     override fun playPause(trackOrdinal: Int) {
-        if (currentPlayedTrackOrdinal == CURRENT_PLAYED_TRACK_NOT_SET || currentPlayedTrackOrdinal != trackOrdinal) {
+        if (currentPlayedTrackOrdinal == C.INDEX_UNSET || currentPlayedTrackOrdinal != trackOrdinal) {
             currentPlayedTrackOrdinal = trackOrdinal
-            currentMediaSource = DynamicConcatenatingMediaSource()
-            currentMediaSource.addMediaSources(createNewMediaSource(trackOrdinal))
+            createMediaSource(trackOrdinal)
             player.prepare(currentMediaSource)
         }
 
@@ -51,44 +54,81 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     }
 
     override fun nextTrack() {
-        val timeLine = player.currentTimeline
-        if (timeLine.isEmpty) {
-            createNewMediaSource(currentPlayedTrackOrdinal)
+        if (player.nextWindowIndex == C.INDEX_UNSET) {
+            concatToMediaSource()
+            player.prepare(currentMediaSource)
+            player.addListener(object : Player.EventListener {
+                override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
+                }
+
+                override fun onSeekProcessed() {
+                }
+
+                override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
+                }
+
+                override fun onPlayerError(error: ExoPlaybackException?) {
+                }
+
+                override fun onLoadingChanged(isLoading: Boolean) {
+                }
+
+                override fun onPositionDiscontinuity(reason: Int) {
+                }
+
+                override fun onRepeatModeChanged(repeatMode: Int) {
+                }
+
+                override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+                }
+
+                override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {
+                }
+
+                override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                    player.seekToDefaultPosition(++currentPlayedTrackOrdinal)
+                    player.removeListener(this)
+                }
+            })
+            return
         }
 
         val nextWindowIndex = player.nextWindowIndex
         if (nextWindowIndex != C.INDEX_UNSET) {
-            player.seekTo(nextWindowIndex, C.TIME_UNSET)
-            player.playWhenReady = true
+            player.seekToDefaultPosition(nextWindowIndex)
+            currentPlayedTrackOrdinal++
         }
     }
 
     override fun previousTrack() {
         //TODO similar to nextTrack
-        val timeLine = player.currentTimeline
-        if (timeLine.isEmpty) {
-            createNewMediaSource(currentPlayedTrackOrdinal)
-        }
+        //TODO case, when play not from the first track???
 
         val previousWindowIndex = player.previousWindowIndex
         if (previousWindowIndex != C.INDEX_UNSET) {
             player.seekTo(previousWindowIndex, C.TIME_UNSET)
             player.playWhenReady = true
+            currentPlayedTrackOrdinal--
         }
     }
 
-    private fun createNewMediaSource(firstTrackOrdinal: Int): MutableList<MediaSource> {
+    private fun createMediaSource(firstTrackOrdinal: Int) {
         val mediaSources = mutableListOf<MediaSource>()
 
-        val bottomBoundary = Math.max(firstTrackOrdinal - MEDIA_SOURCES_BOUNDARY_OFFSET, 0)
-        val topBoundary = Math.min(firstTrackOrdinal + MEDIA_SOURCES_BOUNDARY_OFFSET, state.tracks.size)
-
-        for (i in bottomBoundary..topBoundary) {
+        for (i in firstTrackOrdinal until MEDIA_SOURCES_BOUNDARY_OFFSET) {
             val dataSourceFactory = DefaultDataSourceFactory(context, userAgent, null)
             val uri = Uri.parse(state.tracks[i].path)
             mediaSources.add(ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri))
         }
 
-        return mediaSources
+        currentMediaSource.addMediaSources(mediaSources)
+    }
+
+    private fun concatToMediaSource() {
+        for (i in currentPlayedTrackOrdinal + 1 until currentPlayedTrackOrdinal + MEDIA_SOURCES_BOUNDARY_OFFSET) {
+            val dataSourceFactory = DefaultDataSourceFactory(context, userAgent, null)
+            val uri = Uri.parse(state.tracks[i].path)
+            currentMediaSource.addMediaSource(ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri))
+        }
     }
 }
