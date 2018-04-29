@@ -20,18 +20,27 @@ import com.google.android.exoplayer2.util.Util
  */
 class ExoPlayerController(private val state: TracksState, private val context: Context) : PlayerController {
 
+    companion object {
+
+        const val MEDIA_SOURCES_BOUNDARY_OFFSET = 5
+
+        const val CURRENT_PLAYED_TRACK_NOT_SET = -1
+    }
+
     private var player: ExoPlayer = ExoPlayerFactory.newSimpleInstance(
             DefaultRenderersFactory(context),
             DefaultTrackSelector(),
             DefaultLoadControl()
     )
-    private var currentPlayedTrackOrdinal: Int? = null
+
+    private var currentPlayedTrackOrdinal = CURRENT_PLAYED_TRACK_NOT_SET
+
     private lateinit var currentMediaSource: DynamicConcatenatingMediaSource
 
     private val userAgent = Util.getUserAgent(context, context.applicationInfo.name)
 
     override fun playPause(trackOrdinal: Int) {
-        if (currentPlayedTrackOrdinal == null || currentPlayedTrackOrdinal != trackOrdinal) {
+        if (currentPlayedTrackOrdinal == CURRENT_PLAYED_TRACK_NOT_SET || currentPlayedTrackOrdinal != trackOrdinal) {
             currentPlayedTrackOrdinal = trackOrdinal
             currentMediaSource = DynamicConcatenatingMediaSource()
             currentMediaSource.addMediaSources(createNewMediaSource(trackOrdinal))
@@ -44,12 +53,13 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     override fun nextTrack() {
         val timeLine = player.currentTimeline
         if (timeLine.isEmpty) {
-            return
+            createNewMediaSource(currentPlayedTrackOrdinal)
         }
 
         val nextWindowIndex = player.nextWindowIndex
         if (nextWindowIndex != C.INDEX_UNSET) {
             player.seekTo(nextWindowIndex, C.TIME_UNSET)
+            player.playWhenReady = true
         }
     }
 
@@ -57,19 +67,23 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         //TODO similar to nextTrack
         val timeLine = player.currentTimeline
         if (timeLine.isEmpty) {
-            return
+            createNewMediaSource(currentPlayedTrackOrdinal)
         }
 
         val previousWindowIndex = player.previousWindowIndex
         if (previousWindowIndex != C.INDEX_UNSET) {
             player.seekTo(previousWindowIndex, C.TIME_UNSET)
+            player.playWhenReady = true
         }
     }
 
     private fun createNewMediaSource(firstTrackOrdinal: Int): MutableList<MediaSource> {
         val mediaSources = mutableListOf<MediaSource>()
 
-        for (i in firstTrackOrdinal..firstTrackOrdinal + 2) {
+        val bottomBoundary = Math.max(firstTrackOrdinal - MEDIA_SOURCES_BOUNDARY_OFFSET, 0)
+        val topBoundary = Math.min(firstTrackOrdinal + MEDIA_SOURCES_BOUNDARY_OFFSET, state.tracks.size)
+
+        for (i in bottomBoundary..topBoundary) {
             val dataSourceFactory = DefaultDataSourceFactory(context, userAgent, null)
             val uri = Uri.parse(state.tracks[i].path)
             mediaSources.add(ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri))

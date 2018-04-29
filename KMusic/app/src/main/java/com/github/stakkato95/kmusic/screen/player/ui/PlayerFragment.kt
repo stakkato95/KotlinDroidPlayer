@@ -36,6 +36,8 @@ class PlayerFragment : BaseFragment(), PlayerView {
     override fun showTracks(playerTracks: List<PlayerTrack>) {
         with(pager) {
             adapter = PlayerButtonPagerAdapter(fragmentManager, playerTracks.size) { trackOrdinal -> presenter.playPause(trackOrdinal) }
+            setCurrentItemObserver { old, new -> if (old > new) presenter.previousTrack() else presenter.nextTrack() }
+
             val leftRightPadding = resources.displayMetrics.widthPixels / 6
             setPadding(leftRightPadding, 0, leftRightPadding, 0)
         }
