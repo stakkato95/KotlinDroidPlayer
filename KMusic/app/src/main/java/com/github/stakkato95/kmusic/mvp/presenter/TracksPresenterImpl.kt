@@ -38,6 +38,18 @@ abstract class TracksPresenterImpl(private var view: TracksView,
         //TODO where to dispose of???
     }
 
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        playerController.addProgressListener {
+            view.updateCurrentTrackProgress(it)
+        }
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+        playerController.removeProgressListener()
+    }
+
     override fun playPause(trackOrdinal: Int) {
         playerController.playPause(trackOrdinal)
     }

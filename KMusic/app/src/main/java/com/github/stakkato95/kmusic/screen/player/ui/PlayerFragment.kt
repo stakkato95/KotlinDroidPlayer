@@ -18,17 +18,18 @@ import javax.inject.Inject
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
-class PlayerFragment : BaseFragment(), PlayerView {
+class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
 
     @Inject
     lateinit var presenter: PlayerPresenter
+
+    private var lastVisiblePlayerButton: PlayerButton? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
 
     override fun injectPresenter(): LifecycleObserver {
-        //TODO but presenter is singletone????!!!!! think about it
         App.INJECTOR.plusPlayerComponent(this)?.inject(this)
         return presenter
     }
@@ -36,7 +37,7 @@ class PlayerFragment : BaseFragment(), PlayerView {
     override fun showTracks(playerTracks: List<PlayerTrack>) {
         with(pager) {
             adapter = PlayerButtonPagerAdapter(
-                    fragmentManager,
+                    childFragmentManager,
                     playerTracks.size,
                     { progress -> presenter.rewind(progress) },
                     { trackOrdinal -> presenter.playPause(trackOrdinal) }
@@ -57,6 +58,8 @@ class PlayerFragment : BaseFragment(), PlayerView {
     }
 
     override fun updateCurrentTrackProgress(progress: Float) {
-        //TODO
+        lastVisiblePlayerButton?.setProgress(progress)
     }
+
+    override fun setLastVisiblePlayerButton(playerButton: PlayerButton) { lastVisiblePlayerButton = playerButton }
 }

@@ -5,7 +5,7 @@ package com.github.stakkato95.kmusic.screen.player.controller
  */
 interface PlayerController {
 
-    fun setProgressListener(listener: (Float) -> Unit)
+    fun addProgressListener(listener: (Float) -> Unit)
 
     fun removeProgressListener()
 

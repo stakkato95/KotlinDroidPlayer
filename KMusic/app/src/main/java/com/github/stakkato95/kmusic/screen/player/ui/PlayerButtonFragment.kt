@@ -2,6 +2,7 @@ package com.github.stakkato95.kmusic.screen.player.ui
 
 import android.app.Activity
 import android.arch.lifecycle.LifecycleObserver
+import android.content.Context
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -25,7 +26,7 @@ import javax.inject.Inject
 /**
  * Created by artsiomkaliaha on 06.07.17.
  */
-class PlayerButtonFragment : Fragment() {
+class PlayerButtonFragment : Fragment(), PlayerButton {
 
     companion object {
 
@@ -90,6 +91,19 @@ class PlayerButtonFragment : Fragment() {
         musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
 
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        if (menuVisible && !isDetached && parentFragment != null) {
+            (parentFragment as PlayerScreen).setLastVisiblePlayerButton(this)
+        }
+    }
+
+    override fun setProgress(progress: Float) {
+        //TODO work in progress
+        activity?.runOnUiThread { Toast.makeText(activity, "$progress", Toast.LENGTH_SHORT).show() }
+//        musicProgressBar.progress = progress
+    }
+
     private fun switchPlayPauseIcon() {
         vector_icon.background = if (isPlaying) playPause else pausePlay
         (vector_icon.background as AnimatedVectorDrawable).start()
@@ -98,3 +112,13 @@ class PlayerButtonFragment : Fragment() {
 }
 
 class PlayPauseCallbackHolder(val progressCallback: (Float) -> Unit, val playPauseCallback: (Int) -> Unit) : Serializable
+
+interface PlayerButton {
+
+    fun setProgress(progress: Float)
+}
+
+interface PlayerScreen {
+
+    fun setLastVisiblePlayerButton(playerButton: PlayerButton)
+}

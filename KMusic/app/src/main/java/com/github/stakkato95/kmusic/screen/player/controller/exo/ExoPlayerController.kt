@@ -31,7 +31,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         const val PLAYER_TIMER_PERIOD_MILLIS = 1000L
     }
 
-    private var listener: ((Float) -> Unit)? = null
+    private var listeners = mutableListOf<((Float) -> Unit)?>()
 
     private var player: ExoPlayer = ExoPlayerFactory.newSimpleInstance(
             DefaultRenderersFactory(context),
@@ -101,9 +101,11 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         player.seekTo((durationOfTrack * progress).toLong())
     }
 
-    override fun setProgressListener(listener: (Float) -> Unit) { this.listener = listener }
+    override fun addProgressListener(listener: (Float) -> Unit) { listeners.add(listener) }
 
-    override fun removeProgressListener() { listener = null }
+    override fun removeProgressListener() {
+        //TODO
+    }
 
     private fun createMediaSource(firstTrackOrdinal: Int) {
         val mediaSources = mutableListOf<MediaSource>()
@@ -129,6 +131,6 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         if (!player.playWhenReady) {
             return
         }
-        listener?.invoke((player.currentPosition / player.duration).toFloat())
+        listeners.forEach { it?.invoke(player.currentPosition / player.duration.toFloat()) }
     }
 }
