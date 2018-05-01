@@ -29,59 +29,61 @@ class MusicProgressBar : PercentFrameLayout {
         FINISHED(isFinished = true)
     }
 
-    val DEFAULT_TOUCH_TIME_TO_START_SCROLLING = 500
+    companion object {
+        const val DEFAULT_TOUCH_TIME_TO_START_SCROLLING = 500
 
-    val IDEAL_FPS_RATE = 90f
-    val SECOND_IN_MILLIS = 1000f
+        const val IDEAL_FPS_RATE = 90f
+        const val SECOND_IN_MILLIS = 1000f
 
-    val DEFAULT_ANGLE_BETWEEN_VIBRATIONS = 10
-    val DEFAULT_VIBRATION_TIME = 50
-    val DEFAULT_VIBRATION_TIME_ON_FIRST_TOUCH = 100
-    val DEFAULT_ANGLE_MEASUREMENT_ERROR = 0f
+        const val DEFAULT_ANGLE_BETWEEN_VIBRATIONS = 10
+        const val DEFAULT_VIBRATION_TIME = 50
+        const val DEFAULT_VIBRATION_TIME_ON_FIRST_TOUCH = 100
+        const val DEFAULT_ANGLE_MEASUREMENT_ERROR = 0f
+    }
 
     //progress paints
-    lateinit var backgroundLinePaint: Paint
-    lateinit var progressPaint: Paint
-    lateinit var innerCirclePaint: Paint
+    private lateinit var backgroundLinePaint: Paint
+    private lateinit var progressPaint: Paint
+    private lateinit var innerCirclePaint: Paint
 
-    var progressBarNormalThickness: Float = 0f
-    var progressBarTouchedThickness: Float = 0f
-    var progressBarOffsetFromViewBorder: Float = 0f
+    private var progressBarNormalThickness: Float = 0f
+    private var progressBarTouchedThickness: Float = 0f
+    private var progressBarOffsetFromViewBorder: Float = 0f
 
     //progress coordinates
-    var progressbarAngle = 0f
-    var progressbarAngleLast = 0f
-    val progressStartAngle = -90f
+    private var progressbarAngle = 0f
+    private var progressbarAngleLast = 0f
+    private val progressStartAngle = -90f
 
-    var center = Point()
+    private var center = Point()
         get() = Point(width / 2, height / 2)
-    var centerX = 0f
+    private var centerX = 0f
         get() = center.x.toFloat()
-    var centerY = 0f
+    private var centerY = 0f
         get() = center.y.toFloat()
 
-    var halfWidth = 0f
+    private var halfWidth = 0f
         get() = width / 2f
-    var halfHeight = 0f
+    private var halfHeight = 0f
         get() = height / 2f
 
     //params that control touch
-    var touchTimeToStartScrolling = 0L
+    private var touchTimeToStartScrolling = 0L
 
-    var touchState = TouchState.FINISHED
-    var progressScaleTimeElapsed = 0L
-    val progressBarUpdateStep = (SECOND_IN_MILLIS / IDEAL_FPS_RATE).toLong()
+    private var touchState = TouchState.FINISHED
+    private var progressScaleTimeElapsed = 0L
+    private val progressBarUpdateStep = (SECOND_IN_MILLIS / IDEAL_FPS_RATE).toLong()
 
-    var angleBetweenVibration = 0
-    var angleMeasurementError = 0f
+    private var angleBetweenVibration = 0
+    private var angleMeasurementError = 0f
     var vibrationTime = 0L
     var vibrationTimeOnFirstTouch = 0L
-    lateinit var vibrator: Vibrator
+    private lateinit var vibrator: Vibrator
 
-    var lastTouchPoint: Point? = null
-    var canUpdateProgressAngle = true
+    private var lastTouchPoint: Point? = null
+    private var canUpdateProgressAngle = true
 
-    var progressListener: ((Boolean) -> Unit)? = null
+    private var progressListener: ((Boolean) -> Unit)? = null
 
     constructor(context: Context?) : super(context) {
         init(null)
@@ -95,7 +97,7 @@ class MusicProgressBar : PercentFrameLayout {
         init(attrs)
     }
 
-    fun init(attrs: AttributeSet?) {
+    private fun init(attrs: AttributeSet?) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.MusicProgressBar)
 
         initPaints(attributes)
@@ -114,7 +116,7 @@ class MusicProgressBar : PercentFrameLayout {
         setOnTouchListener(this::touchEvent)
     }
 
-    fun initPaints(attributes: TypedArray) {
+    private fun initPaints(attributes: TypedArray) {
         backgroundLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         backgroundLinePaint.color = attributes.getColor(R.styleable.MusicProgressBar_lineColor, Color.GRAY)
 
@@ -126,7 +128,7 @@ class MusicProgressBar : PercentFrameLayout {
         innerCirclePaint.color = attributes.getColor(R.styleable.MusicProgressBar_innerCircleColor, Color.WHITE)
     }
 
-    fun initBarsThicknesses(attributes: TypedArray) {
+    private fun initBarsThicknesses(attributes: TypedArray) {
         val progressbarDefaultThickness = context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_default_thickness)
         val progressbarDefaultTouchedThickness = context.resources.getDimensionPixelSize(R.dimen.musicProgressBar_touched_thickness)
 
@@ -139,7 +141,7 @@ class MusicProgressBar : PercentFrameLayout {
         progressBarOffsetFromViewBorder = progressBarTouchedThickness - progressBarNormalThickness
     }
 
-    fun initVibration(attributes: TypedArray) {
+    private fun initVibration(attributes: TypedArray) {
         angleBetweenVibration = attributes
                 .getInteger(R.styleable.MusicProgressBar_angleBetweenVibrations, DEFAULT_ANGLE_BETWEEN_VIBRATIONS)
 
@@ -173,13 +175,13 @@ class MusicProgressBar : PercentFrameLayout {
         }
     }
 
-    fun drawBackgroundLine(canvas: Canvas, increaseOfOuterCircle: Float) {
+    private fun drawBackgroundLine(canvas: Canvas, increaseOfOuterCircle: Float) {
         //let's assume that width is bigger than height
         val backgroundLineRadius = Math.min(halfWidth, halfHeight) - progressBarOffsetFromViewBorder + increaseOfOuterCircle
         canvas.drawCircle(centerX, centerY, backgroundLineRadius, backgroundLinePaint)
     }
 
-    fun drawProgressArc(canvas: Canvas, increaseOfOuterCircle: Float) {
+    private fun drawProgressArc(canvas: Canvas, increaseOfOuterCircle: Float) {
         val progressbarLeftPadding = (width - height) / 2f + progressBarOffsetFromViewBorder
 
         val progressArcLeft = progressbarLeftPadding - increaseOfOuterCircle
@@ -198,7 +200,7 @@ class MusicProgressBar : PercentFrameLayout {
                 progressPaint)
     }
 
-    fun drawInnerCircle(canvas: Canvas, reductionOfInnerCircle: Float) {
+    private fun drawInnerCircle(canvas: Canvas, reductionOfInnerCircle: Float) {
         val innerCircleRadius = Math.min(
                 halfWidth - progressBarOffsetFromViewBorder - reductionOfInnerCircle,
                 halfHeight - progressBarOffsetFromViewBorder - reductionOfInnerCircle
@@ -206,15 +208,15 @@ class MusicProgressBar : PercentFrameLayout {
         canvas.drawCircle(centerX, centerY, innerCircleRadius, innerCirclePaint)
     }
 
-    fun calculateIncreaseOfOuterCircle(touchTimeProgress: Float): Float {
+    private fun calculateIncreaseOfOuterCircle(touchTimeProgress: Float): Float {
         return (progressBarTouchedThickness - progressBarNormalThickness) / 2 * touchTimeProgress
     }
 
-    fun calculateReductionOfInnerCircle(touchTimeProgress: Float): Float {
+    private fun calculateReductionOfInnerCircle(touchTimeProgress: Float): Float {
         return progressBarNormalThickness - (progressBarNormalThickness - progressBarTouchedThickness) / 2 * touchTimeProgress
     }
 
-    fun touchEvent(view: View, event: MotionEvent): Boolean {
+    private fun touchEvent(view: View, event: MotionEvent): Boolean {
         when {
             event.action == MotionEvent.ACTION_DOWN -> {
                 touchState = TouchState.STARTED
@@ -254,7 +256,7 @@ class MusicProgressBar : PercentFrameLayout {
         return true
     }
 
-    fun calculateAngle(x: Int, y: Int): Float {
+    private fun calculateAngle(x: Int, y: Int): Float {
         val currentPoint = Point(x, y)
 
         val startX = 0
@@ -273,14 +275,14 @@ class MusicProgressBar : PercentFrameLayout {
         }
     }
 
-    fun updateProgressAngle(touchPoint: Point?) {
+    private fun updateProgressAngle(touchPoint: Point?) {
         touchPoint?.let {
             progressbarAngle = calculateAngle(touchPoint.x, touchPoint.y)
             invalidate()
         }
     }
 
-    fun updateProgressBarThicknessAfterDelay() {
+    private fun updateProgressBarThicknessAfterDelay() {
         val shouldInvalidate = when {
             (touchState.isStarted || touchState.isInProgress) && progressScaleTimeElapsed < touchTimeToStartScrolling -> {
                 progressScaleTimeElapsed += progressBarUpdateStep
@@ -299,7 +301,7 @@ class MusicProgressBar : PercentFrameLayout {
         }
     }
 
-    fun vibrate() {
+    private fun vibrate() {
         if (Math.round(progressbarAngle) % angleBetweenVibration <= angleBetweenVibration * angleMeasurementError) {
             vibrator.vibrate(vibrationTime)
         }
