@@ -112,6 +112,15 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         }
     }
 
+    override fun rewind(progress: Float) {
+        val durationOfTrack = player.duration
+        if (durationOfTrack == C.TIME_UNSET) {
+            return
+        }
+
+        player.seekTo((durationOfTrack * progress).toLong())
+    }
+
     private fun createMediaSource(firstTrackOrdinal: Int) {
         val mediaSources = mutableListOf<MediaSource>()
 

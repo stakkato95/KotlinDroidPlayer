@@ -10,4 +10,6 @@ interface PlayerController {
     fun nextTrack()
 
     fun previousTrack()
+
+    fun rewind(progress: Float)
 }

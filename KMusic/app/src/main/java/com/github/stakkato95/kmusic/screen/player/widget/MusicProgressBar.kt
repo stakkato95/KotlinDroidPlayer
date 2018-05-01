@@ -52,7 +52,6 @@ class MusicProgressBar : PercentFrameLayout {
 
     //progress coordinates
     private var progressbarAngle = 0f
-    private var progressbarAngleLast = 0f
     private val progressStartAngle = -90f
 
     private var center = Point()
@@ -84,6 +83,7 @@ class MusicProgressBar : PercentFrameLayout {
     private var canUpdateProgressAngle = true
 
     private var progressListener: ((Boolean) -> Unit)? = null
+    private var progressPercentListener: ((Float) -> Unit)? = null
 
     constructor(context: Context?) : super(context) {
         init(null)
@@ -250,6 +250,8 @@ class MusicProgressBar : PercentFrameLayout {
                 touchState = TouchState.FINISHED
                 updateProgressBarThicknessAfterDelay()
                 progressListener?.invoke(false)
+
+                progressPercentListener?.invoke(progressbarAngle / 360)
             }
         }
 
@@ -305,11 +307,13 @@ class MusicProgressBar : PercentFrameLayout {
         if (Math.round(progressbarAngle) % angleBetweenVibration <= angleBetweenVibration * angleMeasurementError) {
             vibrator.vibrate(vibrationTime)
         }
-
-        progressbarAngleLast = progressbarAngle
     }
 
     fun setProgressStateListener(listener: (Boolean) -> Unit) { progressListener = listener }
 
     fun removeProgressStateListener() { progressListener = null }
+
+    fun setProgressPercentListener(listener: (Float) -> Unit) { progressPercentListener = listener }
+
+    fun removeProgressPercentListener() { progressPercentListener = null }
 }

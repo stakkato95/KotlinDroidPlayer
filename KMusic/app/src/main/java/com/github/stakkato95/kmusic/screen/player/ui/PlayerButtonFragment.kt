@@ -29,11 +29,11 @@ class PlayerButtonFragment : Fragment() {
 
         private const val TRACK_ORDINAL_KEY = "TRACK_ORDINAL_KEY"
 
-        fun newInstance(callback: (Int) -> Unit, trackOrdinal: Int): PlayerButtonFragment {
+        fun newInstance(progressCallback: (Float) -> Unit, playPauseCallback: (Int) -> Unit, trackOrdinal: Int): PlayerButtonFragment {
             val fragment = PlayerButtonFragment()
 
             val args = Bundle()
-            args.putSerializable(PLAY_PAUSE_CALLBACK_KEY, PlayPauseCallbackHolder(callback))
+            args.putSerializable(PLAY_PAUSE_CALLBACK_KEY, PlayPauseCallbackHolder(progressCallback, playPauseCallback))
             args.putInt(TRACK_ORDINAL_KEY, trackOrdinal)
             fragment.arguments = args
 
@@ -47,7 +47,7 @@ class PlayerButtonFragment : Fragment() {
 
     private val pausePlay by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_play, null) }
 
-    private var playPauseCallbackHolder: PlayPauseCallbackHolder? = null
+    private var callbacksHolder: PlayPauseCallbackHolder? = null
 
     private var trackOrdinal: Int? = null
 
@@ -57,7 +57,7 @@ class PlayerButtonFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playPauseCallbackHolder = arguments.getSerializable(PLAY_PAUSE_CALLBACK_KEY) as PlayPauseCallbackHolder
+        callbacksHolder = arguments.getSerializable(PLAY_PAUSE_CALLBACK_KEY) as PlayPauseCallbackHolder
         trackOrdinal = arguments.getInt(TRACK_ORDINAL_KEY)
 
         activity.picasso.load(R.drawable.test_background).into(centerImage, object : Callback {
@@ -76,11 +76,12 @@ class PlayerButtonFragment : Fragment() {
             switchPlayPauseIcon()
             val ordinal: Int = trackOrdinal ?: TRACK_ORDINAL_NO_VALUE
             if (ordinal != TRACK_ORDINAL_NO_VALUE) {
-                playPauseCallbackHolder?.callback?.invoke(ordinal)
+                callbacksHolder?.playPauseCallback?.invoke(ordinal)
             }
         }
-
         switchPlayPauseIcon()
+
+        musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
 
     fun switchPlayPauseIcon() {
@@ -90,4 +91,4 @@ class PlayerButtonFragment : Fragment() {
     }
 }
 
-class PlayPauseCallbackHolder(val callback: (Int) -> Unit) : Serializable
+class PlayPauseCallbackHolder(val progressCallback: (Float) -> Unit, val playPauseCallback: (Int) -> Unit) : Serializable

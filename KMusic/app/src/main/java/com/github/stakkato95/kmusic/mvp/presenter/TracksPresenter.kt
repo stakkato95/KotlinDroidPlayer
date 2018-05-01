@@ -12,4 +12,6 @@ interface TracksPresenter : BasePresenter, LifecycleObserver {
     fun nextTrack()
 
     fun previousTrack()
+
+    fun rewind(progress: Float)
 }

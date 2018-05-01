@@ -50,4 +50,8 @@ abstract class TracksPresenterImpl(private var view: TracksView,
     override fun previousTrack() {
         playerController.previousTrack()
     }
+
+    override fun rewind(progress: Float) {
+        playerController.rewind(progress)
+    }
 }
