@@ -1,11 +1,10 @@
 package com.github.stakkato95.kmusic.mvp.presenter
 
-import android.arch.lifecycle.DefaultLifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import com.github.stakkato95.kmusic.mvp.TracksState
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCase
 import com.github.stakkato95.kmusic.mvp.view.TracksView
-import com.github.stakkato95.kmusic.screen.player.PlayerController
+import com.github.stakkato95.kmusic.screen.player.controller.PlayerController
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
@@ -14,7 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 abstract class TracksPresenterImpl(private var view: TracksView,
                                    private val useCase: AllTracksUseCase,
                                    private val state: TracksState,
-                                   private val playerController: PlayerController) : TracksPresenter, DefaultLifecycleObserver {
+                                   private val playerController: PlayerController) : TracksPresenter {
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)

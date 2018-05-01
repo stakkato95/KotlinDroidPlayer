@@ -4,8 +4,8 @@ import android.content.Context
 import com.github.stakkato95.kmusic.mvp.TracksState
 import com.github.stakkato95.kmusic.mvp.di.scope.ApplicationScope
 import com.github.stakkato95.kmusic.mvp.repository.room.KMusicDatabase
-import com.github.stakkato95.kmusic.screen.player.ExoPlayerController
-import com.github.stakkato95.kmusic.screen.player.PlayerController
+import com.github.stakkato95.kmusic.screen.player.controller.exo.ExoPlayerController
+import com.github.stakkato95.kmusic.screen.player.controller.PlayerController
 import dagger.Module
 import dagger.Provides
 

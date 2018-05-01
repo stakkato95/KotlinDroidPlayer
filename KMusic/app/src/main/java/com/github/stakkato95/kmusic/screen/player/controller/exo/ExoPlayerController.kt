@@ -1,25 +1,21 @@
-package com.github.stakkato95.kmusic.screen.player
+package com.github.stakkato95.kmusic.screen.player.controller.exo
 
 import android.content.Context
 import android.net.Uri
 import com.github.stakkato95.kmusic.mvp.TracksState
+import com.github.stakkato95.kmusic.screen.player.controller.PlayerController
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.PlaybackParameters
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import java.util.*
 
 /**
  * Created by artsiomkaliaha on 05.10.17.
@@ -29,7 +25,13 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     companion object {
 
         const val MEDIA_SOURCES_BOUNDARY_OFFSET = 5
+
+        const val PLAYER_TIMER = "PLAYER_TIMER"
+
+        const val PLAYER_TIMER_PERIOD_MILLIS = 1000L
     }
+
+    private var listener: ((Float) -> Unit)? = null
 
     private var player: ExoPlayer = ExoPlayerFactory.newSimpleInstance(
             DefaultRenderersFactory(context),
@@ -42,6 +44,13 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     private val currentMediaSource = DynamicConcatenatingMediaSource()
 
     private val userAgent = Util.getUserAgent(context, context.applicationInfo.name)
+
+    init {
+        val timer = Timer(PLAYER_TIMER, true)
+        timer.schedule(object : TimerTask() {
+            override fun run() = onTimerPeriodElapsed()
+        }, 0, PLAYER_TIMER_PERIOD_MILLIS)
+    }
 
     override fun playPause(trackOrdinal: Int) {
         if (currentPlayedTrackOrdinal == C.INDEX_UNSET || currentPlayedTrackOrdinal != trackOrdinal) {
@@ -57,39 +66,10 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         if (player.nextWindowIndex == C.INDEX_UNSET) {
             concatToMediaSource()
             player.prepare(currentMediaSource)
-            player.addListener(object : Player.EventListener {
-                override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
-                }
-
-                override fun onSeekProcessed() {
-                }
-
-                override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-                }
-
-                override fun onPlayerError(error: ExoPlaybackException?) {
-                }
-
-                override fun onLoadingChanged(isLoading: Boolean) {
-                }
-
-                override fun onPositionDiscontinuity(reason: Int) {
-                }
-
-                override fun onRepeatModeChanged(repeatMode: Int) {
-                }
-
-                override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
-                }
-
-                override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {
-                }
-
-                override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                    player.seekToDefaultPosition(++currentPlayedTrackOrdinal)
-                    player.removeListener(this)
-                }
-            })
+            player.addListener(SimpleExoPlayerListener({ listener, _, _ ->
+                player.seekToDefaultPosition(++currentPlayedTrackOrdinal)
+                player.removeListener(listener)
+            }))
             return
         }
 
@@ -121,6 +101,10 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         player.seekTo((durationOfTrack * progress).toLong())
     }
 
+    override fun setProgressListener(listener: (Float) -> Unit) { this.listener = listener }
+
+    override fun removeProgressListener() { listener = null }
+
     private fun createMediaSource(firstTrackOrdinal: Int) {
         val mediaSources = mutableListOf<MediaSource>()
 
@@ -139,5 +123,12 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             val uri = Uri.parse(state.tracks[i].path)
             currentMediaSource.addMediaSource(ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri))
         }
+    }
+
+    private fun onTimerPeriodElapsed() {
+        if (!player.playWhenReady) {
+            return
+        }
+        listener?.invoke((player.currentPosition / player.duration).toFloat())
     }
 }

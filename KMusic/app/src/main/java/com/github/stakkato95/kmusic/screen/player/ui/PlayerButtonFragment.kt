@@ -1,5 +1,7 @@
 package com.github.stakkato95.kmusic.screen.player.ui
 
+import android.app.Activity
+import android.arch.lifecycle.LifecycleObserver
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -9,12 +11,16 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.common.BaseFragment
+import com.github.stakkato95.kmusic.mvp.presenter.PlayerButtonPresenter
 import com.github.stakkato95.kmusic.util.extensions.blur
 import com.github.stakkato95.kmusic.util.extensions.picasso
 import com.squareup.picasso.Callback
 import kotlinx.android.synthetic.main.fragment_player_button.*
 import java.io.Serializable
+import javax.inject.Inject
 
 /**
  * Created by artsiomkaliaha on 06.07.17.
@@ -84,7 +90,7 @@ class PlayerButtonFragment : Fragment() {
         musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
 
-    fun switchPlayPauseIcon() {
+    private fun switchPlayPauseIcon() {
         vector_icon.background = if (isPlaying) playPause else pausePlay
         (vector_icon.background as AnimatedVectorDrawable).start()
         isPlaying = !isPlaying

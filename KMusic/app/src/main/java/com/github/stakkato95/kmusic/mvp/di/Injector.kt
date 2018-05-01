@@ -28,12 +28,14 @@ class Injector(context: Context) {
 
     private var playerComponent: PlayerComponent? = null
 
+    private var playerButtonComponent: PlayerComponent? = null
+
     fun plusSingleTrackComponent(): SingleTrackComponent? {
         singleTrackComponent = appComponent.plusSingleTrackComponent()
         return singleTrackComponent
     }
 
-    fun clearSingleTracjComponent() {
+    fun clearSingleTrackComponent() {
         singleTrackComponent = null
     }
 

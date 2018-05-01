@@ -7,7 +7,7 @@ import com.github.stakkato95.kmusic.mvp.repository.Repository
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCase
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCaseImpl
 import com.github.stakkato95.kmusic.mvp.view.AllTracksView
-import com.github.stakkato95.kmusic.screen.player.PlayerController
+import com.github.stakkato95.kmusic.screen.player.controller.PlayerController
 import dagger.Module
 import dagger.Provides
 
