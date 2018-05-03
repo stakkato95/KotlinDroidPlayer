@@ -93,14 +93,15 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
-        if (menuVisible && !isDetached && parentFragment != null) {
-            (parentFragment as PlayerScreen).setLastVisiblePlayerButton(this)
+        if (!menuVisible && isDetached) {
+            return
         }
+        setFragmentAsLastVisible()
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        parentFragment?.let { (it as PlayerScreen).setLastVisiblePlayerButton(this) }
+        setFragmentAsLastVisible()
     }
 
     override fun setProgress(progress: Float) { musicProgressBar.setProgress(progress) }
@@ -110,6 +111,8 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
         (vector_icon.background as AnimatedVectorDrawable).start()
         isPlaying = !isPlaying
     }
+
+    private fun setFragmentAsLastVisible() { parentFragment?.let { (it as PlayerScreen).setLastVisiblePlayerButton(this) } }
 }
 
 class PlayPauseCallbackHolder(val progressCallback: (Float) -> Unit, val playPauseCallback: (Int) -> Unit) : Serializable
