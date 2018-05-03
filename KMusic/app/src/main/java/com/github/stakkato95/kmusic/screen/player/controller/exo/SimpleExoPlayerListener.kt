@@ -7,10 +7,9 @@ import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 
-class SimpleExoPlayerListener(val onPlayerStateChanged: ((SimpleExoPlayerListener, Boolean, Int) -> Unit)?) : Player.EventListener {
+class SimpleExoPlayerListener(private val onPlayerStateChanged: ((SimpleExoPlayerListener, Boolean, Int) -> Unit)?) : Player.EventListener {
 
     override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
-
     }
 
     override fun onSeekProcessed() {

@@ -17,6 +17,12 @@ abstract class TracksPresenterImpl(private var view: TracksView,
                                    private val playerController: PlayerController,
                                    private val mainHandler: Handler) : TracksPresenter {
 
+    private var listener = PlayerController.SimpleListener(onProgressChanged = {
+        mainHandler.post { view.updateCurrentTrackProgress(it) }
+    }, onNextTrackPlaybackStarted = {
+        mainHandler.post { view.startNextTrackPlayback() }
+    })
+
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         var disposeable = useCase.getData()
@@ -42,14 +48,12 @@ abstract class TracksPresenterImpl(private var view: TracksView,
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-        playerController.addProgressListener {
-            mainHandler.post { view.updateCurrentTrackProgress(it) }
-        }
+        playerController.addListener(listener)
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
-        playerController.removeProgressListener()
+        playerController.removeListener(listener)
     }
 
     override fun playPause(trackOrdinal: Int) {

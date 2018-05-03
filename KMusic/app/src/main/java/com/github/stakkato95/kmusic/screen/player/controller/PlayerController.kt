@@ -5,9 +5,9 @@ package com.github.stakkato95.kmusic.screen.player.controller
  */
 interface PlayerController {
 
-    fun addProgressListener(listener: (Float) -> Unit)
+    fun addListener(listener: Listener)
 
-    fun removeProgressListener()
+    fun removeListener(listener: Listener)
 
     fun playPause(trackOrdinal: Int)
 
@@ -16,4 +16,23 @@ interface PlayerController {
     fun previousTrack()
 
     fun rewind(progress: Float)
+
+    interface Listener {
+
+        fun onProgressChanged(progress: Float)
+
+        fun onNextTrackPlaybackStarted()
+    }
+
+    class SimpleListener(private val onProgressChanged: ((Float) -> Unit)? = null,
+                         private val onNextTrackPlaybackStarted: (() -> Unit)? = null) : Listener {
+
+        override fun onProgressChanged(progress: Float) {
+            onProgressChanged?.invoke(progress)
+        }
+
+        override fun onNextTrackPlaybackStarted() {
+            onNextTrackPlaybackStarted?.invoke()
+        }
+    }
 }

@@ -9,7 +9,7 @@ class PagePositionViewPager : ViewPager {
 
     var observableCurrentItem: Int by Delegates.observable(currentItem) { _, old, new -> observer?.invoke(old, new) }
 
-    var observer: ((Int, Int) -> Unit)? = null
+    private var observer: ((Int, Int) -> Unit)? = null
 
     constructor(context: Context) : super(context) { setCurrentItemListener() }
 

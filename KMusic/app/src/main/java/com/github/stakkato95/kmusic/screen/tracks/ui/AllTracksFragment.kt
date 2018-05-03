@@ -60,4 +60,8 @@ class AllTracksFragment : BaseFragment(), AllTracksView {
     override fun updateCurrentTrackProgress(progress: Float) {
         //TODO
     }
+
+    override fun startNextTrackPlayback() {
+        //TODO
+    }
 }

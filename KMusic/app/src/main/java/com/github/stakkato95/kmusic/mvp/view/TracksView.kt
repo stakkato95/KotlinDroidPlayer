@@ -14,4 +14,6 @@ interface TracksView {
     fun showError()
 
     fun updateCurrentTrackProgress(progress: Float)
+
+    fun startNextTrackPlayback()
 }

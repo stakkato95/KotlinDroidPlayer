@@ -2,6 +2,7 @@ package com.github.stakkato95.kmusic.screen.player.controller.exo
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.github.stakkato95.kmusic.mvp.TracksState
 import com.github.stakkato95.kmusic.screen.player.controller.PlayerController
 import com.google.android.exoplayer2.C
@@ -31,7 +32,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         const val PLAYER_TIMER_PERIOD_MILLIS = 1000L
     }
 
-    private var listeners = mutableListOf<((Float) -> Unit)?>()
+    private var listeners = mutableListOf<PlayerController.Listener>()
 
     private var player: ExoPlayer = ExoPlayerFactory.newSimpleInstance(
             DefaultRenderersFactory(context),
@@ -45,11 +46,19 @@ class ExoPlayerController(private val state: TracksState, private val context: C
 
     private val userAgent = Util.getUserAgent(context, context.applicationInfo.name)
 
+    private var lastTrackDuration: Long? = null
+
     init {
         val timer = Timer(PLAYER_TIMER, true)
         timer.schedule(object : TimerTask() {
             override fun run() = onTimerPeriodElapsed()
         }, 0, PLAYER_TIMER_PERIOD_MILLIS)
+
+        player.addListener(SimpleExoPlayerListener({ _, isPlaying, _ ->
+            if (isPlaying) {
+//                lastTrackDuration = player.duration
+            }
+        }))
     }
 
     override fun playPause(trackOrdinal: Int) {
@@ -101,10 +110,12 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         player.seekTo((durationOfTrack * progress).toLong())
     }
 
-    override fun addProgressListener(listener: (Float) -> Unit) { listeners.add(listener) }
+    override fun addListener(listener: PlayerController.Listener) {
+        listeners.add(listener)
+    }
 
-    override fun removeProgressListener() {
-        //TODO
+    override fun removeListener(listener: PlayerController.Listener) {
+        listeners.remove(listener)
     }
 
     private fun createMediaSource(firstTrackOrdinal: Int) {
@@ -131,6 +142,15 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         if (!player.playWhenReady) {
             return
         }
-        listeners.forEach { it?.invoke(player.currentPosition / player.duration.toFloat()) }
+
+        if (lastTrackDuration == null || lastTrackDuration == C.TIME_END_OF_SOURCE) {
+            lastTrackDuration = player.duration
+        }
+        if (lastTrackDuration != player.duration) {
+            lastTrackDuration = player.duration
+            listeners.forEach { it.onNextTrackPlaybackStarted() }
+        }
+        Log.d("Die Zeit", "${player.currentPosition}")
+        listeners.forEach { it.onProgressChanged(player.currentPosition / player.duration.toFloat()) }
     }
 }

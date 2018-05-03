@@ -25,6 +25,8 @@ class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
 
     private var lastVisiblePlayerButton: PlayerButton? = null
 
+    private val pagerCurrentItemObserver: (Int, Int) -> Unit = { old, new -> if (old > new) presenter.previousTrack() else presenter.nextTrack() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
@@ -42,7 +44,7 @@ class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
                     { progress -> presenter.rewind(progress) },
                     { trackOrdinal -> presenter.playPause(trackOrdinal) }
             )
-            setCurrentItemObserver { old, new -> if (old > new) presenter.previousTrack() else presenter.nextTrack() }
+            setCurrentItemObserver(pagerCurrentItemObserver)
 
             val leftRightPadding = resources.displayMetrics.widthPixels / 6
             setPadding(leftRightPadding, 0, leftRightPadding, 0)
@@ -59,6 +61,14 @@ class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
 
     override fun updateCurrentTrackProgress(progress: Float) {
         lastVisiblePlayerButton?.setProgress(progress)
+    }
+
+    override fun startNextTrackPlayback() {
+        with(pager) {
+            removeCurrentItemObserver()
+            currentItem++
+            setCurrentItemObserver(pagerCurrentItemObserver)
+        }
     }
 
     override fun setLastVisiblePlayerButton(playerButton: PlayerButton) { lastVisiblePlayerButton = playerButton }
