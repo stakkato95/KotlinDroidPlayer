@@ -1,8 +1,5 @@
 package com.github.stakkato95.kmusic.screen.player.ui
 
-import android.app.Activity
-import android.arch.lifecycle.LifecycleObserver
-import android.content.Context
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -12,16 +9,12 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.github.stakkato95.kmusic.R
-import com.github.stakkato95.kmusic.common.BaseFragment
-import com.github.stakkato95.kmusic.mvp.presenter.PlayerButtonPresenter
 import com.github.stakkato95.kmusic.util.extensions.blur
 import com.github.stakkato95.kmusic.util.extensions.picasso
 import com.squareup.picasso.Callback
 import kotlinx.android.synthetic.main.fragment_player_button.*
 import java.io.Serializable
-import javax.inject.Inject
 
 /**
  * Created by artsiomkaliaha on 06.07.17.
@@ -81,6 +74,7 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
 
         vector_icon.setOnClickListener {
             switchPlayPauseIcon()
+            setFragmentAsLastVisible()
             val ordinal: Int = trackOrdinal ?: TRACK_ORDINAL_NO_VALUE
             if (ordinal != TRACK_ORDINAL_NO_VALUE) {
                 callbacksHolder?.playPauseCallback?.invoke(ordinal)
@@ -90,6 +84,13 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
 
         musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
+//
+//    override fun setMenuVisibility(menuVisible: Boolean) {
+//        super.setMenuVisibility(menuVisible)
+//        if (menuVisible) {
+//            setFragmentAsLastVisible()
+//        }
+//    }
 
     override fun setProgress(progress: Float) { musicProgressBar.setProgress(progress) }
 
@@ -97,7 +98,6 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
         vector_icon.background = if (isPlaying) playPause else pausePlay
         (vector_icon.background as AnimatedVectorDrawable).start()
         isPlaying = !isPlaying
-        setFragmentAsLastVisible()
     }
 
     private fun setFragmentAsLastVisible() { parentFragment?.let { (it as PlayerScreen).setLastVisiblePlayerButton(this) } }

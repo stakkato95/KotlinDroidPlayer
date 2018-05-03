@@ -147,6 +147,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             lastTrackDuration = player.duration
         }
         if (lastTrackDuration != player.duration) {
+            currentPlayedTrackOrdinal++
             lastTrackDuration = player.duration
             listeners.forEach { it.onNextTrackPlaybackStarted() }
         }
