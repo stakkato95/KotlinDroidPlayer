@@ -98,10 +98,14 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        parentFragment?.let { (it as PlayerScreen).setLastVisiblePlayerButton(this) }
+    }
+
     override fun setProgress(progress: Float) {
-        //TODO work in progress
-        activity?.runOnUiThread { Toast.makeText(activity, "$progress", Toast.LENGTH_SHORT).show() }
-//        musicProgressBar.progress = progress
+        //TODO entferne diesen Mist
+        activity?.runOnUiThread { musicProgressBar.setProgress(progress) }
     }
 
     private fun switchPlayPauseIcon() {

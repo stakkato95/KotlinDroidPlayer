@@ -316,4 +316,9 @@ class MusicProgressBar : PercentFrameLayout {
     fun setProgressPercentListener(listener: (Float) -> Unit) { progressPercentListener = listener }
 
     fun removeProgressPercentListener() { progressPercentListener = null }
+
+    fun setProgress(progress: Float) {
+        progressbarAngle = 360 * progress
+        invalidate()
+    }
 }
