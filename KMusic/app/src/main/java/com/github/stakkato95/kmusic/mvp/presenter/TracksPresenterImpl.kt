@@ -1,6 +1,7 @@
 package com.github.stakkato95.kmusic.mvp.presenter
 
 import android.arch.lifecycle.LifecycleOwner
+import android.os.Handler
 import com.github.stakkato95.kmusic.mvp.TracksState
 import com.github.stakkato95.kmusic.mvp.usecase.AllTracksUseCase
 import com.github.stakkato95.kmusic.mvp.view.TracksView
@@ -13,7 +14,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 abstract class TracksPresenterImpl(private var view: TracksView,
                                    private val useCase: AllTracksUseCase,
                                    private val state: TracksState,
-                                   private val playerController: PlayerController) : TracksPresenter {
+                                   private val playerController: PlayerController,
+                                   private val mainHandler: Handler) : TracksPresenter {
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
@@ -41,7 +43,7 @@ abstract class TracksPresenterImpl(private var view: TracksView,
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         playerController.addProgressListener {
-            view.updateCurrentTrackProgress(it)
+            mainHandler.post { view.updateCurrentTrackProgress(it) }
         }
     }
 

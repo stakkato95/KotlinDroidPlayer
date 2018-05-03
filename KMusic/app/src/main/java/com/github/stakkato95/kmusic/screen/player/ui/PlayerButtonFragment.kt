@@ -103,10 +103,7 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
         parentFragment?.let { (it as PlayerScreen).setLastVisiblePlayerButton(this) }
     }
 
-    override fun setProgress(progress: Float) {
-        //TODO entferne diesen Mist
-        activity?.runOnUiThread { musicProgressBar.setProgress(progress) }
-    }
+    override fun setProgress(progress: Float) { musicProgressBar.setProgress(progress) }
 
     private fun switchPlayPauseIcon() {
         vector_icon.background = if (isPlaying) playPause else pausePlay

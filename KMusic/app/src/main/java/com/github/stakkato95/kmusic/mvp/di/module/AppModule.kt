@@ -1,11 +1,13 @@
 package com.github.stakkato95.kmusic.mvp.di.module
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.github.stakkato95.kmusic.mvp.TracksState
 import com.github.stakkato95.kmusic.mvp.di.scope.ApplicationScope
 import com.github.stakkato95.kmusic.mvp.repository.room.KMusicDatabase
-import com.github.stakkato95.kmusic.screen.player.controller.exo.ExoPlayerController
 import com.github.stakkato95.kmusic.screen.player.controller.PlayerController
+import com.github.stakkato95.kmusic.screen.player.controller.exo.ExoPlayerController
 import dagger.Module
 import dagger.Provides
 
@@ -30,4 +32,8 @@ class AppModule(private val context: Context) {
     @Provides
     @ApplicationScope
     fun providePlayerController(state: TracksState, context: Context): PlayerController = ExoPlayerController(state, context)
+
+    @Provides
+    @ApplicationScope
+    fun provideMainThreadHandler() = Handler(Looper.getMainLooper())
 }

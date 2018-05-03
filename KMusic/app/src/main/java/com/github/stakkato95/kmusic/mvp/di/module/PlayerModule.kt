@@ -1,5 +1,6 @@
 package com.github.stakkato95.kmusic.mvp.di.module
 
+import android.os.Handler
 import com.github.stakkato95.kmusic.mvp.TracksState
 import com.github.stakkato95.kmusic.mvp.di.scope.PlayerScope
 import com.github.stakkato95.kmusic.mvp.presenter.PlayerPresenter
@@ -25,6 +26,6 @@ class PlayerModule(private val playerView: PlayerView) {
 
     @Provides
     @PlayerScope
-    fun providePlayerPresenter(useCase: AllTracksUseCase, state: TracksState, playerController: PlayerController)
-            = PlayerPresenter(playerView, useCase, state, playerController)
+    fun providePlayerPresenter(useCase: AllTracksUseCase, state: TracksState, playerController: PlayerController, handler: Handler)
+            = PlayerPresenter(playerView, useCase, state, playerController, handler)
 }
