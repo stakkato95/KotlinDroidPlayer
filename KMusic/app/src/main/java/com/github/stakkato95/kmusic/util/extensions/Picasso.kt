@@ -21,24 +21,29 @@ fun Picasso.loadCover(coverPath: String?) = load(Uri.parse("file://$coverPath"))
 
 class RoundedAndBlurredImageTransformation(private val context: Context) : Transformation {
 
+    companion object {
+
+        const val BITMAP_INSET = 0.05f
+    }
+
     override fun key() = javaClass.simpleName
 
     override fun transform(source: Bitmap): Bitmap {
-//        val bitmap = source.blur(context, 0.5f, 25 / 2f)
-//        val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.resources, bitmap)
-//        roundedBitmapDrawable.isCircular = true
-//        roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
+        val width = source.width
+        val height = source.height
 
-        val bitmap = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        val paint = Paint()
-        paint.isAntiAlias = true
-        paint.shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-        val rect = RectF(0f, 0f, source.width.toFloat(), source.height.toFloat())
-        canvas.drawRoundRect(rect, source.width.toFloat() / 2, source.height.toFloat() / 2, paint)
+        val paint = Paint().apply {
+            isAntiAlias = true
+            shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        }
+        val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+        rect.inset(width * BITMAP_INSET, height * BITMAP_INSET)
+
+        canvas.drawRoundRect(rect, width.toFloat() / 2, height.toFloat() / 2, paint)
 
         source.recycle()
-
         return bitmap.blur(context, 0.5f, 25 / 2f)
     }
 }

@@ -75,7 +75,7 @@ class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
         trackOrdinal?.let {
             context.picasso
                     .loadCover(presenter.getCoverPath(it))
-                    .placeholder(R.drawable.test_background)
+//                    .placeholder(R.drawable.test_background)
                     .transform(RoundedAndBlurredImageTransformation(context))
                     .into(centerImage)
         }

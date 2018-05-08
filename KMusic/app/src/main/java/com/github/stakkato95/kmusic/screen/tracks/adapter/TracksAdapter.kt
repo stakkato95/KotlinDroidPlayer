@@ -39,6 +39,9 @@ class TracksViewHolder(override val containerView: View?) : RecyclerView.ViewHol
     fun setup(playerTrack: PlayerTrack) {
         trackNameView.text = playerTrack.name
         trackAuthorView.text = playerTrack.author
-        playerTrack.coverPath?.let { trackImage.context.picasso.loadCover(playerTrack.coverPath)?.into(trackImage) }
+        trackImage.context.picasso
+                .loadCover(playerTrack.coverPath)
+                .error(R.drawable.test_background)
+                .into(trackImage)
     }
 }
