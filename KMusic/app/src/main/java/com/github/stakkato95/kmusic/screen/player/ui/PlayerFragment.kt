@@ -2,6 +2,7 @@ package com.github.stakkato95.kmusic.screen.player.ui
 
 import android.arch.lifecycle.LifecycleObserver
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,16 @@ class PlayerFragment : BaseFragment(), PlayerView {
 
     private val pagerCurrentItemObserver: (Int, Int) -> Unit = { old, new ->
         if (old > new) presenter.previousTrack() else presenter.nextTrack()
+        val visibleFragmentIndex = childFragmentManager.fragments.indexOfFirst { it.isMenuVisible }
+        childFragmentManager.fragments.forEachIndexed { i, f ->
+            if (i != visibleFragmentIndex + 1) {
+                (f as? TrackProgressAware)?.resetProgress()
+            }
+        }
+
+//        childFragmentManager.fragments.asSequence().filterIndexed { i, fragment ->
+//            !fragment.isMenuVisible
+//        }.forEach { (it as? TrackProgressAware)?.resetProgress() }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,6 +71,9 @@ class PlayerFragment : BaseFragment(), PlayerView {
     }
 
     override fun updateCurrentTrackProgress(progress: Float) {
+        if (pager.currentItem != childFragmentManager.fragments.indexOfFirst { it.isMenuVisible }) {
+            return
+        }
         (childFragmentManager.fragments.last { it.isMenuVisible } as? TrackProgressAware)?.setProgress(progress)
     }
 

@@ -19,7 +19,7 @@ import java.io.Serializable
 /**
  * Created by artsiomkaliaha on 06.07.17.
  */
-class TrackProgressAwareFragment : Fragment(), TrackProgressAware {
+class TrackProgressFragment : Fragment(), TrackProgressAware {
 
     companion object {
 
@@ -29,8 +29,8 @@ class TrackProgressAwareFragment : Fragment(), TrackProgressAware {
 
         private const val TRACK_ORDINAL_KEY = "TRACK_ORDINAL_KEY"
 
-        fun newInstance(progressCallback: (Float) -> Unit, playPauseCallback: (Int) -> Unit, trackOrdinal: Int): TrackProgressAwareFragment {
-            val fragment = TrackProgressAwareFragment()
+        fun newInstance(progressCallback: (Float) -> Unit, playPauseCallback: (Int) -> Unit, trackOrdinal: Int): TrackProgressFragment {
+            val fragment = TrackProgressFragment()
 
             val args = Bundle()
             args.putSerializable(PLAY_PAUSE_CALLBACK_KEY, PlayPauseCallbackHolder(progressCallback, playPauseCallback))
@@ -62,7 +62,7 @@ class TrackProgressAwareFragment : Fragment(), TrackProgressAware {
 
         activity.picasso.load(R.drawable.test_background).into(centerImage, object : Callback {
             override fun onSuccess() {
-                val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressAwareFragment.activity, 0.5f, 25 / 2f)
+                val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressFragment.activity, 0.5f, 25 / 2f)
                 val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
                 roundedBitmapDrawable.isCircular = true
                 roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
@@ -73,6 +73,7 @@ class TrackProgressAwareFragment : Fragment(), TrackProgressAware {
         })
 
         vector_icon.setOnClickListener {
+            isPlaying = !isPlaying
             switchPlayPauseIcon()
             val ordinal: Int = trackOrdinal ?: TRACK_ORDINAL_NO_VALUE
             if (ordinal != TRACK_ORDINAL_NO_VALUE) {
@@ -84,12 +85,23 @@ class TrackProgressAwareFragment : Fragment(), TrackProgressAware {
         musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
 
-    override fun setProgress(progress: Float) { musicProgressBar.setProgress(progress) }
+    override fun setProgress(progress: Float) {
+        if (!isPlaying) {
+            isPlaying = true
+            switchPlayPauseIcon()
+        }
+        musicProgressBar.setProgress(progress)
+    }
+
+    override fun resetProgress() {
+        isPlaying = false
+        switchPlayPauseIcon()
+        musicProgressBar.setProgress(.0f)
+    }
 
     private fun switchPlayPauseIcon() {
         vector_icon.background = if (isPlaying) playPause else pausePlay
         (vector_icon.background as AnimatedVectorDrawable).start()
-        isPlaying = !isPlaying
     }
 }
 
@@ -98,4 +110,6 @@ class PlayPauseCallbackHolder(val progressCallback: (Float) -> Unit, val playPau
 interface TrackProgressAware {
 
     fun setProgress(progress: Float)
+
+    fun resetProgress()
 }
