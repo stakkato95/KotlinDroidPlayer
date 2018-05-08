@@ -17,7 +17,7 @@ import com.github.stakkato95.kmusic.mvp.view.PlayerView
  */
 class Injector(context: Context) {
 
-    private var appComponent: AppComponent = DaggerAppComponent
+    public val appComponent: AppComponent = DaggerAppComponent
             .builder()
             .appModule(AppModule(context))
             .build()

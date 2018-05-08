@@ -1,12 +1,12 @@
 package com.github.stakkato95.kmusic.screen.tracks.adapter
 
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
+import com.github.stakkato95.kmusic.util.extensions.loadCover
 import com.github.stakkato95.kmusic.util.extensions.picasso
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_track_info.*
@@ -17,8 +17,8 @@ import kotlinx.android.synthetic.main.item_track_info.*
 class TracksAdapter(private var playerTracks: List<PlayerTrack>? = null) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onBindViewHolder(holder: TracksViewHolder?, position: Int) {
-        val trcks = playerTracks
-        trcks?.let { holder?.setup(trcks[position]) }
+        val tracks = playerTracks
+        tracks?.let { holder?.setup(tracks[position]) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -39,6 +39,6 @@ class TracksViewHolder(override val containerView: View?) : RecyclerView.ViewHol
     fun setup(playerTrack: PlayerTrack) {
         trackNameView.text = playerTrack.name
         trackAuthorView.text = playerTrack.author
-        playerTrack.coverPath?.let { trackImage.context.picasso.load(Uri.parse("file://${playerTrack.coverPath}")).into(trackImage) }
+        playerTrack.coverPath?.let { trackImage.context.picasso.loadCover(playerTrack.coverPath)?.into(trackImage) }
     }
 }

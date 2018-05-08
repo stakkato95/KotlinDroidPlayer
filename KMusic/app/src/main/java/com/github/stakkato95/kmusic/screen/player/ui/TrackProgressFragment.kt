@@ -1,5 +1,6 @@
 package com.github.stakkato95.kmusic.screen.player.ui
 
+import android.arch.lifecycle.LifecycleObserver
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -9,17 +10,26 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.stakkato95.kmusic.App
 import com.github.stakkato95.kmusic.R
+import com.github.stakkato95.kmusic.common.BaseFragment
+import com.github.stakkato95.kmusic.mvp.di.module.TrackProgressModule
+import com.github.stakkato95.kmusic.mvp.presenter.TrackProgressPresenter
+import com.github.stakkato95.kmusic.mvp.view.ProgressView
+import com.github.stakkato95.kmusic.util.extensions.RoundedAndBlurredImageTransformation
 import com.github.stakkato95.kmusic.util.extensions.blur
+import com.github.stakkato95.kmusic.util.extensions.loadCover
 import com.github.stakkato95.kmusic.util.extensions.picasso
 import com.squareup.picasso.Callback
 import kotlinx.android.synthetic.main.fragment_player_button.*
+import kotlinx.android.synthetic.main.item_track_info.*
 import java.io.Serializable
+import javax.inject.Inject
 
 /**
  * Created by artsiomkaliaha on 06.07.17.
  */
-class TrackProgressFragment : Fragment(), TrackProgressAware {
+class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
 
     companion object {
 
@@ -51,8 +61,10 @@ class TrackProgressFragment : Fragment(), TrackProgressAware {
 
     private var trackOrdinal: Int? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
-            = inflater?.inflate(R.layout.fragment_player_button, container, false)!!
+    @Inject
+    lateinit var presenter: TrackProgressPresenter
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) = inflater?.inflate(R.layout.fragment_player_button, container, false)!!
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,17 +72,13 @@ class TrackProgressFragment : Fragment(), TrackProgressAware {
         callbacksHolder = arguments.getSerializable(PLAY_PAUSE_CALLBACK_KEY) as PlayPauseCallbackHolder
         trackOrdinal = arguments.getInt(TRACK_ORDINAL_KEY)
 
-        activity.picasso.load(R.drawable.test_background).into(centerImage, object : Callback {
-            override fun onSuccess() {
-                val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressFragment.activity, 0.5f, 25 / 2f)
-                val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
-                roundedBitmapDrawable.isCircular = true
-                roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
-                centerImage.setImageDrawable(roundedBitmapDrawable)
-            }
-
-            override fun onError() {}
-        })
+        trackOrdinal?.let {
+            context.picasso
+                    .loadCover(presenter.getCoverPath(it))
+                    .placeholder(R.drawable.test_background)
+                    .transform(RoundedAndBlurredImageTransformation(context))
+                    .into(centerImage)
+        }
 
         vector_icon.setOnClickListener {
             isPlaying = !isPlaying
@@ -83,6 +91,11 @@ class TrackProgressFragment : Fragment(), TrackProgressAware {
         switchPlayPauseIcon()
 
         musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
+    }
+
+    override fun injectPresenter(): LifecycleObserver {
+        App.INJECTOR.appComponent.plusTrackProgressComponent(TrackProgressModule(this)).inject(this)
+        return presenter
     }
 
     override fun setProgress(progress: Float) {

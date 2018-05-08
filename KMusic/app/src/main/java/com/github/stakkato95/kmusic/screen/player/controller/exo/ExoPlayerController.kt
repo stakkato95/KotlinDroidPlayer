@@ -113,6 +113,8 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         player.seekTo((durationOfTrack * progress).toLong())
     }
 
+    override fun isPlayingTrack(trackOrdinal: Int) = player.playWhenReady && player.currentWindowIndex == trackOrdinal
+
     override fun addListener(listener: PlayerController.Listener) {
         listeners.add(listener)
     }

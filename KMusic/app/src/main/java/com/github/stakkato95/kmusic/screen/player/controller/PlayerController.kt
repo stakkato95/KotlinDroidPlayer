@@ -17,6 +17,8 @@ interface PlayerController {
 
     fun rewind(progress: Float)
 
+    fun isPlayingTrack(trackOrdinal: Int): Boolean
+
     interface Listener {
 
         fun onProgressChanged(progress: Float)
