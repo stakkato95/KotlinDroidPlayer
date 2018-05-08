@@ -19,7 +19,7 @@ import java.io.Serializable
 /**
  * Created by artsiomkaliaha on 06.07.17.
  */
-class PlayerButtonFragment : Fragment(), PlayerButton {
+class TrackProgressAwareFragment : Fragment(), TrackProgressAware {
 
     companion object {
 
@@ -29,8 +29,8 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
 
         private const val TRACK_ORDINAL_KEY = "TRACK_ORDINAL_KEY"
 
-        fun newInstance(progressCallback: (Float) -> Unit, playPauseCallback: (Int) -> Unit, trackOrdinal: Int): PlayerButtonFragment {
-            val fragment = PlayerButtonFragment()
+        fun newInstance(progressCallback: (Float) -> Unit, playPauseCallback: (Int) -> Unit, trackOrdinal: Int): TrackProgressAwareFragment {
+            val fragment = TrackProgressAwareFragment()
 
             val args = Bundle()
             args.putSerializable(PLAY_PAUSE_CALLBACK_KEY, PlayPauseCallbackHolder(progressCallback, playPauseCallback))
@@ -62,7 +62,7 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
 
         activity.picasso.load(R.drawable.test_background).into(centerImage, object : Callback {
             override fun onSuccess() {
-                val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@PlayerButtonFragment.activity, 0.5f, 25 / 2f)
+                val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressAwareFragment.activity, 0.5f, 25 / 2f)
                 val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
                 roundedBitmapDrawable.isCircular = true
                 roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
@@ -74,7 +74,6 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
 
         vector_icon.setOnClickListener {
             switchPlayPauseIcon()
-            setFragmentAsLastVisible()
             val ordinal: Int = trackOrdinal ?: TRACK_ORDINAL_NO_VALUE
             if (ordinal != TRACK_ORDINAL_NO_VALUE) {
                 callbacksHolder?.playPauseCallback?.invoke(ordinal)
@@ -84,13 +83,6 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
 
         musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
-//
-//    override fun setMenuVisibility(menuVisible: Boolean) {
-//        super.setMenuVisibility(menuVisible)
-//        if (menuVisible) {
-//            setFragmentAsLastVisible()
-//        }
-//    }
 
     override fun setProgress(progress: Float) { musicProgressBar.setProgress(progress) }
 
@@ -99,18 +91,11 @@ class PlayerButtonFragment : Fragment(), PlayerButton {
         (vector_icon.background as AnimatedVectorDrawable).start()
         isPlaying = !isPlaying
     }
-
-    private fun setFragmentAsLastVisible() { parentFragment?.let { (it as PlayerScreen).setLastVisiblePlayerButton(this) } }
 }
 
 class PlayPauseCallbackHolder(val progressCallback: (Float) -> Unit, val playPauseCallback: (Int) -> Unit) : Serializable
 
-interface PlayerButton {
+interface TrackProgressAware {
 
     fun setProgress(progress: Float)
-}
-
-interface PlayerScreen {
-
-    fun setLastVisiblePlayerButton(playerButton: PlayerButton)
 }

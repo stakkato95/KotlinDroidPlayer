@@ -2,7 +2,6 @@ package com.github.stakkato95.kmusic.screen.player.controller.exo
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.github.stakkato95.kmusic.mvp.TracksState
 import com.github.stakkato95.kmusic.screen.player.controller.PlayerController
 import com.google.android.exoplayer2.C
@@ -29,7 +28,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
 
         const val PLAYER_TIMER = "PLAYER_TIMER"
 
-        const val PLAYER_TIMER_PERIOD_MILLIS = 1000L
+        const val PLAYER_TIMER_PERIOD_MILLIS = 50L
     }
 
     private var listeners = mutableListOf<PlayerController.Listener>()
@@ -146,11 +145,9 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         if (!player.playWhenReady) {
             return
         }
-
         if (lastTrackDuration == null || lastTrackDuration == C.TIME_END_OF_SOURCE) {
             lastTrackDuration = player.duration
         }
-        Log.d("Die Zeit", "${player.currentPosition}")
         listeners.forEach { it.onProgressChanged(player.currentPosition / player.duration.toFloat()) }
     }
 }

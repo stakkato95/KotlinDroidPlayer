@@ -18,12 +18,10 @@ import javax.inject.Inject
 /**
  * Created by artsiomkaliaha on 14.07.17.
  */
-class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
+class PlayerFragment : BaseFragment(), PlayerView {
 
     @Inject
     lateinit var presenter: PlayerPresenter
-
-    private var lastVisiblePlayerButton: PlayerButton? = null
 
     private val pagerCurrentItemObserver: (Int, Int) -> Unit = { old, new ->
         if (old > new) presenter.previousTrack() else presenter.nextTrack()
@@ -62,7 +60,7 @@ class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
     }
 
     override fun updateCurrentTrackProgress(progress: Float) {
-        lastVisiblePlayerButton?.setProgress(progress)
+        (childFragmentManager.fragments.last { it.isMenuVisible } as? TrackProgressAware)?.setProgress(progress)
     }
 
     override fun startNextTrackPlayback() {
@@ -72,6 +70,4 @@ class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
             setCurrentItemObserver(pagerCurrentItemObserver)
         }
     }
-
-    override fun setLastVisiblePlayerButton(playerButton: PlayerButton) { lastVisiblePlayerButton = playerButton }
 }
