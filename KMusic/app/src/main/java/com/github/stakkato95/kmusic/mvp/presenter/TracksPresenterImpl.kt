@@ -20,7 +20,9 @@ abstract class TracksPresenterImpl(private var view: TracksView,
     private var listener = PlayerController.SimpleListener(onProgressChanged = {
         mainHandler.post { view.updateCurrentTrackProgress(it) }
     }, onNextTrackPlaybackStarted = {
-        mainHandler.post { view.startNextTrackPlayback() }
+        mainHandler.post {
+            view.startNextTrackPlayback()
+        }
     })
 
     override fun onCreate(owner: LifecycleOwner) {

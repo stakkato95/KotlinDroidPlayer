@@ -25,7 +25,9 @@ class PlayerFragment : BaseFragment(), PlayerView, PlayerScreen {
 
     private var lastVisiblePlayerButton: PlayerButton? = null
 
-    private val pagerCurrentItemObserver: (Int, Int) -> Unit = { old, new -> if (old > new) presenter.previousTrack() else presenter.nextTrack() }
+    private val pagerCurrentItemObserver: (Int, Int) -> Unit = { old, new ->
+        if (old > new) presenter.previousTrack() else presenter.nextTrack()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_player, container, false)

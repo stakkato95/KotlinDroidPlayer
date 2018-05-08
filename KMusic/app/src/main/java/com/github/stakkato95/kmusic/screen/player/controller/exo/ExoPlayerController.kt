@@ -54,10 +54,14 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             override fun run() = onTimerPeriodElapsed()
         }, 0, PLAYER_TIMER_PERIOD_MILLIS)
 
-        player.addListener(SimpleExoPlayerListener({ _, isPlaying, _ ->
-            if (isPlaying) {
-//                lastTrackDuration = player.duration
+        player.addListener(SimpleExoPlayerListener(onTrackChanged = {
+            //player.currentWindowIndex == currentPlayedTrackOrdinal
+            //for the case, when track changed wie swipe by user
+            if (player.currentWindowIndex == 0 || player.currentWindowIndex == currentPlayedTrackOrdinal) {
+                return@SimpleExoPlayerListener
             }
+            currentPlayedTrackOrdinal++
+            listeners.forEach { it.onNextTrackPlaybackStarted() }
         }))
     }
 
@@ -145,11 +149,6 @@ class ExoPlayerController(private val state: TracksState, private val context: C
 
         if (lastTrackDuration == null || lastTrackDuration == C.TIME_END_OF_SOURCE) {
             lastTrackDuration = player.duration
-        }
-        if (lastTrackDuration != player.duration) {
-            currentPlayedTrackOrdinal++
-            lastTrackDuration = player.duration
-            listeners.forEach { it.onNextTrackPlaybackStarted() }
         }
         Log.d("Die Zeit", "${player.currentPosition}")
         listeners.forEach { it.onProgressChanged(player.currentPosition / player.duration.toFloat()) }

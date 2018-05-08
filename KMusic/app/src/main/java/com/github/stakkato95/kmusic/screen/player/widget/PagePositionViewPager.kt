@@ -7,7 +7,9 @@ import kotlin.properties.Delegates
 
 class PagePositionViewPager : ViewPager {
 
-    var observableCurrentItem: Int by Delegates.observable(currentItem) { _, old, new -> observer?.invoke(old, new) }
+    var observableCurrentItem: Int by Delegates.observable(currentItem) { _, old, new ->
+        observer?.invoke(old, new)
+    }
 
     private var observer: ((Int, Int) -> Unit)? = null
 
