@@ -75,9 +75,19 @@ class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
         trackOrdinal?.let {
             context.picasso
                     .loadCover(presenter.getCoverPath(it))
-//                    .placeholder(R.drawable.test_background)
+                    .error(R.drawable.test_background)
                     .transform(RoundedAndBlurredImageTransformation(context))
-                    .into(centerImage)
+                    .into(centerImage, object : Callback {
+                        override fun onSuccess() { }
+
+                        override fun onError() {
+                            val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressFragment.activity, 0.5f, 25 / 2f)
+                            val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
+                            roundedBitmapDrawable.isCircular = true
+                            roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
+                            centerImage.setImageDrawable(roundedBitmapDrawable)
+                        }
+                    })
         }
 
         vector_icon.setOnClickListener {

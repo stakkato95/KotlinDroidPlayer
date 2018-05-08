@@ -23,7 +23,7 @@ class RoundedAndBlurredImageTransformation(private val context: Context) : Trans
 
     companion object {
 
-        const val BITMAP_INSET = 0.05f
+        const val BITMAP_INSET = 0f//0.05f
     }
 
     override fun key() = javaClass.simpleName
@@ -36,7 +36,7 @@ class RoundedAndBlurredImageTransformation(private val context: Context) : Trans
         val canvas = Canvas(bitmap)
         val paint = Paint().apply {
             isAntiAlias = true
-            shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+            shader = BitmapShader(source.blur(context, 1f, 25 / 2f), Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         }
         val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
         rect.inset(width * BITMAP_INSET, height * BITMAP_INSET)
@@ -44,6 +44,6 @@ class RoundedAndBlurredImageTransformation(private val context: Context) : Trans
         canvas.drawRoundRect(rect, width.toFloat() / 2, height.toFloat() / 2, paint)
 
         source.recycle()
-        return bitmap.blur(context, 0.5f, 25 / 2f)
+        return bitmap
     }
 }
