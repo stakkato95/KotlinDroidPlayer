@@ -2,8 +2,12 @@ package com.github.stakkato95.kmusic.util.extensions
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Shader
 import android.net.Uri
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Transformation
 
@@ -20,13 +24,21 @@ class RoundedAndBlurredImageTransformation(private val context: Context) : Trans
     override fun key() = javaClass.simpleName
 
     override fun transform(source: Bitmap): Bitmap {
-        val bitmap = source.blur(context, 0.5f, 25 / 2f)
-        val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.resources, bitmap)
-        roundedBitmapDrawable.isCircular = true
-        roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
+//        val bitmap = source.blur(context, 0.5f, 25 / 2f)
+//        val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.resources, bitmap)
+//        roundedBitmapDrawable.isCircular = true
+//        roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
+
+        val bitmap = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        paint.isAntiAlias = true
+        paint.shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        val rect = RectF(0f, 0f, source.width.toFloat(), source.height.toFloat())
+        canvas.drawRoundRect(rect, source.width.toFloat() / 2, source.height.toFloat() / 2, paint)
 
         source.recycle()
 
-        return roundedBitmapDrawable.bitmap
+        return bitmap.blur(context, 0.5f, 25 / 2f)
     }
 }
