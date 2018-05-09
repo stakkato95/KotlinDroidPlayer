@@ -64,9 +64,6 @@ abstract class TracksPresenterImpl(private var view: TracksView,
     }
 
     override fun nextTrack() {
-//        if (!playerController.isPlaying) {
-//            return
-//        }
         playerController.nextTrack()
     }
 
