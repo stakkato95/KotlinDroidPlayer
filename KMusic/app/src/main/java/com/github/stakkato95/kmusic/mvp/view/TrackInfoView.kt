@@ -8,6 +8,4 @@ import com.github.stakkato95.kmusic.mvp.repository.model.PlayerTrack
 interface TrackInfoView {
 
     fun showTrackInfo(playerTrack: PlayerTrack)
-
-    fun showDefaultInfo()
 }

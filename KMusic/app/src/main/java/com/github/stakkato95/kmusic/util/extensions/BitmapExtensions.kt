@@ -11,9 +11,9 @@ import android.renderscript.ScriptIntrinsicBlur
  * Created by artsiomkaliaha on 30.06.17.
  */
 
-fun Bitmap.blur(context: Context, outputBitmapScale: Float, blurRadius: Float): Bitmap {
-    var checkedBlurRadius = 0.0f
-    checkedBlurRadius = if (blurRadius > 25) 25f else if (blurRadius < 0) 0f else blurRadius
+fun Bitmap.blur(context: Context, outputBitmapScale: Float = 0.5f, blurRadius: Float = 25 / 2f): Bitmap {
+//    var checkedBlurRadius = 0.0f
+//    checkedBlurRadius = if (blurRadius > 25) 25f else if (blurRadius < 0) 0f else blurRadius
 
     val height = Math.round(this.height * outputBitmapScale)
     val width = Math.round(this.width * outputBitmapScale)

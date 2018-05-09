@@ -66,6 +66,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             val isNextTrack = (player.currentWindowIndex != 0 || previousTrackOrdinal < currentPlayedTrackOrdinal) && !userCausedSwitchToNextTrack
             userCausedSwitchToNextTrack = false
 
+            state.setCurrrentTrack(currentPlayedTrackOrdinal)
             if (!player.playWhenReady) {
                 return@SimpleExoPlayerListener
             }

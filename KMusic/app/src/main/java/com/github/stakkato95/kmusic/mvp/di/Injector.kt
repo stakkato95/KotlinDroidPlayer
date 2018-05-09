@@ -6,11 +6,14 @@ import com.github.stakkato95.kmusic.mvp.di.component.AppComponent
 import com.github.stakkato95.kmusic.mvp.di.component.DaggerAppComponent
 import com.github.stakkato95.kmusic.mvp.di.component.PlayerComponent
 import com.github.stakkato95.kmusic.mvp.di.component.SingleTrackComponent
+import com.github.stakkato95.kmusic.mvp.di.component.TrackInfoComponent
 import com.github.stakkato95.kmusic.mvp.di.module.AllTracksModule
 import com.github.stakkato95.kmusic.mvp.di.module.AppModule
 import com.github.stakkato95.kmusic.mvp.di.module.PlayerModule
+import com.github.stakkato95.kmusic.mvp.di.module.TrackInfoModule
 import com.github.stakkato95.kmusic.mvp.view.AllTracksView
 import com.github.stakkato95.kmusic.mvp.view.PlayerView
+import com.github.stakkato95.kmusic.mvp.view.TrackInfoView
 
 /**
  * Created by artsiomkaliaha on 05.10.17.
@@ -29,6 +32,8 @@ class Injector(context: Context) {
     private var playerComponent: PlayerComponent? = null
 
     private var playerButtonComponent: PlayerComponent? = null
+
+    private var trackInfoComponent: TrackInfoComponent? = null
 
     fun plusSingleTrackComponent(): SingleTrackComponent? {
         singleTrackComponent = appComponent.plusSingleTrackComponent()
@@ -63,5 +68,15 @@ class Injector(context: Context) {
 
     fun clearPlayerComponent() {
         playerComponent = null
+    }
+
+    fun plusTrackInfoComponent(view: TrackInfoView): TrackInfoComponent {
+        val component = appComponent.plusTrackInfoComponent(TrackInfoModule(view))
+        trackInfoComponent = component
+        return component
+    }
+
+    fun clearTrackInfoComponent() {
+        trackInfoComponent = null
     }
 }

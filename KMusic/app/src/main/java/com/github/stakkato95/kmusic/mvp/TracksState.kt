@@ -9,7 +9,9 @@ class TracksState {
 
     private val observers = mutableListOf<((PlayerTrack?) -> Unit)>()
 
-    var currentPlayerTrack by observable<PlayerTrack?>(null) { _, _, new -> observers.forEach { it(new) } }
+    var currentPlayerTrack by observable<PlayerTrack?>(null) { _, _, new ->
+        observers.forEach { it(new) }
+    }
 
     fun addCurrentTrackObserver(observer: (PlayerTrack?) -> Unit) {
         observers.add(observer)
@@ -19,4 +21,7 @@ class TracksState {
         observers.remove(observer)
     }
 
+    fun setCurrrentTrack(index: Int) {
+        currentPlayerTrack = tracks[index]
+    }
 }

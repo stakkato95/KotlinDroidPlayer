@@ -15,10 +15,11 @@ import com.github.stakkato95.kmusic.common.BaseFragment
 import com.github.stakkato95.kmusic.mvp.di.module.TrackProgressModule
 import com.github.stakkato95.kmusic.mvp.presenter.TrackProgressPresenter
 import com.github.stakkato95.kmusic.mvp.view.ProgressView
-import com.github.stakkato95.kmusic.util.extensions.RoundedAndBlurredImageTransformation
 import com.github.stakkato95.kmusic.util.extensions.blur
 import com.github.stakkato95.kmusic.util.extensions.loadCover
 import com.github.stakkato95.kmusic.util.extensions.picasso
+import com.github.stakkato95.kmusic.util.picasso.BlurTransformation
+import com.github.stakkato95.kmusic.util.picasso.RoundTransformation
 import com.squareup.picasso.Callback
 import kotlinx.android.synthetic.main.fragment_player_button.*
 import java.io.Serializable
@@ -65,13 +66,14 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
         trackOrdinal?.let {
             context.picasso
                     .loadCover(presenter.getCoverPath(it))
+                    .transform(BlurTransformation(context))
+                    .transform(RoundTransformation())
                     .error(R.drawable.test_background)
-                    .transform(RoundedAndBlurredImageTransformation(context))
                     .into(centerImage, object : Callback {
                         override fun onSuccess() {}
 
                         override fun onError() {
-                            val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressFragment.activity, 0.5f, 25 / 2f)
+                            val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressFragment.context)
                             val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
                             roundedBitmapDrawable.isCircular = true
                             roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()
