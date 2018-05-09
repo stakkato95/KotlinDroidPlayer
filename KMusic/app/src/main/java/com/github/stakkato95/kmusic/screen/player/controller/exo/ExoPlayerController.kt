@@ -49,6 +49,9 @@ class ExoPlayerController(private val state: TracksState, private val context: C
 
     private var userCausedSwitchToNextTrack = false
 
+    override val isPlaying: Boolean
+        get() = player.playWhenReady
+
     init {
         val timer = Timer(PLAYER_TIMER, true)
         timer.schedule(object : TimerTask() {
@@ -63,6 +66,9 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             val isNextTrack = (player.currentWindowIndex != 0 || previousTrackOrdinal < currentPlayedTrackOrdinal) && !userCausedSwitchToNextTrack
             userCausedSwitchToNextTrack = false
 
+            if (!player.playWhenReady) {
+                return@SimpleExoPlayerListener
+            }
             listeners.forEach { it.onTrackPlaybackStarted(currentPlayedTrackOrdinal, isNextTrack) }
         }))
     }

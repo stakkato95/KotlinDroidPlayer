@@ -5,6 +5,8 @@ package com.github.stakkato95.kmusic.screen.player.controller
  */
 interface PlayerController {
 
+    val isPlaying: Boolean
+
     fun addListener(listener: Listener)
 
     fun removeListener(listener: Listener)
