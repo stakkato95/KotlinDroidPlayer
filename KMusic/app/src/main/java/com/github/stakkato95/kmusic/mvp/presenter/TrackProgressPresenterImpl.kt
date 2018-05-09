@@ -20,6 +20,11 @@ class TrackProgressPresenterImpl(private val view: ProgressView,
             return@SimpleListener
         }
         handler.post { view.changePlayBackState(false) }
+    }, onProgressChanged = { trackOrdinal, progress ->
+        if (trackOrdinal != view.trackOrdinal) {
+            return@SimpleListener
+        }
+        handler.post { view.updateProgress(progress) }
     })
 
     override fun onResume(owner: LifecycleOwner) {

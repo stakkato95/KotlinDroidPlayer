@@ -17,13 +17,7 @@ abstract class TracksPresenterImpl(private var view: TracksView,
                                    private val playerController: PlayerController,
                                    private val mainHandler: Handler) : TracksPresenter {
 
-    private var listener = PlayerController.SimpleListener(onProgressChanged = {
-        mainHandler.post { view.updateCurrentTrackProgress(it) }
-    }, onNextTrackPlaybackStarted = {
-        mainHandler.post {
-            view.startNextTrackPlayback()
-        }
-    }, onTrackPlaybackStarted = { _, isNextTrack ->
+    private var listener = PlayerController.SimpleListener(onTrackPlaybackStarted = { _, isNextTrack ->
         if (isNextTrack == null || !isNextTrack) {
             return@SimpleListener
         }

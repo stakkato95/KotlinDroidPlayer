@@ -27,7 +27,7 @@ import javax.inject.Inject
 /**
  * Created by artsiomkaliaha on 06.07.17.
  */
-class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
+class TrackProgressFragment : BaseFragment(), ProgressView {
 
     companion object {
 
@@ -99,25 +99,18 @@ class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
         return presenter
     }
 
-    override fun setProgress(progress: Float) {
+    override fun updateProgress(progress: Float) {
         musicProgressBar.setProgress(progress)
     }
 
-    override fun resetProgress() {
-        musicProgressBar.setProgress(.0f)
-    }
-
     override fun changePlayBackState(isPlaying: Boolean) {
+        if (!isPlaying) {
+            musicProgressBar.setProgress(.0f)
+        }
+
         vector_icon.background = if (isPlaying) playPause else pausePlay
         (vector_icon.background as AnimatedVectorDrawable).start()
     }
 }
 
 class PlayPauseCallbackHolder(val progressCallback: (Float) -> Unit, val playPauseCallback: (Int) -> Unit) : Serializable
-
-interface TrackProgressAware {
-
-    fun setProgress(progress: Float)
-
-    fun resetProgress()
-}

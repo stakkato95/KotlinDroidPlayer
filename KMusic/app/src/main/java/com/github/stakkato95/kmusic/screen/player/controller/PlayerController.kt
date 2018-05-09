@@ -21,26 +21,19 @@ interface PlayerController {
 
     interface Listener {
 
-        fun onProgressChanged(progress: Float)
-
-        fun onNextTrackPlaybackStarted()
+        fun onProgressChanged(trackOrdinal: Int, progress: Float)
 
         fun onTrackPlaybackStarted(trackOrdinal: Int, isNextTrack: Boolean? = null)
 
         fun onTrackPlaybackPaused(trackOrdinal: Int)
     }
 
-    class SimpleListener(private val onProgressChanged: ((Float) -> Unit)? = null,
-                         private val onNextTrackPlaybackStarted: (() -> Unit)? = null,
+    class SimpleListener(private val onProgressChanged: ((Int, Float) -> Unit)? = null,
                          private val onTrackPlaybackStarted: ((Int, Boolean?) -> Unit)? = null,
                          private val onTrackPlaybackPaused: ((Int) -> Unit)? = null) : Listener {
 
-        override fun onProgressChanged(progress: Float) {
-            onProgressChanged?.invoke(progress)
-        }
-
-        override fun onNextTrackPlaybackStarted() {
-            onNextTrackPlaybackStarted?.invoke()
+        override fun onProgressChanged(trackOrdinal: Int, progress: Float) {
+            onProgressChanged?.invoke(trackOrdinal, progress)
         }
 
         override fun onTrackPlaybackStarted(trackOrdinal: Int, isNextTrack: Boolean?) {

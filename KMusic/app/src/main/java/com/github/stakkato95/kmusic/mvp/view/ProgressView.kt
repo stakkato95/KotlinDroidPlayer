@@ -4,5 +4,7 @@ interface ProgressView {
 
     fun changePlayBackState(isPlaying: Boolean)
 
+    fun updateProgress(progress: Float)
+
     val trackOrdinal: Int?
 }
