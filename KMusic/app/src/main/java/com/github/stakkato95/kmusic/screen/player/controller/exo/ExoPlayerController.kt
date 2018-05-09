@@ -60,7 +60,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
                 return@SimpleExoPlayerListener
             }
             currentPlayedTrackOrdinal++
-            listeners.forEach { it.onNextTrackPlaybackStarted() }
+            listeners.forEach { it.onTrackPlaybackStarted(currentPlayedTrackOrdinal, true) }
         }))
     }
 
@@ -72,6 +72,11 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         }
 
         player.playWhenReady = !player.playWhenReady
+        if (player.playWhenReady) {
+            listeners.forEach { it.onTrackPlaybackStarted(trackOrdinal) }
+        } else {
+            listeners.forEach { it.onTrackPlaybackPaused(trackOrdinal) }
+        }
     }
 
     override fun nextTrack() {
@@ -81,6 +86,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             player.addListener(SimpleExoPlayerListener({ listener, _, _ ->
                 player.seekToDefaultPosition(++currentPlayedTrackOrdinal)
                 player.removeListener(listener)
+                listeners.forEach { it.onTrackPlaybackStarted(currentPlayedTrackOrdinal, true) }
             }))
             return
         }
@@ -101,6 +107,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             player.seekTo(previousWindowIndex, C.TIME_UNSET)
             player.playWhenReady = true
             currentPlayedTrackOrdinal--
+            listeners.forEach { it.onTrackPlaybackStarted(currentPlayedTrackOrdinal, false) }
         }
     }
 

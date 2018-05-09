@@ -6,4 +6,6 @@ interface TrackProgressPresenter : BasePresenter {
     fun isPlayingCurrentTrack(trackOrdinal: Int): Boolean
 
     fun getCoverPath(trackOrdinal: Int): String?
+
+    fun playPause()
 }

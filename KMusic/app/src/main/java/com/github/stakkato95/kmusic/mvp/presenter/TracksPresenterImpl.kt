@@ -23,6 +23,13 @@ abstract class TracksPresenterImpl(private var view: TracksView,
         mainHandler.post {
             view.startNextTrackPlayback()
         }
+    }, onTrackPlaybackStarted = { _, isNextTrack ->
+        if (isNextTrack == null || !isNextTrack) {
+            return@SimpleListener
+        }
+        mainHandler.post {
+            view.startNextTrackPlayback()
+        }
     })
 
     override fun onCreate(owner: LifecycleOwner) {

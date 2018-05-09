@@ -1,3 +1,8 @@
 package com.github.stakkato95.kmusic.mvp.view
 
-interface ProgressView
+interface ProgressView {
+
+    fun changePlayBackState(isPlaying: Boolean)
+
+    val trackOrdinal: Int?
+}

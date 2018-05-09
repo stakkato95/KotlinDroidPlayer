@@ -4,7 +4,6 @@ import android.arch.lifecycle.LifecycleObserver
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.view.LayoutInflater
@@ -22,7 +21,6 @@ import com.github.stakkato95.kmusic.util.extensions.loadCover
 import com.github.stakkato95.kmusic.util.extensions.picasso
 import com.squareup.picasso.Callback
 import kotlinx.android.synthetic.main.fragment_player_button.*
-import kotlinx.android.synthetic.main.item_track_info.*
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -51,20 +49,21 @@ class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
         }
     }
 
-    private var isPlaying = false
-
     private val playPause by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_play_pause, null) }
 
     private val pausePlay by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_play, null) }
 
     private var callbacksHolder: PlayPauseCallbackHolder? = null
 
-    private var trackOrdinal: Int? = null
+    override var trackOrdinal: Int? = null
+        private set
 
     @Inject
     lateinit var presenter: TrackProgressPresenter
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) = inflater?.inflate(R.layout.fragment_player_button, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater?.inflate(R.layout.fragment_player_button, container, false)!!
+    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,7 +77,7 @@ class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
                     .error(R.drawable.test_background)
                     .transform(RoundedAndBlurredImageTransformation(context))
                     .into(centerImage, object : Callback {
-                        override fun onSuccess() { }
+                        override fun onSuccess() {}
 
                         override fun onError() {
                             val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressFragment.activity, 0.5f, 25 / 2f)
@@ -90,15 +89,7 @@ class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
                     })
         }
 
-        vector_icon.setOnClickListener {
-            isPlaying = !isPlaying
-            switchPlayPauseIcon()
-            val ordinal: Int = trackOrdinal ?: TRACK_ORDINAL_NO_VALUE
-            if (ordinal != TRACK_ORDINAL_NO_VALUE) {
-                callbacksHolder?.playPauseCallback?.invoke(ordinal)
-            }
-        }
-        switchPlayPauseIcon()
+        vector_icon.setOnClickListener { presenter.playPause() }
 
         musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
@@ -109,20 +100,14 @@ class TrackProgressFragment : BaseFragment(), ProgressView, TrackProgressAware {
     }
 
     override fun setProgress(progress: Float) {
-        if (!isPlaying) {
-            isPlaying = true
-            switchPlayPauseIcon()
-        }
         musicProgressBar.setProgress(progress)
     }
 
     override fun resetProgress() {
-        isPlaying = false
-        switchPlayPauseIcon()
         musicProgressBar.setProgress(.0f)
     }
 
-    private fun switchPlayPauseIcon() {
+    override fun changePlayBackState(isPlaying: Boolean) {
         vector_icon.background = if (isPlaying) playPause else pausePlay
         (vector_icon.background as AnimatedVectorDrawable).start()
     }
