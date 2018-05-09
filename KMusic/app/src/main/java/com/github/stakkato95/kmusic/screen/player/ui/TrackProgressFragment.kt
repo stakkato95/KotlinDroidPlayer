@@ -31,8 +31,6 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
 
     companion object {
 
-        private const val PLAY_PAUSE_CALLBACK_KEY = "PLAY_PAUSE_CALLBACK_KEY"
-
         private const val TRACK_ORDINAL_KEY = "TRACK_ORDINAL_KEY"
 
         fun newInstance(trackOrdinal: Int): TrackProgressFragment {
@@ -84,7 +82,7 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
 
         vector_icon.setOnClickListener { presenter.playPause() }
 
-//        musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
+        musicProgressBar.setProgressPercentListener { progress -> presenter.rewind(progress) }
     }
 
     override fun injectPresenter(): LifecycleObserver {
@@ -105,5 +103,3 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
         (vector_icon.background as AnimatedVectorDrawable).start()
     }
 }
-
-class PlayPauseCallbackHolder(val progressCallback: (Float) -> Unit, val playPauseCallback: (Int) -> Unit) : Serializable

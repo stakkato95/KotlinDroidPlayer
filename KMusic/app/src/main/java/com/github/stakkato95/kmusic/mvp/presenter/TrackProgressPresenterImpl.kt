@@ -40,4 +40,8 @@ class TrackProgressPresenterImpl(private val view: ProgressView,
     override fun playPause() {
         view.trackOrdinal?.let { playerController.playPause(it) }
     }
+
+    override fun rewind(progress: Float) {
+        playerController.rewind(progress)
+    }
 }

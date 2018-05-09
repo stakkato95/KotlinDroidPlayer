@@ -8,4 +8,6 @@ interface TrackProgressPresenter : BasePresenter {
     fun getCoverPath(trackOrdinal: Int): String?
 
     fun playPause()
+
+    fun rewind(progress: Float)
 }
