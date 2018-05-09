@@ -12,19 +12,15 @@ class TrackProgressPresenterImpl(private val view: ProgressView,
                                  private val handler: Handler) : TrackProgressPresenter {
 
     private val listener = PlayerController.SimpleListener(onTrackPlaybackStarted = { trackOrdinal, _ ->
-        handler.post {
-            view.changePlayBackState(trackOrdinal == view.trackOrdinal)
-        }
+        handler.post { view.changePlayBackState(trackOrdinal == view.trackOrdinal, true) }
     }, onTrackPlaybackPaused = { trackOrdinal ->
-        if (trackOrdinal != view.trackOrdinal) {
-            return@SimpleListener
+        if (trackOrdinal == view.trackOrdinal) {
+            handler.post { view.changePlayBackState(trackOrdinal == view.trackOrdinal, false) }
         }
-        handler.post { view.changePlayBackState(false) }
     }, onProgressChanged = { trackOrdinal, progress ->
-        if (trackOrdinal != view.trackOrdinal) {
-            return@SimpleListener
+        if (trackOrdinal == view.trackOrdinal) {
+            handler.post { view.updateProgress(progress) }
         }
-        handler.post { view.updateProgress(progress) }
     })
 
     override fun onResume(owner: LifecycleOwner) {

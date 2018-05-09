@@ -94,7 +94,7 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         if (player.nextWindowIndex == C.INDEX_UNSET) {
             concatToMediaSource()
             player.prepare(currentMediaSource)
-            player.addListener(SimpleExoPlayerListener({ listener, _, _ ->
+            player.addListener(SimpleExoPlayerListener(onPlayerStateChanged = { listener, _, _ ->
                 player.seekToDefaultPosition(currentPlayedTrackOrdinal + 1)
                 player.removeListener(listener)
             }))
@@ -108,13 +108,9 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     }
 
     override fun previousTrack() {
-        //TODO similar to nextTrack
-        //TODO case, when play not from the first track???
-
         val previousWindowIndex = player.previousWindowIndex
         if (previousWindowIndex != C.INDEX_UNSET) {
             player.seekTo(previousWindowIndex, C.TIME_UNSET)
-            player.playWhenReady = true
         }
     }
 

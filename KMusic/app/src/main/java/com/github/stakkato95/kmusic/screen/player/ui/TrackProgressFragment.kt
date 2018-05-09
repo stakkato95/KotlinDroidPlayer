@@ -31,17 +31,14 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
 
     companion object {
 
-        private const val TRACK_ORDINAL_NO_VALUE = -1
-
         private const val PLAY_PAUSE_CALLBACK_KEY = "PLAY_PAUSE_CALLBACK_KEY"
 
         private const val TRACK_ORDINAL_KEY = "TRACK_ORDINAL_KEY"
 
-        fun newInstance(progressCallback: (Float) -> Unit, playPauseCallback: (Int) -> Unit, trackOrdinal: Int): TrackProgressFragment {
+        fun newInstance(trackOrdinal: Int): TrackProgressFragment {
             val fragment = TrackProgressFragment()
 
             val args = Bundle()
-            args.putSerializable(PLAY_PAUSE_CALLBACK_KEY, PlayPauseCallbackHolder(progressCallback, playPauseCallback))
             args.putInt(TRACK_ORDINAL_KEY, trackOrdinal)
             fragment.arguments = args
 
@@ -52,8 +49,6 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
     private val playPause by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_play_pause, null) }
 
     private val pausePlay by lazy { ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_play, null) }
-
-    private var callbacksHolder: PlayPauseCallbackHolder? = null
 
     override var trackOrdinal: Int? = null
         private set
@@ -67,8 +62,6 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        callbacksHolder = arguments.getSerializable(PLAY_PAUSE_CALLBACK_KEY) as PlayPauseCallbackHolder
         trackOrdinal = arguments.getInt(TRACK_ORDINAL_KEY)
 
         trackOrdinal?.let {
@@ -91,7 +84,7 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
 
         vector_icon.setOnClickListener { presenter.playPause() }
 
-        musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
+//        musicProgressBar.setProgressPercentListener { progress -> callbacksHolder?.progressCallback?.invoke(progress) }
     }
 
     override fun injectPresenter(): LifecycleObserver {
@@ -103,12 +96,12 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
         musicProgressBar.setProgress(progress)
     }
 
-    override fun changePlayBackState(isPlaying: Boolean) {
-        if (!isPlaying) {
+    override fun changePlayBackState(isCurrentTrack: Boolean, isPlaying: Boolean) {
+        if (!isCurrentTrack) {
             musicProgressBar.setProgress(.0f)
         }
 
-        vector_icon.background = if (isPlaying) playPause else pausePlay
+        vector_icon.background = if (isPlaying && isCurrentTrack) playPause else pausePlay
         (vector_icon.background as AnimatedVectorDrawable).start()
     }
 }
