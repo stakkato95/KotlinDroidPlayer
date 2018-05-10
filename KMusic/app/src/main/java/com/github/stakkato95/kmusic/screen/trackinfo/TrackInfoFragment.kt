@@ -50,9 +50,16 @@ class TrackInfoFragment : BaseFragment(), TrackInfoView {
     }
 
     override fun showTrackInfo(playerTrack: PlayerTrack) {
-        val titleAware = findFirstResponder<TitleAware>()
-        titleAware?.let {
-            it.setTitle(playerTrack.name)
+        findFirstResponder<TitleAware>()?.setTitle(playerTrack.name)
+
+        if (playerTrack.bitRate == PlayerTrack.SAMPLE_BIT_RATE_UNSET
+                || playerTrack.sampleRate == PlayerTrack.SAMPLE_BIT_RATE_UNSET) {
+            audioFormatView.visibility = View.GONE
+            audioFormatLabelView.visibility = View.GONE
+        } else {
+            audioFormatView.visibility = View.VISIBLE
+            audioFormatLabelView.visibility = View.VISIBLE
+            audioFormatView.text = "MP3 ${playerTrack.sampleRate} KHz STEREO ${playerTrack.bitRate} Kb/s"
         }
 
         artistView.text = playerTrack.author
