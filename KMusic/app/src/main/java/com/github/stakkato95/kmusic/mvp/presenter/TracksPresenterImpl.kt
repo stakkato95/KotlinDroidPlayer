@@ -36,7 +36,7 @@ abstract class TracksPresenterImpl(private var view: TracksView,
                                 view.showNoTracks()
                                 return@subscribe
                             }
-                            state.tracks = it
+                            state.tracks.addAll(it)
                             view.showTracks(it)
                         },
                         {
@@ -52,6 +52,12 @@ abstract class TracksPresenterImpl(private var view: TracksView,
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         playerController.addListener(listener)
+
+        if (state.tracks.isEmpty()) {
+            view.showNoTracks()
+        } else {
+            view.showTracks(state.tracks)
+        }
     }
 
     override fun onPause(owner: LifecycleOwner) {

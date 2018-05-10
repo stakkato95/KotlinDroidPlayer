@@ -5,7 +5,7 @@ import kotlin.properties.Delegates.observable
 
 class TracksState {
 
-    lateinit var tracks: List<PlayerTrack>
+    var tracks = mutableListOf<PlayerTrack>()
 
     private val observers = mutableListOf<((PlayerTrack?) -> Unit)>()
 
@@ -21,7 +21,7 @@ class TracksState {
         observers.remove(observer)
     }
 
-    fun setCurrrentTrack(index: Int) {
+    fun setCurrentTrack(index: Int) {
         currentPlayerTrack = tracks[index]
     }
 }

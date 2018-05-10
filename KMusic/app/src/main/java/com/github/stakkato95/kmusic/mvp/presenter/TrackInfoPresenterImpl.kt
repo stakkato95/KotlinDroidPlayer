@@ -14,6 +14,7 @@ class TrackInfoPresenterImpl(private val view: TrackInfoView, private val state:
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         state.addCurrentTrackObserver(listener)
+        state.currentPlayerTrack?.let { view.showTrackInfo(it) }
     }
 
     override fun onPause(owner: LifecycleOwner) {
