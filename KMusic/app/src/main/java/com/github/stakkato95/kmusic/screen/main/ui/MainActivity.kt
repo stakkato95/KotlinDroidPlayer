@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.github.stakkato95.kmusic.R
 import com.github.stakkato95.kmusic.screen.main.adapter.RootPagerAdapter
+import com.github.stakkato95.kmusic.screen.trackinfo.TrackInfoFragment
 import com.github.stakkato95.kmusic.screen.tracks.widget.ViewPagerCoordinator
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_player_button.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TrackInfoFragment.TitleAware {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,16 +18,9 @@ class MainActivity : AppCompatActivity() {
 
         val coordinator = ViewPagerCoordinator(verticalPagerView, albumTextVeiw, 1f, 0.5f)
         coordinator.labelMovementPercent = 0.4f
-
-//        setProgressBarTouchListener()
-//
     }
 
-    fun setProgressBarTouchListener() {
-        albumTextVeiw.post {
-            musicProgressBar.setProgressStateListener { isScrollInProgress ->
-                verticalPagerView.canInterceptTouchEvents = !isScrollInProgress
-            }
-        }
+    override fun setTitle(title: String) {
+        albumTextVeiw.text = title
     }
 }

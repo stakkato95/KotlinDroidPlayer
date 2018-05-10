@@ -16,4 +16,14 @@ abstract class BaseFragment : Fragment() {
     }
 
     abstract fun injectPresenter() : LifecycleObserver
+
+    protected inline fun <reified T> findFirstResponder(): T? {
+        val parent = parentFragment
+        while (parent != null) {
+            if (parent is T) {
+                return parent
+            }
+        }
+        return activity as T
+    }
 }

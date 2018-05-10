@@ -25,6 +25,11 @@ import javax.inject.Inject
  */
 class TrackInfoFragment : BaseFragment(), TrackInfoView {
 
+    interface TitleAware {
+
+        fun setTitle(title: String)
+    }
+
     @Inject
     lateinit var presenter: TrackInfoPresenter
 
@@ -45,6 +50,11 @@ class TrackInfoFragment : BaseFragment(), TrackInfoView {
     }
 
     override fun showTrackInfo(playerTrack: PlayerTrack) {
+        val titleAware = findFirstResponder<TitleAware>()
+        titleAware?.let {
+            it.setTitle(playerTrack.name)
+        }
+
         artistView.text = playerTrack.author
         context.picasso
                 .loadCover(playerTrack.coverPath)
