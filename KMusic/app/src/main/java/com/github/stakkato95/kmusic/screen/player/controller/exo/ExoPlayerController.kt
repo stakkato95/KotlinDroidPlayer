@@ -63,7 +63,11 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             //for the case, when track changed wie swipe by user
             val previousTrackOrdinal = currentPlayedTrackOrdinal
             currentPlayedTrackOrdinal = player.currentWindowIndex
-            val isNextTrack = (player.currentWindowIndex != 0 || previousTrackOrdinal < currentPlayedTrackOrdinal) && !userCausedSwitchToNextTrack
+            val isNextTrack = (
+                    player.currentWindowIndex != 0 &&
+                    previousTrackOrdinal < currentPlayedTrackOrdinal &&
+                    !userCausedSwitchToNextTrack
+                    )
             userCausedSwitchToNextTrack = false
 
             state.setCurrentTrack(currentPlayedTrackOrdinal)

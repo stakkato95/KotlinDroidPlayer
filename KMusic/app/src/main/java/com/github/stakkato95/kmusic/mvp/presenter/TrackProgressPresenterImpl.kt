@@ -11,13 +11,24 @@ class TrackProgressPresenterImpl(private val view: ProgressView,
                                  private val playerController: PlayerController,
                                  private val handler: Handler) : TrackProgressPresenter {
 
+    private var isViewPaused = true
+
     private val listener = PlayerController.SimpleListener(onTrackPlaybackStarted = { trackOrdinal, _ ->
+        if (isViewPaused) {
+            return@SimpleListener
+        }
         handler.post { view.changePlayBackState(trackOrdinal == view.trackOrdinal, true) }
     }, onTrackPlaybackPaused = { trackOrdinal ->
+        if (isViewPaused) {
+            return@SimpleListener
+        }
         if (trackOrdinal == view.trackOrdinal) {
             handler.post { view.changePlayBackState(trackOrdinal == view.trackOrdinal, false) }
         }
     }, onProgressChanged = { trackOrdinal, progress ->
+        if (isViewPaused) {
+            return@SimpleListener
+        }
         if (trackOrdinal == view.trackOrdinal) {
             handler.post { view.updateProgress(progress) }
         }
@@ -25,11 +36,13 @@ class TrackProgressPresenterImpl(private val view: ProgressView,
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
+        isViewPaused = false
         playerController.addListener(listener)
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
+        isViewPaused = true
         playerController.removeListener(listener)
     }
 

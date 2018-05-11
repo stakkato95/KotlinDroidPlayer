@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,10 +99,18 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
     }
 
     override fun updateProgress(progress: Float) {
+        if (musicProgressBar == null) {
+            Log.d("", "")
+        }
+
         musicProgressBar.setProgress(progress)
     }
 
     override fun changePlayBackState(isCurrentTrack: Boolean, isPlaying: Boolean) {
+        if (musicProgressBar == null || vector_icon == null) {
+            Log.d("", "")
+        }
+
         if (!isCurrentTrack) {
             musicProgressBar.setProgress(.0f)
         }
