@@ -70,7 +70,9 @@ class ExoPlayerController(private val state: TracksState, private val context: C
             if (!player.playWhenReady) {
                 return@SimpleExoPlayerListener
             }
-            listeners.forEach { it.onTrackPlaybackStarted(currentPlayedTrackOrdinal, isNextTrack) }
+            synchronized(listeners) {
+                listeners.forEach { it.onTrackPlaybackStarted(currentPlayedTrackOrdinal, isNextTrack) }
+            }
         }))
     }
 
@@ -83,9 +85,13 @@ class ExoPlayerController(private val state: TracksState, private val context: C
 
         player.playWhenReady = !player.playWhenReady
         if (player.playWhenReady) {
-            listeners.forEach { it.onTrackPlaybackStarted(trackOrdinal) }
+            synchronized(listeners) {
+                listeners.forEach { it.onTrackPlaybackStarted(trackOrdinal) }
+            }
         } else {
-            listeners.forEach { it.onTrackPlaybackPaused(trackOrdinal) }
+            synchronized(listeners) {
+                listeners.forEach { it.onTrackPlaybackPaused(trackOrdinal) }
+            }
         }
     }
 
@@ -127,11 +133,15 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     override fun isPlayingTrack(trackOrdinal: Int) = player.playWhenReady && player.currentWindowIndex == trackOrdinal
 
     override fun addListener(listener: PlayerController.Listener) {
-        listeners.add(listener)
+        synchronized(listeners) {
+            listeners.add(listener)
+        }
     }
 
     override fun removeListener(listener: PlayerController.Listener) {
-        listeners.remove(listener)
+        synchronized(listeners) {
+            listeners.remove(listener)
+        }
     }
 
     private fun createMediaSource(firstTrackOrdinal: Int) {
@@ -161,6 +171,8 @@ class ExoPlayerController(private val state: TracksState, private val context: C
         if (lastTrackDuration == null || lastTrackDuration == C.TIME_END_OF_SOURCE) {
             lastTrackDuration = player.duration
         }
-        listeners.forEach { it.onProgressChanged(player.currentWindowIndex, player.currentPosition / player.duration.toFloat()) }
+        synchronized(listeners) {
+            listeners.forEach { it.onProgressChanged(player.currentWindowIndex, player.currentPosition / player.duration.toFloat()) }
+        }
     }
 }

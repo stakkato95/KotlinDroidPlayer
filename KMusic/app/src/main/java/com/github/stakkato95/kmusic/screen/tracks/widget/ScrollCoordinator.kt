@@ -5,10 +5,10 @@ import android.view.View
 /**
  * Created by artsiomkaliaha on 03.08.17.
  */
-abstract class ScrollCoordinator(val observableView: View) {
+abstract class ScrollCoordinator<T: View>(protected val observableView: T) {
 
     init {
-        observableView.viewTreeObserver.addOnScrollChangedListener { onObservableViewScrolled() }
+        observableView.viewTreeObserver.addOnScrollChangedListener(::onObservableViewScrolled)
     }
 
     abstract fun onObservableViewScrolled()
