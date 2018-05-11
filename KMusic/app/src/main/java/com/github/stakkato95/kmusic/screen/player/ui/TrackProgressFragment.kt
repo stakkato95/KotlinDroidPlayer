@@ -99,18 +99,10 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
     }
 
     override fun updateProgress(progress: Float) {
-        if (musicProgressBar == null) {
-            Log.d("", "")
-        }
-
         musicProgressBar.setProgress(progress)
     }
 
     override fun changePlayBackState(isCurrentTrack: Boolean, isPlaying: Boolean) {
-        if (musicProgressBar == null || vector_icon == null) {
-            Log.d("", "")
-        }
-
         if (!isCurrentTrack) {
             musicProgressBar.setProgress(.0f)
         }
