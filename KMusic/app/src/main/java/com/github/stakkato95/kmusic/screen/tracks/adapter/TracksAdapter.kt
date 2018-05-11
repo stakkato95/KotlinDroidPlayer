@@ -16,9 +16,9 @@ import kotlinx.android.synthetic.main.item_track_info.*
  */
 class TracksAdapter(private var playerTracks: List<PlayerTrack>? = null) : RecyclerView.Adapter<TracksViewHolder>() {
 
-    override fun onBindViewHolder(holder: TracksViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         val tracks = playerTracks
-        tracks?.let { holder?.setup(tracks[position]) }
+        tracks?.let { holder.setup(tracks[position]) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {

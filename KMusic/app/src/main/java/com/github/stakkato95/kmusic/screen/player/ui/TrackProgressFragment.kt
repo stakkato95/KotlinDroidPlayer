@@ -22,7 +22,6 @@ import com.github.stakkato95.kmusic.util.picasso.BlurTransformation
 import com.github.stakkato95.kmusic.util.picasso.RoundTransformation
 import com.squareup.picasso.Callback
 import kotlinx.android.synthetic.main.fragment_player_button.*
-import java.io.Serializable
 import javax.inject.Inject
 
 /**
@@ -55,25 +54,31 @@ class TrackProgressFragment : BaseFragment(), ProgressView {
     @Inject
     lateinit var presenter: TrackProgressPresenter
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater?.inflate(R.layout.fragment_player_button, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_player_button, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        trackOrdinal = arguments.getInt(TRACK_ORDINAL_KEY)
+        trackOrdinal = arguments?.getInt(TRACK_ORDINAL_KEY)
 
         trackOrdinal?.let {
-            context.picasso
+            if (context == null) {
+                return@let
+            }
+            context!!.picasso
                     .loadCover(presenter.getCoverPath(it))
-                    .transform(BlurTransformation(context))
+                    .transform(BlurTransformation(context!!))
                     .transform(RoundTransformation())
                     .error(R.drawable.test_background)
                     .into(centerImage, object : Callback {
                         override fun onSuccess() {}
 
                         override fun onError() {
-                            val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(this@TrackProgressFragment.context)
+                            if (context == null) {
+                                return
+                            }
+                            val bitmap = (centerImage.drawable as BitmapDrawable).bitmap.blur(context!!)
                             val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
                             roundedBitmapDrawable.isCircular = true
                             roundedBitmapDrawable.cornerRadius = Math.max(bitmap.height, bitmap.width).toFloat()

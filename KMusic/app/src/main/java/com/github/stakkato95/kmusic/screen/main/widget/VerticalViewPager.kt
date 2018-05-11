@@ -13,7 +13,7 @@ class VerticalViewPager : ViewPager {
 
     val normalizedScrollY: Float get() = scrollX / width.toFloat() * height
 
-    var canInterceptTouchEvents = true
+    private var canInterceptTouchEvents = true
 
     constructor(context: Context) : super(context)
 
@@ -49,9 +49,7 @@ class VerticalViewPager : ViewPager {
 
     class VerticalViewPagerTransformer : ViewPager.PageTransformer {
 
-        override fun transformPage(page: View?, position: Float) {
-            if (page == null) return
-
+        override fun transformPage(page: View, position: Float) {
             if (position <= 1) {
                 page.translationX = page.width * -position
 

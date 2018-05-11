@@ -1,8 +1,10 @@
 package com.github.stakkato95.kmusic.screen.trackinfo
 
 import android.arch.lifecycle.LifecycleObserver
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.support.v7.graphics.Palette
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,8 +42,10 @@ class TrackInfoFragment : BaseFragment(), TrackInfoView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val blurredImage = (coverImageView.drawable as BitmapDrawable).bitmap.blur(context)
-        coverImageView.setImageBitmap(blurredImage)
+        context?.let {
+            val blurredImage = (coverImageView.drawable as BitmapDrawable).bitmap.blur(it)
+            coverImageView.setImageBitmap(blurredImage)
+        }
     }
 
     override fun injectPresenter(): LifecycleObserver {
@@ -51,6 +55,11 @@ class TrackInfoFragment : BaseFragment(), TrackInfoView {
 
     override fun showTrackInfo(playerTrack: PlayerTrack) {
         findFirstResponder<TitleAware>()?.setTitle(playerTrack.name)
+
+        val paletteBitmap = BitmapFactory.decodeFile("file://" + playerTrack.coverPath)
+        val palette = Palette.Builder(paletteBitmap).generate()
+        palette.mutedSwatch?.rgb?.let { artistView.setTextColor(it) }
+
 
         if (playerTrack.bitRate == PlayerTrack.SAMPLE_BIT_RATE_UNSET
                 || playerTrack.sampleRate == PlayerTrack.SAMPLE_BIT_RATE_UNSET) {
@@ -63,19 +72,21 @@ class TrackInfoFragment : BaseFragment(), TrackInfoView {
         }
 
         artistView.text = playerTrack.author
-        context.picasso
-                .loadCover(playerTrack.coverPath)
-                .transform(BlurTransformation(context))
-                .error(R.drawable.test_background)
-                .into(coverImageView, object : Callback {
-                    override fun onSuccess() {}
+        context?.let {
+            it.picasso
+                    .loadCover(playerTrack.coverPath)
+                    .transform(BlurTransformation(it))
+                    .error(R.drawable.test_background)
+                    .into(coverImageView, object : Callback {
+                        override fun onSuccess() {}
 
-                    override fun onError() {
-                        val bitmap = (coverImageView.drawable as BitmapDrawable)
-                                .bitmap
-                                .blur(this@TrackInfoFragment.context)
-                        coverImageView.setImageBitmap(bitmap)
-                    }
-                })
+                        override fun onError() {
+                            val bitmap = (coverImageView.drawable as BitmapDrawable)
+                                    .bitmap
+                                    .blur(it)
+                            coverImageView.setImageBitmap(bitmap)
+                        }
+                    })
+        }
     }
 }
