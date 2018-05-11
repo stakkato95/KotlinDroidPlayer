@@ -147,7 +147,8 @@ class ExoPlayerController(private val state: TracksState, private val context: C
     private fun createMediaSource(firstTrackOrdinal: Int) {
         val mediaSources = mutableListOf<MediaSource>()
 
-        for (i in firstTrackOrdinal until MEDIA_SOURCES_BOUNDARY_OFFSET) {
+        //TODO all tracks are initialised in one go => remove unused code
+        for (i in firstTrackOrdinal until state.tracks.size) {// MEDIA_SOURCES_BOUNDARY_OFFSET) {
             val dataSourceFactory = DefaultDataSourceFactory(context, userAgent, null)
             val uri = Uri.parse(state.tracks[i].path)
             mediaSources.add(ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri))
